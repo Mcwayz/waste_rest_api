@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from base.models import Subscription, Collection, Waste, User
 from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer
 from django.shortcuts import get_object_or_404, render
-from django.http import JsonResponse
 
 
 @api_view(['GET'])
