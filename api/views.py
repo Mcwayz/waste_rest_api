@@ -1,15 +1,24 @@
+import json
+from rest_framework import status
+from .serializers import SubSerializer
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from base.models import Subscription, Collection, Waste, User
 from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer
-from django.shortcuts import get_object_or_404, render
+
+
+UserAuth = get_user_model()
 
 
 @api_view(['GET'])
 def apiOverview(request):
     api_urls ={
         'Users List' : '/users/',
-        'Add User' : '/add-user/',
+        'Add Profile' : '/add-profile/',
         'Waste Types' : '/waste-types/',
         'Collections' : '/collections/',
         'Collections' : '/collections/',
@@ -24,14 +33,11 @@ def apiOverview(request):
     return Response(api_urls)
 
 
-
-
 @api_view(['GET'])
 def getSubscription(request):
-    Sub  = Subscription.objects.all() 
-    serializer = SubSerializer(Sub, many=True)
-    return Response(serializer.data) 
-
+    sub = Subscription.objects.select_related('user', 'waste').all()
+    serializer = SubSerializer(sub, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -149,3 +155,14 @@ def updateSubscription(request, pk):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def create_user(request):
+    data = json.loads(request.body)
+    form = UserCreationForm(data)
+    if form.is_valid():
+        user = form.save()
+        return Response({'success': True, 'user_id': user.id}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'success': False, 'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)

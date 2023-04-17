@@ -1,13 +1,15 @@
 from django.db import models
 from decimal import Decimal
 from django.utils import timezone
+from django.contrib.auth.models import User as SysUser
 # Create your models here.
 
 from django.db import models
 
+
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
-    username = models.TextField(max_length=40)
+    auth = models.ForeignKey(SysUser, on_delete=models.CASCADE)
     firstname = models.TextField(max_length=60)
     lastname = models.TextField(max_length=60)
     address = models.TextField(max_length=200)
@@ -18,20 +20,20 @@ class User(models.Model):
 class Waste(models.Model):
     waste_id = models.AutoField(primary_key=True)
     waste_type = models.TextField(max_length=100)
+    monthly_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
     waste_desc = models.TextField(max_length=500)
 
 
 class Collection(models.Model):
     collection_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    collection_date  = models.DateField()
-    collect = models.BooleanField(default=False)
-    remarks = models.CharField(max_length=300)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request_date  = models.DateTimeField(default=timezone.now, blank=True)
+    is_collected = models.BooleanField(default=False)
+    collection_date  = models.DateTimeField(blank=True)
 
 
 class Subscription(models.Model):
     sub_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    waste_id = models.ForeignKey(Waste, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    waste = models.ForeignKey(Waste, on_delete=models.CASCADE)
     sub_date = models.DateTimeField(default=timezone.now, blank=True)
