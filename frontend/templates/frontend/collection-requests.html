@@ -7,16 +7,18 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>e-Waste - Dashboard </title>
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.css" integrity="sha384-9EBxFvN6KcyM6cNwmlzDIe6GTvVB6KFQxKgITPUNYQJ6/dvKjW0s8mTkwgOJFm3v" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.js" integrity="sha384-8Q2aFXcX14ZY9X1yMvR/cWEMEnw/EH1GTsmzq3iLrb8WzAuPLtBgrSQVhbp3yvOt" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         {% load static %}
         <link href=" {% static 'css/styles.css' %}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
- 
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">e-Waste</a>
+            <a class="navbar-brand ps-3" href="home">Dashboard</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -91,7 +93,7 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="charts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
@@ -110,107 +112,49 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
+                        <h1 class="mt-4">Collections</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="home">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Collections</li>
                         </ol>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Collections
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Subscriptions
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                The Administration Regulation for the Collection and Treatment of Waste Electronic and Electrical Equipment clearly states that reuse was not taken into consideration in the regulation. 
                             </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Subscriptions
+                                Waste Collection
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Sub ID</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
+                                            <th>Collection ID</th>
+                                            <th>Is Collected</th>
+                                            <th>Request Date</th>
                                             <th>Address</th>
-                                            <th>Waste Type</th>
-                                            <th>Monthly Fee</th>
-                                            <th>Subscription date</th>
+                                            <th>Map View</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Sub ID</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
+                                            <th>Collection ID</th>
+                                            <th>Is Collected</th>
+                                            <th>Request Date</th>
                                             <th>Address</th>
-                                            <th>Waste Type</th>
-                                            <th>Monthly Fee</th>
-                                            <th>Subscription date</th>
+                                            <th>Map View</th>
                                         </tr>
                                     </tfoot>
-                                    <tbody id="table-body">
+                                    <tbody>
                                         {% for row in data %}
                                         <tr>
-                                          <td>{{ row.sub_id }}</td>
-                                          <td>{{ row.firstname }}</td>
-                                          <td>{{ row.lastname }}</td>
+                                          <td>{{ row.collection_id }}</td>
+                                          <td>{{ row.is_collected }}</td>
+                                          <td>{{ row.request_date }}</td>
                                           <td>{{ row.address }}</td>
-                                          <td>{{ row.waste_type }}</td>
-                                          <td>{{ row.monthly_price }}</td>
-                                          <td>{{ row.sub_date }}</td>
+                                          <td><a href="{% url 'map' %}?latitude={{row.latitude}}&longitude={{row.longitude}}">View Location</a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -222,7 +166,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; e-Waste 2023</div>
+                            <div class="text-muted">Copyright &copy; Your e-Waste 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
@@ -233,12 +177,9 @@
                 </footer>
             </div>
         </div>
-        <script src="{% static 'js/api.js' %}"></script>
+        <!-- Container for the map -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/scripts.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="{% static 'assets/demo/chart-area-demo.js' %}"></script>
-        <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/datatables-simple-demo.js' %}"></script>
     </body>

@@ -5,6 +5,7 @@ from base.models import Subscription
 
 
 def dashboard(request):
+    # Make a request to the endpoint to retrieve data
     response = requests.get("http://127.0.0.1:8000/api/subscriptions")
     data = response.json()
     context = {'data': data}
@@ -17,6 +18,7 @@ def index(request):
 
 
 def users(request):
+    # Make a request to the endpoint to retrieve data
     response = requests.get("http://127.0.0.1:8000/api/users")
     data = response.json()
     context = {'data': data}
@@ -24,11 +26,21 @@ def users(request):
 
 
 def collections(request):
+    # Make a request to the endpoint to retrieve data
     response = requests.get("http://127.0.0.1:8000/api/collections")
     data = response.json()
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collections.html', context)
+
+
+def collection_requests(request):
+    # Make a request to the endpoint to retrieve data
+    response = requests.get("http://127.0.0.1:8000/api/collection-requests")
+    data = response.json()
+    context = {'data': data}
+    print(data)
+    return render(request, 'frontend/collection-requests.html', context)
 
 
 def subscriptions(request):
@@ -46,8 +58,20 @@ def sub_details(request, pk):
     return render(request, 'frontend/sub_details.html', context)
 
 
-def display_map(request):
-    latitude = request.GET.get('latitude', None)
-    longitude = request.GET.get('longitude', None)
-    context = {'latitude': latitude, 'longitude': longitude}
-    return render(request, 'frontend/collections.html', context)
+def map_view(request):
+    latitude = request.GET.get('latitude')
+    longitude = request.GET.get('longitude')
+    return render(request, 'frontend/map.html', {'latitude': latitude, 'longitude': longitude})
+
+
+def add_user(request):
+    return render(request, 'frontend/add-user.html')
+
+
+def overdue(request):
+    # Make a request to the endpoint to retrieve data
+    response = requests.get("http://127.0.0.1:8000/api/subscriptions")
+    data = response.json()
+    context = {'data': data}
+    print(data)
+    return render(request, 'frontend/overdue.html', context)

@@ -1,7 +1,8 @@
 import json
+from datetime import datetime
 from rest_framework import status
 from .serializers import SubSerializer
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as AuthUser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -69,6 +70,13 @@ def getCollections(request):
 
 
 @api_view(['GET'])
+def getCollected(request):
+    collections = Collection.objects.filter(is_collected=True)
+    serializer = CollectionSerializer(collections, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
@@ -114,12 +122,13 @@ def addCollection(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
-def updateCollection(request, pk):
-    collection = Collection.objects.get(collection_id=pk)
-    serializer = CollectionSerializer(instance=collection,data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+@api_view(['PUT'])
+def update_collection(request, pk):
+    collection = Collection.objects.get(pk=pk)
+    collection.is_collected = request.data.get('is_collected', collection.is_collected)
+    collection.collection_date = datetime.now()
+    collection.save()
+    serializer = CollectionSerializer(collection)
     return Response(serializer.data)
 
 
@@ -162,7 +171,12 @@ def create_user(request):
     data = json.loads(request.body)
     form = UserCreationForm(data)
     if form.is_valid():
-        user = form.save()
+        user = form.save(commit=False)
+        user.username = data['username']
+        user.email = data['email']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.save()
         return Response({'success': True, 'user_id': user.id}, status=status.HTTP_201_CREATED)
     else:
         return Response({'success': False, 'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
