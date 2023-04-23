@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 from rest_framework import status
 from .serializers import SubSerializer
-from django.contrib.auth.models import User as AuthUser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -174,8 +173,10 @@ def create_user(request):
         user = form.save(commit=False)
         user.username = data['username']
         user.email = data['email']
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
+        user.first_name = data.get('firstname')
+        user.last_name = data.get('lastname')
+        user.password1 = data['password1']
+        user.password2 = data['password2']
         user.save()
         return Response({'success': True, 'user_id': user.id}, status=status.HTTP_201_CREATED)
     else:
