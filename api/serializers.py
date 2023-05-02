@@ -1,29 +1,41 @@
 from rest_framework import serializers
-from base.models import Subscription, User, Waste, Collection
-
-class WasteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Waste
-        fields = ('waste_type', 'monthly_price', 'waste_desc')
+from django.contrib.auth import get_user_model
+from base.models import Subscription, UserProfile, Waste, Collection
 
 
 class SubSerializer(serializers.ModelSerializer):
-    firstname = serializers.CharField(source='user.firstname')
-    lastname = serializers.CharField(source='user.lastname')
+    firstname = serializers.SerializerMethodField()
+    lastname = serializers.SerializerMethodField()
     address = serializers.CharField(source='user.address')
     waste_type = serializers.CharField(source='waste.waste_type')
+    auth_id = serializers.IntegerField(source='user.auth_id')
     monthly_price = serializers.DecimalField(source='waste.monthly_price', max_digits=10, decimal_places=2)
+
     class Meta:
         model = Subscription
-        fields = ('sub_id', 'firstname', 'lastname', 'address', 'waste_type', 'monthly_price', 'sub_date')
+        fields = ('sub_id', 'firstname', 'lastname', 'address', 'waste_type', 'monthly_price', 'sub_date', 'auth_id')
+
+    def get_firstname(self, obj):
+        return obj.user.auth.first_name
+
+    def get_lastname(self, obj):
+        return obj.user.auth.last_name
+    
+    
+class WasteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Waste
+        fields = ('waste_id','waste_type', 'monthly_price', 'waste_desc')
 
 
 class UserSerializer(serializers.ModelSerializer):
+    firstname = serializers.CharField(source='auth.first_name')
+    lastname = serializers.CharField(source='auth.last_name')
+    email = serializers.CharField(source='auth.email')
     class Meta:
-        model = User
-        fields = ('user_id', 'firstname', 'lastname', 'address', 'longitude', 'latitude')
+        model = UserProfile
+        fields = ('user_id', 'address', 'longitude', 'latitude', 'auth_id', 'firstname', 'lastname', 'email')
         
-
 class CollectionSerializer(serializers.ModelSerializer):
     address = serializers.CharField(source='user.address')
     longitude = serializers.CharField(source='user.longitude')
@@ -31,3 +43,10 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ('collection_id', 'is_collected', 'request_date','address', 'longitude', 'latitude')
+        
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('address', 'longitude', 'latitude', 'auth_id')
+   

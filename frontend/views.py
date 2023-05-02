@@ -3,10 +3,12 @@ from django.shortcuts import render
 from base.models import Subscription
 # Create your views here.
 
+base = "http://192.168.88.81:8000/"
+
 
 def dashboard(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/subscriptions")
+    response = requests.get(base+"api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -19,7 +21,7 @@ def index(request):
 
 def users(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/users")
+    response = requests.get(base+"api/users")
     data = response.json()
     context = {'data': data}
     return render(request, 'frontend/manage-users.html', context)
@@ -27,7 +29,7 @@ def users(request):
 
 def collections(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/collections")
+    response = requests.get(base+"api/collections")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -36,7 +38,7 @@ def collections(request):
 
 def collection_requests(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/collection-requests")
+    response = requests.get(base+"api/collection-requests")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -45,7 +47,7 @@ def collection_requests(request):
 
 def subscriptions(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/subscriptions")
+    response = requests.get(base+"api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -70,7 +72,7 @@ def add_user(request):
 
 def overdue(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get("http://127.0.0.1:8000/api/subscriptions")
+    response = requests.get(base+"api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)

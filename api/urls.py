@@ -12,9 +12,9 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('', views.apiOverview),
     path('users', views.getUsers),
-    path('add-profile', views.addUser),
     path('waste-types', views.getWaste),
     path('add-wastetype', views.addWaste),
+    path('add-profile', views.addProfile),
     path('collections', views.getCollected),
     path('add-collection', views.addCollection),
     path('subscriptions', views.getSubscription),

@@ -1,17 +1,15 @@
 from django.db import models
 from decimal import Decimal
 from django.utils import timezone
-from django.contrib.auth.models import User as SysUser
+from django.contrib.auth.models import User
 # Create your models here.
 
 from django.db import models
 
 
-class User(models.Model):
+class UserProfile(models.Model):
     user_id = models.AutoField(primary_key=True)
-    auth = models.ForeignKey(SysUser, on_delete=models.CASCADE)
-    firstname = models.TextField(max_length=60)
-    lastname = models.TextField(max_length=60)
+    auth = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.TextField(max_length=200)
     longitude = models.TextField(max_length=200)
     latitude = models.TextField(max_length=200)
@@ -26,7 +24,7 @@ class Waste(models.Model):
 
 class Collection(models.Model):
     collection_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     request_date  = models.DateTimeField(default=timezone.now, blank=True)
     is_collected = models.BooleanField(default=False)
     collection_date  = models.DateTimeField(blank=True)
@@ -34,6 +32,6 @@ class Collection(models.Model):
 
 class Subscription(models.Model):
     sub_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     waste = models.ForeignKey(Waste, on_delete=models.CASCADE)
     sub_date = models.DateTimeField(default=timezone.now, blank=True)

@@ -2,16 +2,14 @@ import json
 from datetime import datetime
 from rest_framework import status
 from .serializers import SubSerializer
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from base.models import Subscription, Collection, Waste, User
-from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer
+from base.models import Subscription, Collection, Waste, UserProfile
+from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer
 
-
-UserAuth = get_user_model()
 
 
 @api_view(['GET'])
@@ -84,29 +82,40 @@ def collectionDetails(request, pk):
 
 @api_view(['GET'])
 def getUsers(request):
-    users = User.objects.all()
+    users = UserProfile.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def getUser(request, pk):
-    users = get_object_or_404(User, pk=pk)
+    users = get_object_or_404(UserProfile, pk=pk)
     serializer = UserSerializer(users)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
-def addUser(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+def addProfile(request):
+    if request.method == 'POST':
+        auth_id = request.data.get('auth_id')
+        try:
+            user = User.objects.get(id=auth_id)
+        except User.DoesNotExist:
+            return Response({'message': 'User Not Found'}, status=404)
+        
+        serializer = ProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(auth=user)
+            return Response({'success': True, 'auth_id': auth_id}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=400)
+
+    return Response({'message': 'Invalid Request Method'}, status=405)
 
 
 @api_view(['POST'])
 def updateUser(request, pk):
-    user = User.objects.get(user_id=pk)
+    user = UserProfile.objects.get(user_id=pk)
     serializer = UserSerializer(instance=user, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -173,8 +182,8 @@ def create_user(request):
         user = form.save(commit=False)
         user.username = data['username']
         user.email = data['email']
-        user.first_name = data.get('firstname')
-        user.last_name = data.get('lastname')
+        user.first_name = data.get('first_name')
+        user.last_name = data.get('last_name')
         user.password1 = data['password1']
         user.password2 = data['password2']
         user.save()

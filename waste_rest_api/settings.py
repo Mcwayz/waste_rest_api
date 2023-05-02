@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost', 
-    '192.168.184.81'
+    '192.168.8.105',
+    '192.168.88.81',
     ]
 
 
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     'base',
     'api',
     'frontend'
-    
 ]
 
 MIDDLEWARE = [
