@@ -3,7 +3,7 @@ from django.shortcuts import render
 from base.models import Subscription
 # Create your views here.
 
-base = "http://192.168.88.81:8000/"
+base = "http://192.168.1.172:8000/"
 
 
 def dashboard(request):
