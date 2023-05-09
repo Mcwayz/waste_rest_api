@@ -7,9 +7,6 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>e-Waste - Dashboard </title>
-        <!-- Leaflet CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.css" integrity="sha384-9EBxFvN6KcyM6cNwmlzDIe6GTvVB6KFQxKgITPUNYQJ6/dvKjW0s8mTkwgOJFm3v" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.js" integrity="sha384-8Q2aFXcX14ZY9X1yMvR/cWEMEnw/EH1GTsmzq3iLrb8WzAuPLtBgrSQVhbp3yvOt" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         {% load static %}
         <link href=" {% static 'css/styles.css' %}" rel="stylesheet" />
@@ -93,7 +90,7 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts">
+                            <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
@@ -114,61 +111,73 @@
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Collections</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="home">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Collections</li>
+                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="#">Collection Requests</a></li>
+                            <li class="breadcrumb-item active">Request Details</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                The Administration Regulation for the Collection and Treatment of Waste Electronic and Electrical Equipment clearly states that reuse was not taken into consideration in the regulation. 
+                                Waste collection is a part of the process of waste management. It is the transfer of solid waste from the point of use and disposal to the point of treatment or landfill.
+                                
                             </div>
                         </div>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Waste Collection
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Collection ID</th>
-                                            <th>Is Collected</th>
-                                            <th>Request Date</th>
-                                            <th>Address</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Collection ID</th>
-                                            <th>Is Collected</th>
-                                            <th>Request Date</th>
-                                            <th>Address</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for row in data %}
-                                        <tr>
-                                          <td>{{ row.collection_id }}</td>
-                                          <td>{{ row.is_collected }}</td>
-                                          <td>{{ row.request_date }}</td>
-                                          <td>{{ row.address }}</td>
-                                          <td>
-                                            <a href="{% url 'collection_details' row.collection_id %}">View Details</a> &nbsp; &nbsp; &nbsp; 
-                                            <a href="{% url 'map' %}?latitude={{row.latitude}}&longitude={{row.longitude}}">Location</a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+
+                                    <main>
+                                        <div class="container">
+                                                    <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Collection Details</h3></div>
+                                                        <div class="card-body">
+                                                            <form>
+                                                                <div class="row mb-3">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <input class="form-control" id="inputRequestID" type="text" value="{{ collection.collection_id }}"  />
+                                                                            <label for="inputRequestID">Request ID</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating">
+                                                                            <input class="form-control" id="inputDate" type="text" value="{{ collection.request_date }}" />
+                                                                            <label for="inputDate">Request Date</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mb-3">
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3">
+                                                                            <input class="form-control" id="inputApproval" type="text" value="{{ collection.is_collected }}" />
+                                                                            <label for="inputApproval">Collection Approval</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3">
+                                                                            <div class="row mb-3">
+                                                                            <input class="form-control" id="inputAddress" type="text" value="{{ collection.address }}" />
+                                                                            <label for="inputAddress">address</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-4 mb-0">
+                                                                    <div class="d-grid"><a class="btn btn-primary btn-block" href="{% url 'map' %}?latitude={{collection.latitude}}&longitude={{collection.longitude}}">View Location</a></div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </main>
                         </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your e-Waste 2023</div>
+                            <div class="text-muted">Copyright &copy; e-Waste 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
@@ -179,7 +188,6 @@
                 </footer>
             </div>
         </div>
-        <!-- Container for the map -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/scripts.js' %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>

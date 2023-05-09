@@ -11,6 +11,7 @@ urlpatterns = [
     path('home', views.dashboard, name='Admin Dashboard'),
     path('collections', views.collections, name='Collections'),
     path('subscriptions', views.subscriptions, name='Subscriptions'),
+    path('sub-details/<int:pk>/', views.sub_details, name='sub_details'),
     path('collection-requests', views.collection_requests, name='Requests'),
-    path('subscription-details', views.sub_details, name='Subscription Details'),
+    path('collection-details/<int:pk>/', views.collection_details, name='collection_details'),
     ]

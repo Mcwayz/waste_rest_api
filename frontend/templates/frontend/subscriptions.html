@@ -136,7 +136,6 @@
                                             <th>Waste Type</th>
                                             <th>Monthly Fee</th>
                                             <th>Subscription date</th>
-                                            <th>Due date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -148,7 +147,6 @@
                                             <th>Address</th>
                                             <th>Waste Type</th>
                                             <th>Monthly Fee</th>
-                                            <th>Due date</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
@@ -162,8 +160,7 @@
                                           <td>{{ row.waste_type }}</td>
                                           <td>{{ row.monthly_price }}</td>
                                           <td>{{ row.sub_date }}</td>
-                                          <td>{{ row.sub_date }}</td>
-                                          <td><a href="">Details</a></td>
+                                          <td><a href="{% url 'sub_details' row.sub_id %}">View Details</a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

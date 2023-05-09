@@ -112,7 +112,8 @@
                         <h1 class="mt-4">Subscriptions</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="home">Dashboard</a></li>
-                            <li class="breadcrumb-item active">subscriptions</li>
+                            <li class="breadcrumb-item"><a href="#">Subscriptions</a></li>
+                            <li class="breadcrumb-item active">Subscription Details</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
@@ -121,53 +122,73 @@
                             </div>
                         </div>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                User subscriptions
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Sub ID</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Address</th>
-                                            <th>Waste Type</th>
-                                            <th>Monthly Fee</th>
-                                            <th>Subscription date</th>
-                                            <th>Due date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Sub ID</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Address</th>
-                                            <th>Waste Type</th>
-                                            <th>Monthly Fee</th>
-                                            <th>Due date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody id="table-body">
-                                        {% for row in data %}
-                                        <tr>
-                                          <td>{{ row.sub_id }}</td>
-                                          <td>{{ row.firstname }}</td>
-                                          <td>{{ row.lastname }}</td>
-                                          <td>{{ row.address }}</td>
-                                          <td>{{ row.waste_type }}</td>
-                                          <td>{{ row.monthly_price }}</td>
-                                          <td>{{ row.sub_date }}</td>
-                                          <td><a href="{% url 'my_model_details' pk=my_model.pk %}">Details</a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+
+                                    <main>
+                                        <div class="container">
+                                                    <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Subscription Details</h3></div>
+                                                        <div class="card-body">
+                                                            <form>
+                                                                <div class="row mb-3">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <input class="form-control" id="inputFirstName" type="text" value="{{ details.firstname }}" placeholder="Enter your first name" />
+                                                                            <label for="inputFirstName">First name</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating">
+                                                                            <input class="form-control" id="inputLastName" type="text" value="{{ details.lastname }}" placeholder="Enter your last name" />
+                                                                            <label for="inputLastName">Last name</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-floating mb-3">
+                                                                    <input class="form-control" id="inputAddress" type="text" value="{{ details.address }}" placeholder="Eg...Plot 3342 Libala South" />
+                                                                    <label for="inputAddress">address</label>
+                                                                </div>
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <select class="form-control" id="waste-type" name="waste_type">
+                                                                                <option value="{{ details.waste_type }}">{{ details.waste_type }}</option>
+                                                                              </select>
+                                                                            <label for="waste-type">Waste Type</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <input class="form-control" id="inputPrice" type="text" value="{{ details.monthly_price }}" placeholder="Price" />
+                                                                            <label for="inputPrice">Monthly Subscription</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <input class="form-control" id="subDate" type="text" value="{{ details.sub_date }}" placeholder="Sub Date" />
+                                                                            <label for="subDate">Subscribed </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <input class="form-control" id="inputPrice" type="text" value="{{ details.sub_date }}" placeholder="Due Date" />
+                                                                            <label for="inputPrice">Due Date </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                         
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </main>
                         </div>
                     </div>
                 </main>

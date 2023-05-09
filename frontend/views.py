@@ -1,14 +1,15 @@
 import requests
 from django.shortcuts import render
-from base.models import Subscription
+from django.http import HttpResponseServerError
+
 # Create your views here.
 
-base = "http://192.168.1.172:8000/"
+base = "http://127.0.0.1:8000"
 
 
 def dashboard(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/subscriptions")
+    response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -21,7 +22,7 @@ def index(request):
 
 def users(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/users")
+    response = requests.get(f"{base}/api/users")
     data = response.json()
     context = {'data': data}
     return render(request, 'frontend/manage-users.html', context)
@@ -29,7 +30,7 @@ def users(request):
 
 def collections(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/collections")
+    response = requests.get(f"{base}/api/collections")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -38,16 +39,25 @@ def collections(request):
 
 def collection_requests(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/collection-requests")
+    response = requests.get(f"{base}/api/collection-requests")
     data = response.json()
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collection-requests.html', context)
 
 
+def collection_details(request, pk):
+    # Make a request to the endpoint to retrieve data
+    response = requests.get(f"{base}/api/collection-details/{pk}")
+    data = response.json()
+    context = {'collection': data}
+    print(data)
+    return render(request, 'frontend/collection-details.html', context)
+
+
 def subscriptions(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/subscriptions")
+    response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)
@@ -55,7 +65,9 @@ def subscriptions(request):
 
 
 def sub_details(request, pk):
-    details = subscriptions.objects.get(pk=pk)
+    api_url = f"{base}/api/subscription-details/{pk}"
+    response = requests.get(api_url)
+    details = response.json()
     context = {'details': details}
     return render(request, 'frontend/sub_details.html', context)
 
@@ -72,7 +84,7 @@ def add_user(request):
 
 def overdue(request):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(base+"api/subscriptions")
+    response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
     context = {'data': data}
     print(data)
