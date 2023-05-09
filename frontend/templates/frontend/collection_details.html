@@ -155,14 +155,15 @@
 
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating mb-3">
-                                                                            <div class="row mb-3">
                                                                             <input class="form-control" id="inputAddress" type="text" value="{{ collection.address }}" />
-                                                                            <label for="inputAddress">address</label>
+                                                                            <label for="inputAddress">Requesting Address</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="mt-4 mb-0">
                                                                     <div class="d-grid"><a class="btn btn-primary btn-block" href="{% url 'map' %}?latitude={{collection.latitude}}&longitude={{collection.longitude}}">View Location</a></div>
+                                                                    <br>
+                                                                    <div class="d-grid"><a class="btn btn-secondary btn-block" href="{% url 'map' %}?latitude={{collection.latitude}}&longitude={{collection.longitude}}">Approve Request</a></div>
                                                                 </div>
                                                             </form>
                                                         </div>

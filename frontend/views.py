@@ -48,11 +48,12 @@ def collection_requests(request):
 
 def collection_details(request, pk):
     # Make a request to the endpoint to retrieve data
-    response = requests.get(f"{base}/api/collection-details/{pk}")
-    data = response.json()
-    context = {'collection': data}
-    print(data)
-    return render(request, 'frontend/collection-details.html', context)
+    api_url = f"{base}/api/collection-details/{pk}"
+    response = requests.get(api_url)
+    details = response.json()
+    context = {'collection': details}
+    print(details)
+    return render(request, 'frontend/collection_details.html', context)
 
 
 def subscriptions(request):
@@ -69,6 +70,7 @@ def sub_details(request, pk):
     response = requests.get(api_url)
     details = response.json()
     context = {'details': details}
+    print(details)
     return render(request, 'frontend/sub_details.html', context)
 
 
