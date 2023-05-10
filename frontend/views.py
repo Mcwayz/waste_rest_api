@@ -56,6 +56,16 @@ def collection_details(request, pk):
     return render(request, 'frontend/collection_details.html', context)
 
 
+def update_collection(request, pk):
+    # Make a request to the endpoint to retrieve data
+    api_url = f"{base}/api/update-collection/{pk}/"
+    response = requests.get(api_url)
+    details = response.json()
+    context = {'collection': details}
+    print(details)
+    return render(request, 'frontend/collection_details.html', context)
+
+
 def subscriptions(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/subscriptions")
