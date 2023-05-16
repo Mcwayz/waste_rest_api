@@ -4,7 +4,7 @@ from django.http import HttpResponseServerError
 
 # Create your views here.
 
-base = "http://127.0.0.1:8000"
+base = "http://192.168.8.110:8000"
 
 
 def dashboard(request):
