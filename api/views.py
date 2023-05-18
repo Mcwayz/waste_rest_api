@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Subscription, Collection, Waste, UserProfile
-from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer
+from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer
 
 
 
@@ -126,7 +126,7 @@ def updateUser(request, pk):
 
 @api_view(['POST'])
 def addCollection(request):
-    serializer = CollectionSerializer(data=request.data)
+    serializer = CollectSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -163,16 +163,17 @@ def updateWaste(request, pk):
         return Response(serializer.data)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(['POST'])
 def addSubscription(request):
-    serializer = SubSerializer(data=request.data)
+    serializer = SubscriptionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
+    
 
 @api_view(['POST'])
 def updateSubscription(request, pk):

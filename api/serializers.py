@@ -36,6 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('user_id', 'address', 'longitude', 'latitude', 'auth_id', 'firstname', 'lastname', 'email')
         
+        
 class CollectionSerializer(serializers.ModelSerializer):
     address = serializers.CharField(source='user.address')
     longitude = serializers.CharField(source='user.longitude')
@@ -49,4 +50,20 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('address', 'longitude', 'latitude', 'auth_id')
+        
+        
+class SubscriptionSerializer(serializers.ModelSerializer):
+    waste_type = serializers.CharField(source='waste.waste_type')
+    user = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
    
+    class Meta:
+        model = Subscription
+        fields = ('sub_id', 'waste_type', 'sub_date', 'user')
+    
+    
+class CollectSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
+
+    class Meta:
+        model = Collection
+        fields = ('collection_id', 'user', 'is_collected', 'request_date', 'collection_date')
