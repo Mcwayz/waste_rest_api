@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Subscription, Collection, Waste, UserProfile
-from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer
+from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer
 
 
 
@@ -92,6 +92,15 @@ def getUser(request, pk):
     users = get_object_or_404(UserProfile, pk=pk)
     serializer = UserSerializer(users)
     return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def getUserDetails(request, auth_id):
+    user = get_object_or_404(UserProfile, auth__id=auth_id)
+    serializer = DetailsSerializer(user)
+    data = serializer.data
+    return Response(data)
 
 
 @api_view(['POST'])

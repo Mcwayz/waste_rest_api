@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from base.models import Subscription, UserProfile, Waste, Collection
 
 
@@ -53,13 +54,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         
         
 class SubscriptionSerializer(serializers.ModelSerializer):
-    waste_type = serializers.CharField(source='waste.waste_type')
+    waste = serializers.PrimaryKeyRelatedField(queryset=Waste.objects.all())
     user = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
-   
+
     class Meta:
         model = Subscription
-        fields = ('sub_id', 'waste_type', 'sub_date', 'user')
-    
+        fields = ('sub_id', 'waste', 'sub_date', 'user')
+
     
 class CollectSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
@@ -67,3 +68,17 @@ class CollectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ('collection_id', 'user', 'is_collected', 'request_date', 'collection_date')
+        
+        
+class DetailsSerializer(serializers.ModelSerializer):
+    auth_id = serializers.SerializerMethodField()
+    firstname = serializers.CharField(source='auth.first_name')
+    lastname = serializers.CharField(source='auth.last_name')
+    email = serializers.CharField(source='auth.email')
+
+    def get_auth_id(self, obj):
+        return obj.auth_id if obj.auth else None
+
+    class Meta:
+        model = UserProfile
+        fields = ('user_id', 'address', 'longitude', 'latitude', 'auth_id', 'firstname', 'lastname', 'email')

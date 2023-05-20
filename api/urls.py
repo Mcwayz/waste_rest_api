@@ -23,6 +23,7 @@ urlpatterns = [
     path('add-user/', views.create_user, name='create-user'),
     path('user-details/<str:pk>/', views.getUser, name='user-details'),
     path('update-user/<str:pk>/', views.updateUser, name='update-user'),
+    path('profile-details/<int:auth_id>/', views.getUserDetails, name='user-details'),
     path('update-waste/<str:pk>/', views.updateWaste, name='update-waste'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
