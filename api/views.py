@@ -61,7 +61,7 @@ def wasteDetails(request, pk):
 
 @api_view(['GET'])
 def getCollections(request):
-    collections = Collection.objects.all()
+    collections = Collection.objects.filter(is_collected=False)
     serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data) 
 

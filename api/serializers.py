@@ -44,7 +44,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     latitude = serializers.CharField(source='user.latitude')
     class Meta:
         model = Collection
-        fields = ('collection_id', 'is_collected', 'request_date','address', 'longitude', 'latitude')
+        fields = ('collection_id', 'is_collected', 'collection_date', 'request_date','address', 'longitude', 'latitude')
         
 
 class ProfileSerializer(serializers.ModelSerializer):
