@@ -223,11 +223,13 @@
                       return response.json();
                     } else {
                       throw new Error('Request failed');
+                      alert('Request failed');
                     }
                   })
                   .then(function(data) {
                     // Display the response in the container
                     responseContainer.textContent = JSON.stringify(data);
+                    alert('Collection Request Has Been Closed!');
                   })
                   .catch(function(error) {
                     console.log(error);

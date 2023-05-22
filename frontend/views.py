@@ -1,10 +1,11 @@
 import requests
 from django.shortcuts import render
-from django.http import HttpResponseServerError
+from .decorators import token_required
 
 # Create your views here.
 
 base = "http://192.168.8.106:8000"
+
 
 
 def dashboard(request):
@@ -26,6 +27,7 @@ def users(request):
     data = response.json()
     context = {'data': data}
     return render(request, 'frontend/manage-users.html', context)
+
 
 
 def collections(request):
@@ -56,6 +58,7 @@ def collection_details(request, pk):
     return render(request, 'frontend/collection_details.html', context)
 
 
+
 def update_collection(request, pk):
     # Make a request to the endpoint to retrieve data
     api_url = f"{base}/api/update-collection/{pk}/"
@@ -73,6 +76,7 @@ def subscriptions(request):
     context = {'data': data}
     print(data)
     return render(request, 'frontend/subscriptions.html', context)
+
 
 
 def sub_details(request, pk):
