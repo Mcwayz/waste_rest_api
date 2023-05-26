@@ -4,7 +4,7 @@ from .decorators import token_required
 
 # Create your views here.
 
-base = "http://192.168.8.106:8000"
+base = "http://192.168.1.79:8000"
 
 
 

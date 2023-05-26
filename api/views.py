@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
 from rest_framework import status
-from .serializers import SubSerializer
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -9,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Subscription, Collection, Waste, UserProfile
 from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer
-
 
 
 @api_view(['GET'])
@@ -81,6 +79,13 @@ def collectionDetails(request, pk):
 
 
 @api_view(['GET'])
+def mySubs(request, auth_id):
+    subscriptions = Subscription.objects.filter(user_id=auth_id)
+    serializer = SubSerializer(subscriptions, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def getUsers(request):
     users = UserProfile.objects.all()
     serializer = UserSerializer(users, many=True)
@@ -92,7 +97,6 @@ def getUser(request, pk):
     users = get_object_or_404(UserProfile, pk=pk)
     serializer = UserSerializer(users)
     return Response(serializer.data)
-
 
 
 @api_view(['GET'])

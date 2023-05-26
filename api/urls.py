@@ -20,6 +20,7 @@ urlpatterns = [
     path('subscriptions', views.getSubscription),
     path('add-subscription', views.addSubscription),
     path('collection-requests', views.getCollections),
+    path('my-subscriptions/<int:auth_id>/', views.mySubs),
     path('add-user/', views.create_user, name='create-user'),
     path('user-details/<str:pk>/', views.getUser, name='user-details'),
     path('update-user/<str:pk>/', views.updateUser, name='update-user'),
