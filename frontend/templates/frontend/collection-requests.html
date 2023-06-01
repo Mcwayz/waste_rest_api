@@ -7,9 +7,6 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>e-Waste - Dashboard </title>
-        <!-- Leaflet CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.css" integrity="sha384-9EBxFvN6KcyM6cNwmlzDIe6GTvVB6KFQxKgITPUNYQJ6/dvKjW0s8mTkwgOJFm3v" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/leaflet/1.3.1/leaflet.js" integrity="sha384-8Q2aFXcX14ZY9X1yMvR/cWEMEnw/EH1GTsmzq3iLrb8WzAuPLtBgrSQVhbp3yvOt" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         {% load static %}
         <link href=" {% static 'css/styles.css' %}" rel="stylesheet" />
@@ -36,7 +33,7 @@
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -92,15 +89,6 @@
                                     </div>
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -112,7 +100,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Collections</h1>
+                        <h1 class="mt-4">Pending Collection Requests</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="home">Dashboard</a></li>
                             <li class="breadcrumb-item active">Collections</li>
@@ -152,7 +140,7 @@
                                         <tr>
                                           <td>{{ row.collection_id }}</td>
                                           <td>{{ row.is_collected }}</td>
-                                          <td>{{ row.request_date }}</td>
+                                          <td>{{ row.request_date |date:'d-m-Y H:i:s' }}</td>
                                           <td>{{ row.address }}</td>
                                           <td>
                                             <a href="{% url 'collection_details' row.collection_id %}">View Details</a> &nbsp; &nbsp; &nbsp; 

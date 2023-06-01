@@ -1,7 +1,12 @@
 import requests
-import datetime
+import datetime as date_time
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import render
+from base.models import Collection, Subscription
 from .decorators import token_required
+
+
 
 # Create your views here.
 
@@ -12,8 +17,27 @@ def dashboard(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
-    context = {'data': data}
-    print(data)
+ # Calculate the date range for active subscriptions (less than 30 days)
+    today = timezone.now().date()
+    thirty_days_ago = today - date_time.timedelta(days=30)
+    active_subscriptions_count = Subscription.objects.filter(sub_date__gte=thirty_days_ago).count()
+    all_subscriptions_count = Subscription.objects.count()
+    collection_requests_count = Collection.objects.filter(is_collected=False).count()
+    complete_collections_count = Collection.objects.filter(is_collected=True).count()
+    overdue_subscriptions_count = all_subscriptions_count - active_subscriptions_count
+    for item in data:
+        sub_date = date_time.datetime.strptime(item['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        item['sub_date'] = sub_date
+
+
+    context = {
+        'data': data, 
+        'collection_requests_count': collection_requests_count,
+        'complete_collections_count': complete_collections_count,
+        'active_subscriptions_count': active_subscriptions_count,
+        'overdue_subscriptions_count': overdue_subscriptions_count,
+    }
+
     return render(request, 'frontend/home.html', context)
 
 
@@ -33,6 +57,11 @@ def collections(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/collections")
     data = response.json()
+    for item in data:
+        request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        collection_date = date_time.datetime.strptime(item['collection_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        item['request_date'] = request_date
+        item['collection_date'] = collection_date
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collections.html', context)
@@ -42,6 +71,9 @@ def collection_requests(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/collection-requests")
     data = response.json()
+    for item in data:
+        request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        item['request_date'] = request_date
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collection-requests.html', context)
@@ -52,10 +84,21 @@ def collection_details(request, pk):
     api_url = f"{base}/api/collection-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
-    request_date = datetime.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
     context = {'collection': details, 'request_date': request_date}
     print(details)
     return render(request, 'frontend/collection_details.html', context)
+
+
+def collection_summary(request, pk):
+    # Make a request to the endpoint to retrieve data
+    api_url = f"{base}/api/collection-details/{pk}"
+    response = requests.get(api_url)
+    details = response.json()
+    request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'collection': details, 'request_date': request_date}
+    print(details)
+    return render(request, 'frontend/collection_summary.html', context)
 
 
 def update_collection(request, pk):
@@ -72,6 +115,11 @@ def subscriptions(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
+    
+    for item in data:
+        sub_date = date_time.datetime.strptime(item['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        item['sub_date'] = sub_date
+    
     context = {'data': data}
     print(data)
     return render(request, 'frontend/subscriptions.html', context)
@@ -81,8 +129,9 @@ def sub_details(request, pk):
     api_url = f"{base}/api/subscription-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
-    sub_date = datetime.datetime.strptime(details['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    context = {'details': details, 'sub_date': sub_date}
+    sub_date = date_time.datetime.strptime(details['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    due_date = sub_date + timedelta(days=30)
+    context = {'details': details, 'sub_date': sub_date, 'due_date': due_date}
     return render(request, 'frontend/sub_details.html', context)
 
 
@@ -100,6 +149,12 @@ def overdue(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/subscriptions")
     data = response.json()
-    context = {'data': data}
-    print(data)
+    today = date_time.datetime.now().date()
+    one_month_ago = today - timedelta(days=30)
+    filtered_data = [sub for sub in data if date_time.datetime.strptime(sub['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ").date() <= one_month_ago]
+    for item in filtered_data:
+        sub_date = date_time.datetime.strptime(item['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        item['sub_date'] = sub_date
+    context = {'data': filtered_data}
+    print(filtered_data)
     return render(request, 'frontend/overdue.html', context)

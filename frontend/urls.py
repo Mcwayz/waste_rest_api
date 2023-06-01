@@ -14,4 +14,5 @@ urlpatterns = [
     path('sub-details/<int:pk>/', views.sub_details, name='sub_details'),
     path('collection-requests', views.collection_requests, name='Requests'),
     path('collection-details/<int:pk>/', views.collection_details, name='collection_details'),
+    path('collection-summary/<int:pk>/', views.collection_summary, name='collection_summary'),
     ]
