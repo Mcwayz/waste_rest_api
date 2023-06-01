@@ -160,7 +160,7 @@
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating mb-3 mb-md-0">
-                                                                            <input class="form-control" id="inputPrice" type="text" value="{{ details.monthly_price }}" placeholder="Price" />
+                                                                            <input class="form-control" id="InputPrice" type="text" value="{{ details.monthly_price }}" placeholder="Price" />
                                                                             <label for="inputPrice">Monthly Subscription</label>
                                                                         </div>
                                                                     </div>
@@ -169,17 +169,18 @@
                                                                 <div class="row mb-3">
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating mb-3 mb-md-0">
-                                                                            <input class="form-control" id="subDate" type="text" value="{{ details.sub_date }}" placeholder="Sub Date" />
-                                                                            <label for="subDate">Subscribed </label>
+                                                                            <input class="form-control" id="subDate" type="text" value="{{ sub_date|date:'d-m-Y H:i:s' }}" placeholder="Due Date" />
+                                                                            <label for="subDate">Sub Date</label>
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating mb-3 mb-md-0">
-                                                                            <input class="form-control" id="inputPrice" type="text" value="{{ details.sub_date }}" placeholder="Due Date" />
-                                                                            <label for="inputPrice">Due Date </label>
+                                                                            <input class="form-control" id="dueDate" type="text" value="{{ sub_date|date:"d-m-Y H:i:s" }}" placeholder="Due Date" />
+                                                                            <label for="dueDate">Due Date</label>
                                                                         </div>
                                                                     </div>
+                                                                    
                                                                 </div>
                          
                                                             </form>

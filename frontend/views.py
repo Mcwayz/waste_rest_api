@@ -1,11 +1,11 @@
 import requests
+import datetime
 from django.shortcuts import render
 from .decorators import token_required
 
 # Create your views here.
 
 base = "http://192.168.1.79:8000"
-
 
 
 def dashboard(request):
@@ -27,7 +27,6 @@ def users(request):
     data = response.json()
     context = {'data': data}
     return render(request, 'frontend/manage-users.html', context)
-
 
 
 def collections(request):
@@ -53,10 +52,10 @@ def collection_details(request, pk):
     api_url = f"{base}/api/collection-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
-    context = {'collection': details}
+    request_date = datetime.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'collection': details, 'request_date': request_date}
     print(details)
     return render(request, 'frontend/collection_details.html', context)
-
 
 
 def update_collection(request, pk):
@@ -78,13 +77,12 @@ def subscriptions(request):
     return render(request, 'frontend/subscriptions.html', context)
 
 
-
 def sub_details(request, pk):
     api_url = f"{base}/api/subscription-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
-    context = {'details': details}
-    print(details)
+    sub_date = datetime.datetime.strptime(details['sub_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'details': details, 'sub_date': sub_date}
     return render(request, 'frontend/sub_details.html', context)
 
 
