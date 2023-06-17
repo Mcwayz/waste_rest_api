@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Subscription, Collection, Waste, UserProfile, TaskAssignment, Collectors
-from .serializers import SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
+from .serializers import CollectorDetailsSerializer, SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
 
 
 @api_view(['GET'])
@@ -109,7 +109,7 @@ def getUsers(request):
 @api_view(['GET'])
 def getCollectors(request):
     users = Collectors.objects.all()
-    serializer = CollectorSerializer(users, many=True)
+    serializer = CollectorDetailsSerializer(users, many=True)
     return Response(serializer.data)
 
 

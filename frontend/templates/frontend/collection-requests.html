@@ -122,6 +122,7 @@
                                             <th>Collection ID</th>
                                             <th>Is Collected</th>
                                             <th>Request Date</th>
+                                            <th>Desired Collection Date</th>
                                             <th>Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -131,6 +132,7 @@
                                             <th>Collection ID</th>
                                             <th>Is Collected</th>
                                             <th>Request Date</th>
+                                            <th>Desired Collection Date</th>
                                             <th>Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -141,6 +143,7 @@
                                           <td>{{ row.collection_id }}</td>
                                           <td>{{ row.is_collected }}</td>
                                           <td>{{ row.request_date |date:'d-m-Y H:i:s' }}</td>
+                                          <td>{{ row.user_collect_date |date:'d-m-Y H:i:s' }}</td>
                                           <td>{{ row.address }}</td>
                                           <td>
                                             <a href="{% url 'collection_details' row.collection_id %}">View Details</a> &nbsp; &nbsp; &nbsp; 

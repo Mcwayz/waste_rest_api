@@ -51,6 +51,6 @@ class TaskAssignment(models.Model):
     collector = models.ForeignKey(Collectors, on_delete=models.CASCADE)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    assigned_date  = models.DateTimeField(blank=True)
+    assigned_date  = models.DateTimeField(default=timezone.now, blank=True)
     date_closed = models.DateTimeField(blank=True, null=True)
     

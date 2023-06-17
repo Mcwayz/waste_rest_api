@@ -59,8 +59,10 @@ def collections(request):
     data = response.json()
     for item in data:
         request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        user_collect_date = date_time.datetime.strptime(item['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
         collection_date = date_time.datetime.strptime(item['collection_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
         item['request_date'] = request_date
+        item['user_collect_date'] = user_collect_date
         item['collection_date'] = collection_date
     context = {'data': data}
     print(data)
@@ -73,7 +75,9 @@ def collection_requests(request):
     data = response.json()
     for item in data:
         request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        user_collect_date = date_time.datetime.strptime(item['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
         item['request_date'] = request_date
+        item['user_collect_date'] = user_collect_date
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collection-requests.html', context)
@@ -85,7 +89,8 @@ def collection_details(request, pk):
     response = requests.get(api_url)
     details = response.json()
     request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    context = {'collection': details, 'request_date': request_date}
+    user_collect_date = date_time.datetime.strptime(details['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'collection': details, 'request_date': request_date, 'user_collect_date':user_collect_date}
     print(details)
     return render(request, 'frontend/collection_details.html', context)
 
@@ -96,7 +101,8 @@ def collection_summary(request, pk):
     response = requests.get(api_url)
     details = response.json()
     request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    context = {'collection': details, 'request_date': request_date}
+    user_collect_date = date_time.datetime.strptime(details['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'collection': details, 'request_date': request_date, 'user_collect_date':user_collect_date}
     print(details)
     return render(request, 'frontend/collection_summary.html', context)
 

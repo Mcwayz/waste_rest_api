@@ -44,7 +44,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     latitude = serializers.CharField(source='user.latitude')
     class Meta:
         model = Collection
-        fields = ('collection_id', 'is_collected', 'collection_date', 'request_date','address', 'longitude', 'latitude')
+        fields = ('collection_id', 'user_id', 'is_collected', 'collection_date', 'user_collect_date', 'request_date','address', 'longitude', 'latitude')
         
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -94,14 +94,14 @@ class CollectorDetailsSerializer(serializers.ModelSerializer):
         return obj.auth_id if obj.auth else None
 
     class Meta:
-        model = UserProfile
-        fields = ('collector_id', 'vehicle', 'work_area','firstname', 'lastname', 'email' 'auth_id')
+        model = Collectors
+        fields = ('collector_id', 'vehicle', 'work_area', 'firstname', 'lastname', 'email', 'auth_id')
         
         
 class CollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collectors
-        fields = ('vehicle', 'work_area', 'auth')
+        fields = ('collector_id', 'vehicle', 'work_area', 'auth')
         
         
 class TasksSerializer(serializers.ModelSerializer):
