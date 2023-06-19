@@ -72,9 +72,23 @@ def getTasks(request):
 
 
 @api_view(['GET'])
-def getMyTasks(request, auth_id):
-    tasks = TaskAssignment.objects.filter(user=auth_id)
+def getClosedTasks(request):
+    tasks = TaskAssignment.objects.filter(date_closed__isnull=False)
     serializer = TasksSerializer(tasks, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getMyTasks(request, auth_id):
+    tasks = TaskAssignment.objects.filter(collector=auth_id)
+    serializer = TasksSerializer(tasks, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getCollectedTasks(request, auth_id):
+    collections = Collection.objects.filter(user__auth_id=auth_id, is_collected=True)
+    serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data)
 
 
@@ -129,7 +143,7 @@ def getUserDetails(request, auth_id):
 
 @api_view(['GET'])
 def getCollector(request, pk):
-    users = get_object_or_404(Collectors, pk=pk)
+    users = get_object_or_404(Collectors, auth__id=pk)
     serializer = CollectorSerializer(users)
     return Response(serializer.data)
 

@@ -76,11 +76,42 @@ def collection_requests(request):
     for item in data:
         request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
         user_collect_date = date_time.datetime.strptime(item['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        item['request_date'] = request_date
+        item['assigned_date'] = request_date
         item['user_collect_date'] = user_collect_date
     context = {'data': data}
     print(data)
     return render(request, 'frontend/collection-requests.html', context)
+
+
+def task_assignments(request):
+    # Make a request to the endpoint to retrieve data
+    response = requests.get(f"{base}/api/tasks")
+    data = response.json()
+    context = {'data': data}
+    print(data)
+    return render(request, 'frontend/assigned-tasks.html', context)
+
+
+def closed_assignments(request):
+    # Make a request to the endpoint to retrieve data
+    response = requests.get(f"{base}/api/completed-tasks")
+    data = response.json()
+    context = {'data': data}
+    print(data)
+    return render(request, 'frontend/completed-tasks.html', context)
+
+
+def task_details(request, pk):
+    # Make a request to the endpoint to retrieve data
+    api_url = f"{base}/api/my-tasks/1/{pk}/"
+    response = requests.get(api_url)
+    details = response.json()
+    request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    assigned_date = date_time.datetime.strptime(details['assigned_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    user_collect_date = date_time.datetime.strptime(details['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    context = {'collection': details, 'request_date': request_date, 'user_collect_date': user_collect_date, 'assigned_date':assigned_date}
+    print(details)
+    return render(request, 'frontend/assigned-task-details.html', context)
 
 
 def collection_details(request, pk):

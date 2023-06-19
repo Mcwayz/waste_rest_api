@@ -110,11 +110,13 @@ class TasksSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(source='user.longitude')
     latitude = serializers.CharField(source='user.latitude')
     user_collect_date = serializers.CharField(source='collection.user_collect_date')
+    request_date = serializers.CharField(source='collection.request_date')
     is_collected = serializers.CharField(source='collection.is_collected')
+    collection_id = serializers.PrimaryKeyRelatedField(queryset=Collection.objects.all())
 
     class Meta:
         model = TaskAssignment
-        fields = ('user', 'collector_id', 'address', 'longitude', 'latitude', 'is_collected', 'assigned_date', 'user_collect_date', 'date_closed')
+        fields = ('task_id', 'collection_id', 'collector_id','user', 'address', 'longitude', 'latitude', 'is_collected','request_date', 'assigned_date', 'user_collect_date', 'date_closed')
         
         
 class CollectorsSerializer(serializers.ModelSerializer):

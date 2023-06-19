@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,9 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1', 
-    'localhost', 
-    '192.168.8.106',
-    '192.168.1.79',
+    'localhost',
+    '192.168.43.199',
+    '192.168.8.107',
 ]
 
 
@@ -43,9 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', 
+    'frontend',
     'base',
     'api',
-    'frontend'
 ]
 
 MIDDLEWARE = [
