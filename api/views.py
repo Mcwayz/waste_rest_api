@@ -86,6 +86,13 @@ def getMyTasks(request, auth_id):
 
 
 @api_view(['GET'])
+def getMyRequests(request, auth_id):
+    tasks = TaskAssignment.objects.filter(user=auth_id)
+    serializer = TasksSerializer(tasks, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def getCollectedTasks(request, auth_id):
     collections = Collection.objects.filter(user__auth_id=auth_id, is_collected=True)
     serializer = CollectionSerializer(collections, many=True)

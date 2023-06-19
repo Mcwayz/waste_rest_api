@@ -159,6 +159,12 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <button class="btn btn-success" id="export_data" name="export_data" style="margin-left: 40%;">Export To Excel</button>
+                                    </div>
+                                </form> 
                             </div>
                         </div>
                     </div>
@@ -182,5 +188,13 @@
         <script src="{% static 'js/scripts.js' %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/datatables-simple-demo.js' %}"></script>
+        <script src="{% static  'js/table2excel.js' %}"></script>
+        <script>
+            document.getElementById('export_data').addEventListener('click', function()
+            {
+                var table2excel = new Table2Excel();
+                table2excel.export(document.querySelectorAll('#dataTable'));
+            });
+        </script>
     </body>
 </html>

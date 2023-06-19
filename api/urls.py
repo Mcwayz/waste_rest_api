@@ -27,6 +27,7 @@ urlpatterns = [
     path('my-tasks/<int:auth_id>/', views.getMyTasks),
     path('collection-requests', views.getCollections),
     path('my-subscriptions/<int:auth_id>/', views.mySubs),
+    path('my-requests/<int:auth_id>/', views.getMyRequests),
     path('add-user/', views.create_user, name='create-user'),
     path('my-collections/<int:auth_id>/', views.getCollectedTasks),
     path('collector/<str:pk>/', views.getCollector, name='Collector'),
