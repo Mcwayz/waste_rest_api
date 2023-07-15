@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <section class="vh-100" style="background-color: #b0bfc2;">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                  <div class="card" style="border-radius: 1rem;">
+                    <div class="row g-0">
+                      <div class="col-md-6 col-lg-5 d-none d-md-block">
+                        {% load static %}
+                        <img src="{% static 'assets/img/pagebkg.png' %}"
+                          alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                      </div>
+                      <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                        <div class="card-body p-4 p-lg-5 text-black">
+          
+                          <form id="form">
+          
+                            <div class="d-flex align-items-center mb-3 pb-1">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                 <span class="h1 fw-bold mb-0">e-Waste Admin</span>
+                            </div>
+          
+                            <div class="form-outline mb-4">
+                              <input type="email" id="email" class="form-control form-control-lg" />
+                              <label class="form-label" for="email">Email address</label>
+                            </div>
+          
+                            <div class="form-outline mb-4">
+                              <input type="password" id="password" class="form-control form-control-lg" />
+                              <label class="form-label" for="password">Password</label>
+                            </div>
+          
+                            <div class="pt-1 mb-4">
+                              <button class="btn btn-dark btn-lg btn-block" id="login-btn" type="button">Login</button>
+                            </div>
+          
+                            <a class="small text-muted" href="#!">Forgot password?</a>
+                            <a href="#!" class="small text-muted">Terms of use.</a>
+                            <a href="#!" class="small text-muted">Privacy policy</a>
+                          </form>
+          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {% load static %}
+          <script src="{% static 'js/api.js' %}"></script>
+          <script type="text/javascript">
+            document.getElementById('login-btn').onclick = function() {
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
+                login(email, password)
+                  .then(tokens => console.log(tokens))
+                  .catch(error => console.error(error));
+              };
+
+          </script>
+    </body>
+</html>
