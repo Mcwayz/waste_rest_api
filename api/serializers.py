@@ -36,7 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('user_id', 'address', 'longitude', 'latitude', 'auth_id', 'firstname', 'lastname', 'email')
-        
+    
         
 class CollectionSerializer(serializers.ModelSerializer):
     address = serializers.CharField(source='user.address')

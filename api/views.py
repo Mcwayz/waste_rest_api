@@ -302,8 +302,6 @@ def updateSubscription(request, pk):
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def create_user(request):
     data = json.loads(request.body)
     form = UserCreationForm(data)
