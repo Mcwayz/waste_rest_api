@@ -16,18 +16,9 @@ from .serializers import CollectorDetailsSerializer, SubSerializer, WasteSeriali
 @api_view(['GET'])
 def apiOverview(request):
     api_urls ={
-        'Users List' : '/users/',
-        'Add Profile' : '/add-profile/',
         'Waste Types' : '/waste-types/',
         'Collections' : '/collections/',
-        'Collections' : '/collections/',
         'Subscriptions' : '/subscriptions/',
-        'Add Waste Type' : '/add-wastetype/',
-        'Add Collection' : '/add-collection/',
-        'Add Subscription' : '/add-subscription/',
-        'Update Waste Type' : '/update-wastetype/',
-        'Update Collection' : '/update-collection/',
-        'Update Subscription' : '/update-subscription/',
     }
     return Response(api_urls)
 
