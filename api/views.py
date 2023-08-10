@@ -197,7 +197,7 @@ def updateUser(request, pk):
     user = UserProfile.objects.get(user_id=pk)
     serializer = UserSerializer(instance=user, data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save() 
         return Response(serializer.data)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -235,6 +235,7 @@ def update_collection(request, pk):
     collection.save()
 
     # Update TaskAssignment
+    
     task_assignment = TaskAssignment.objects.filter(collection=collection)
     task_assignment.update(date_closed=datetime.now())
 
