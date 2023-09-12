@@ -6,11 +6,18 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from base.models import Subscription, Collection, Waste, UserProfile, TaskAssignment, Collectors
 from .serializers import CollectorDetailsSerializer, SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
+
+
+#                            #
+#                            #
+#                            #
+#    GET Request Methods     #
+#                            #
+#                            #
+#                            #
 
 
 @api_view(['GET'])
@@ -24,8 +31,6 @@ def apiOverview(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getSubscription(request):
     sub = Subscription.objects.select_related('user', 'waste').all()
     serializer = SubSerializer(sub, many=True)
@@ -33,8 +38,6 @@ def getSubscription(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def subscriptionDetails(request, pk):
     subscription = get_object_or_404(Subscription, pk=pk)
     serializer = SubSerializer(subscription)
@@ -42,8 +45,6 @@ def subscriptionDetails(request, pk):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getWaste(request):
     waste = Waste.objects.all()
     serializer = WasteSerializer(waste, many=True)
@@ -51,8 +52,6 @@ def getWaste(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def wasteDetails(request, pk):
     waste = get_object_or_404(Waste, pk=pk)
     serializier = WasteSerializer(waste)
@@ -60,8 +59,6 @@ def wasteDetails(request, pk):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getCollections(request):
     collections = Collection.objects.filter(is_collected=False)
     serializer = CollectionSerializer(collections, many=True)
@@ -69,8 +66,6 @@ def getCollections(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getTasks(request):
     tasks = TaskAssignment.objects.filter(date_closed=None)
     serializer = TasksSerializer(tasks, many=True)
@@ -78,8 +73,6 @@ def getTasks(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getMyTasks(request, auth_id):
     tasks = TaskAssignment.objects.filter(user=auth_id)
     serializer = TasksSerializer(tasks, many=True)
@@ -87,8 +80,6 @@ def getMyTasks(request, auth_id):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getCollected(request):
     collections = Collection.objects.filter(is_collected=True)
     serializer = CollectionSerializer(collections, many=True)
@@ -96,8 +87,6 @@ def getCollected(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
@@ -105,8 +94,6 @@ def collectionDetails(request, pk):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def mySubs(request, auth_id):
     subscriptions = Subscription.objects.filter(user_id=auth_id)
     serializer = SubSerializer(subscriptions, many=True)
@@ -114,8 +101,6 @@ def mySubs(request, auth_id):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getUsers(request):
     users = UserProfile.objects.all()
     serializer = UserSerializer(users, many=True)
@@ -123,8 +108,6 @@ def getUsers(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getCollectors(request):
     users = Collectors.objects.all()
     serializer = CollectorDetailsSerializer(users, many=True)
@@ -132,8 +115,6 @@ def getCollectors(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getUser(request, pk):
     users = get_object_or_404(UserProfile, pk=pk)
     serializer = UserSerializer(users)
@@ -141,8 +122,6 @@ def getUser(request, pk):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getUserDetails(request, auth_id):
     user = get_object_or_404(UserProfile, auth__id=auth_id)
     serializer = DetailsSerializer(user)
@@ -151,8 +130,6 @@ def getUserDetails(request, auth_id):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getCollector(request, pk):
     users = get_object_or_404(Collectors, pk=pk)
     serializer = CollectorSerializer(users)
@@ -160,8 +137,6 @@ def getCollector(request, pk):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def getCollectorDetails(request, auth_id):
     user = get_object_or_404(Collectors, auth__id=auth_id)
     serializer = DetailsSerializer(user)
@@ -169,9 +144,29 @@ def getCollectorDetails(request, auth_id):
     return Response(data)
 
 
+#                            #
+#                            #
+#                            #
+# End Of GET Request Methods #
+#                            #
+#                            #
+#                            # 
+
+
+
+
+
+
+#                            #
+#                            #
+#                            #
+#    POST Request Methods    #
+#                            #
+#                            #
+#                            #
+
+
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def addProfile(request):
     if request.method == 'POST':
         auth_id = request.data.get('auth_id')
@@ -191,8 +186,7 @@ def addProfile(request):
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+
 def updateUser(request, pk):
     user = UserProfile.objects.get(user_id=pk)
     serializer = UserSerializer(instance=user, data=request.data)
@@ -204,8 +198,7 @@ def updateUser(request, pk):
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+
 def addCollection(request):
     serializer = CollectSerializer(data=request.data)
     if serializer.is_valid():
@@ -225,27 +218,7 @@ def addCollector(request):
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
-def update_collection(request, pk):
-    collection = Collection.objects.get(pk=pk)
-    collection.is_collected = True
-    collection.collection_date = datetime.now()
-    collection.save()
-
-    # Update TaskAssignment
-    
-    task_assignment = TaskAssignment.objects.filter(collection=collection)
-    task_assignment.update(date_closed=datetime.now())
-
-    serializer = CollectionSerializer(collection)
-    return Response(serializer.data)
-
-
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def addWaste(request):
     serializer = WasteSerializer(data=request.data)
     if serializer.is_valid():
@@ -256,8 +229,6 @@ def addWaste(request):
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def updateWaste(request, pk):
     waste = Waste.objects.get(waste_id=pk)
     serializer = WasteSerializer(instance=waste,data=request.data)
@@ -269,8 +240,6 @@ def updateWaste(request, pk):
     
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def addSubscription(request):
     serializer = SubscriptionSerializer(data=request.data)
     if serializer.is_valid():
@@ -281,8 +250,6 @@ def addSubscription(request):
     
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def updateSubscription(request, pk):
     sub = Subscription.objects.get(sub_id=pk)
     serializer = SubSerializer(instance=sub,data=request.data)
@@ -312,8 +279,6 @@ def create_user(request):
     
     
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
 def addAssignment(request):
     serializer = TaskAssignmentSerializer(data=request.data)
     if serializer.is_valid():
@@ -321,3 +286,32 @@ def addAssignment(request):
         return Response(serializer.data)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+#                            #
+#                            #
+#                            #
+# End - POST Request Methods #
+#                            #
+#                            #
+#                            # 
+    
+    
+# ------------PUT Method------------#
+    
+@api_view(['PUT'])
+def update_collection(request, pk):
+    collection = Collection.objects.get(pk=pk)
+    collection.is_collected = True
+    collection.collection_date = datetime.now()
+    collection.save()
+
+    # Update TaskAssignment
+    
+    task_assignment = TaskAssignment.objects.filter(collection=collection)
+    task_assignment.update(date_closed=datetime.now())
+
+    serializer = CollectionSerializer(collection)
+    return Response(serializer.data)
+
+# ------------End - Here--------------#
