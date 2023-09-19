@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view
 from base.models import Subscription, Collection, Waste, UserProfile, TaskAssignment, Collectors
-from .serializers import CollectorDetailsSerializer, SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
+from .serializers.serializers import CollectorDetailsSerializer, SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
 
 
 #                            #
