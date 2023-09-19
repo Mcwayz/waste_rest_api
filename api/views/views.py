@@ -7,8 +7,9 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view
-from base.models import Subscription, Collection, Waste, UserProfile, TaskAssignment, Collectors
-from .serializers.serializers import CollectorDetailsSerializer, SubSerializer, WasteSerializer, CollectionSerializer, UserSerializer, ProfileSerializer, CollectSerializer, SubscriptionSerializer, DetailsSerializer, CollectorSerializer, TaskAssignmentSerializer,TasksSerializer
+from base.models import CustomerProfile, Collection, Waste, CollectorProfile, Requests, Ratings
+from ..serializers.customer_serializer import CollectorDetailsSerializer, WasteSerializer, CollectionSerializer
+
 
 
 #                            #
@@ -18,37 +19,6 @@ from .serializers.serializers import CollectorDetailsSerializer, SubSerializer, 
 #                            #
 #                            #
 #                            #
-
-
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls ={
-        'Waste Types' : '/waste-types/',
-        'Collections' : '/collections/',
-        'Subscriptions' : '/subscriptions/',
-    }
-    return Response(api_urls)
-
-
-@api_view(['GET'])
-def getSubscription(request):
-    sub = Subscription.objects.select_related('user', 'waste').all()
-    serializer = SubSerializer(sub, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def subscriptionDetails(request, pk):
-    subscription = get_object_or_404(Subscription, pk=pk)
-    serializer = SubSerializer(subscription)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getWaste(request):
-    waste = Waste.objects.all()
-    serializer = WasteSerializer(waste, many=True)
-    return Response(serializer.data) 
 
 
 @api_view(['GET'])
@@ -65,19 +35,6 @@ def getCollections(request):
     return Response(serializer.data) 
 
 
-@api_view(['GET'])
-def getTasks(request):
-    tasks = TaskAssignment.objects.filter(date_closed=None)
-    serializer = TasksSerializer(tasks, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getMyTasks(request, auth_id):
-    tasks = TaskAssignment.objects.filter(user=auth_id)
-    serializer = TasksSerializer(tasks, many=True)
-    return Response(serializer.data)
-
 
 @api_view(['GET'])
 def getCollected(request):
@@ -93,55 +50,6 @@ def collectionDetails(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-def mySubs(request, auth_id):
-    subscriptions = Subscription.objects.filter(user_id=auth_id)
-    serializer = SubSerializer(subscriptions, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getUsers(request):
-    users = UserProfile.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getCollectors(request):
-    users = Collectors.objects.all()
-    serializer = CollectorDetailsSerializer(users, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getUser(request, pk):
-    users = get_object_or_404(UserProfile, pk=pk)
-    serializer = UserSerializer(users)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getUserDetails(request, auth_id):
-    user = get_object_or_404(UserProfile, auth__id=auth_id)
-    serializer = DetailsSerializer(user)
-    data = serializer.data
-    return Response(data)
-
-
-@api_view(['GET'])
-def getCollector(request, pk):
-    users = get_object_or_404(Collectors, pk=pk)
-    serializer = CollectorSerializer(users)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getCollectorDetails(request, auth_id):
-    user = get_object_or_404(Collectors, auth__id=auth_id)
-    serializer = DetailsSerializer(user)
-    data = serializer.data
-    return Response(data)
 
 
 #                            #
@@ -161,7 +69,7 @@ def getCollectorDetails(request, auth_id):
 #                            #
 #                            #
 #    POST Request Methods    #
-#                            #a
+#                            #
 #                            #
 #                            #
 

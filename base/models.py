@@ -10,13 +10,15 @@ class Waste(models.Model):
     waste_desc = models.CharField(max_length=500)
     collection_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
 
+    
 # User Profile Model
 class CustomerProfile(models.Model):
-    user_id = models.AutoField(primary_key=True)
+    customer_id = models.AutoField(primary_key=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     address = models.TextField(max_length=200)
     auth = models.OneToOneField(User, on_delete=models.CASCADE)
+    
     
 # Collectors (Driver) Model
 class CollectorProfile(models.Model):
@@ -27,6 +29,14 @@ class CollectorProfile(models.Model):
     auth = models.ForeignKey(User, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    
+    
+# Driver Waste Type Model
+class CollectorWaste(models.Model):
+    collector_profile_id = models.AutoField(primary_key=True)
+    waste = models.ForeignKey(Waste, on_delete=models.CASCADE, related_name='waste_type')
+    collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector')
+
     
 
 # Collections Model
@@ -40,6 +50,8 @@ class Collection(models.Model):
 # User Requests Model
 class Requests(models.Model):
     request_id = models.AutoField(primary_key=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     number_of_bags = models.PositiveIntegerField()
     request_status = models.CharField(max_length=100)
     request_date = models.DateTimeField(default=timezone.now, blank=True)
