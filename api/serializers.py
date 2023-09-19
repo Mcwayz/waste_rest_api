@@ -42,16 +42,35 @@ class UserSerializer(serializers.ModelSerializer):
         
     
 # Collection Serializer
-        
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('auth', 'address', 'longitude', 'latitude')
+
 class CollectionSerializer(serializers.ModelSerializer):
-    address = serializers.CharField(source='user.address')
-    latitude = serializers.CharField(source='user.latitude')
-    lastname = serializers.CharField(source='auth.last_name')
-    longitude = serializers.CharField(source='user.longitude')
-    firstname = serializers.CharField(source='auth.first_name')
+    user = UserProfileSerializer()  # Use the nested serializer for UserProfile
+    firstname = serializers.SerializerMethodField()  # Add this line
+
     class Meta:
         model = Collection
-        fields = ('collection_id', 'user_id','firstname', 'lastname', 'is_collected', 'collection_date', 'user_collect_date', 'request_date','address', 'longitude', 'latitude')
+        fields = ('collection_id', 'user', 'firstname', 'lastname', 'is_collected', 'collection_date', 'user_collect_date', 'request_date', 'address', 'longitude', 'latitude')
+
+    def get_firstname(self, obj):
+        return obj.user.auth.first_name  # Access the first_name field through the UserProfile relationshipclass UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('auth', 'address', 'longitude', 'latitude')
+
+class CollectionSerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer()
+    firstname = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Collection
+        fields = ('collection_id', 'user', 'firstname', 'is_collected', 'collection_date', 'user_collect_date', 'request_date')
+
+    def get_firstname(self, obj):
+        return obj.user.auth.first_name
         
         
 # Profile Serializer
