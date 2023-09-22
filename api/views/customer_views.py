@@ -138,6 +138,31 @@ def cancel_request(request, request_id):
 
     return Response({'Message': 'Request Canceled Successfully'}, status=status.HTTP_200_OK)
 
+
+# Add Rating
+@api_view(['POST'])
+def add_rating(request, collection_id):
+    try:
+        collection = Collection.objects.get(pk=collection_id)
+    except Collection.DoesNotExist:
+        return Response({'Message': 'Collection Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if the authenticated user is the customer who made the request
+    if request.user != collection.request.customer.auth:
+        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+
+    # You can add additional validation logic for the rating data here
+    # For example, validate that the rating score is within a certain range
+
+    rating_score = request.data.get('rating_score')
+    if rating_score is None:
+        return Response({'mMssage': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Create a new rating object and associate it with the collection
+    rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
+
+    return Response({'message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
+
     
 
 

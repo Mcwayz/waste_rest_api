@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import CustomerProfile, Collection, Waste, CollectorProfile, Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, RatingSerializer, CollectionSerializer, CustomerLocationSerializer
+from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, RequestSerializer, RatingSerializer, CollectionSerializer, CustomerLocationSerializer
 
 
 #                            #
@@ -42,6 +42,12 @@ def getCollectors(request):
     serializer = CollectorSerializer(collectors, many=True)
     return Response(serializer.data) 
 
+# Get Collector
+@api_view(['GET'])
+def getCollector(request, pk):
+    collectors = CollectorProfile.objects.filter(pk=pk)
+    serializer = CollectorSerializer(collectors, many=True)
+    return Response(serializer.data) 
 
 # Get All Customers
 @api_view(['GET'])
@@ -50,6 +56,12 @@ def getCustomers(request):
     serializer = CustomerSerializer(customers, many=True)
     return Response(serializer.data) 
 
+# Get Customer
+@api_view(['GET'])
+def getCustomer(request, pk):
+    customer = CustomerProfile.objects.filter(pk=pk)
+    serializer = CustomerSerializer(customer, many=True)
+    return Response(serializer.data) 
 
 # Get Collection Details
 @api_view(['GET'])
