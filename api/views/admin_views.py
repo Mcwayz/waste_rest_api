@@ -25,7 +25,7 @@ def getCollections(request):
     collections = Collection.objects.all()
     serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data) 
-
+  
 
 # Get All Completed Collections
 @api_view(['GET'])
@@ -33,6 +33,22 @@ def getCollected(request):
     collections = Collection.objects.filter(is_collected=True)
     serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data)
+
+
+# Get All Collectors
+@api_view(['GET'])
+def getCollectors(request):
+    collectors = CollectorProfile.objects.all()
+    serializer = CollectorSerializer(collectors, many=True)
+    return Response(serializer.data) 
+
+
+# Get All Customers
+@api_view(['GET'])
+def getCustomers(request):
+    customers = CustomerProfile.objects.all()
+    serializer = CustomerSerializer(customers, many=True)
+    return Response(serializer.data) 
 
 
 # Get Collection Details
