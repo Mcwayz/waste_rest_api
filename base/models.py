@@ -34,7 +34,7 @@ class CollectorProfile(models.Model):
 # Driver Waste Type Model
 class CollectorWaste(models.Model):
     collector_profile_id = models.AutoField(primary_key=True)
-    waste = models.ForeignKey(Waste, on_delete=models.CASCADE, related_name='waste_type')
+    waste = models.ForeignKey(Waste, on_delete=models.CASCADE, related_name='collector_wastes')
     collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector')
 
     

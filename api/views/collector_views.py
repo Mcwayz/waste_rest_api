@@ -37,6 +37,14 @@ def getCollectorProfile(request, pk):
     return Response(serializer.data)
 
 
+# Get Collector Profiles
+@api_view(['GET'])
+def getCollectorProfiles(request):
+    profile = CollectorProfile.objects.all()
+    serializer = CollectorDetailsSerializer(profile, many=True)
+    return Response(serializer.data)
+
+
 # Get Completed Collections 
 @api_view(['GET'])
 def getCompletedCollections(request, pk):

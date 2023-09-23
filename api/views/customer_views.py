@@ -35,6 +35,22 @@ def collectionDetails(request, pk):
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
 
+# Get Customer Profile
+@api_view(['GET'])
+def getCustomerProfile(request, pk):
+    profile = get_object_or_404(CustomerProfile, pk=pk)
+    serializer = CustomerSerializer(profile)
+    return Response(serializer.data)
+
+
+# Get Customers
+
+@api_view(['GET'])
+def getCustomerProfiles(request):
+    profile = CustomerProfile.objects.all()
+    serializer = CustomerSerializer(profile, many=True)
+    return Response(serializer.data)
+
 
 #                            #
 #                            #

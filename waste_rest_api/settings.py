@@ -14,6 +14,10 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+
+GDAL_LIBRARY_PATH = '/usr/lib/libgdal.so'  # Update with the actual path to your GDAL library
+os.environ['GDAL_LIBRARY_PATH'] = GDAL_LIBRARY_PATH
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

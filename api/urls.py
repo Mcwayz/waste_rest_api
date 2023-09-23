@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import views
+from .views import collector_views, customer_views, admin_views
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -10,34 +10,23 @@ from rest_framework_simplejwt.views import (
 #URLs / Routes for endpoints
 
 urlpatterns = [
-    path('', views.apiOverview),
-    path('users', views.getUsers),
-    path('tasks', views.getTasks),
-    path('waste-types', views.getWaste),
-    path('add-wastetype', views.addWaste),
-    path('add-profile', views.addProfile),
-    path('collectors', views.getCollectors),
-    path('collections', views.getCollected),
-    path('add-collector', views.addCollector),
-    path('add-collection', views.addCollection),
-    path('subscriptions', views.getSubscription),
-    path('assign-collector', views.addAssignment),
-    path('add-subscription', views.addSubscription),
-    path('my-tasks/<int:auth_id>/', views.getMyTasks),
-    path('collection-requests', views.getCollections),
-    path('my-subscriptions/<int:auth_id>/', views.mySubs),
-    path('add-user/', views.create_user, name='create-user'),
-    path('collector/<str:pk>/', views.getCollector, name='Collector'),
-    path('user-details/<str:pk>/', views.getUser, name='user-details'),
-    path('update-user/<str:pk>/', views.updateUser, name='update-user'),
-    path('update-waste/<str:pk>/', views.updateWaste, name='update-waste'),
+    path('addWasteType', admin_views.addWaste),
+    path('wasteTypes', customer_views.getWaste),
+    path('customerRequests', admin_views.getRequests),
+    path('addCollection', collector_views.addCollection),
+    path('customers', customer_views.getCustomerProfiles),
+    path('collectors', collector_views.getCollectorProfiles),
+    path('updateCustomer/<str:pk>/', customer_views.updateUser),
+    path('updateCollector/<str:pk>/', collector_views.updateUser),
+    path('avaliableDrivers', customer_views.viewAvailableDrivers),
+    path('addCollectorProfile', collector_views.addCollectorProfile),
+    path('addCollector/', collector_views.create_user, name='create-user'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('waste-details/<str:pk>/', views.wasteDetails, name='waste-details'),
-    path('profile-details/<int:auth_id>/', views.getUserDetails, name='user-details'),
-    path('update-subscription/<str:pk>/', views.updateUser, name='update-subscription'),
-    path('update-collection/<str:pk>/', views.update_collection, name='update-collection'),
-    path('collection-details/<str:pk>/', views.collectionDetails, name='collection-details'),
-    path('collector-details/<int:auth_id>/', views.getCollectorDetails, name='collector-details'),
-    path('subscription-details/<str:pk>', views.subscriptionDetails, name='subscription-details'),
+    path('updateWaste/<str:pk>/', admin_views.updateWaste, name='update-waste'),
+    path('wasteDetails/<str:pk>/', admin_views.wasteDetails, name='waste-details'),
+    path('cancelRequest/<str:pk>/', customer_views.cancel_request, name='cancel-request'),
+    path('customerDetails/<str:pk>/', customer_views.getCustomerProfile, name='user-details'),
+    path('collectionDetails/<str:pk>/', customer_views.collectionDetails, name='collection-details'),
+    path('collectorDetails/<str:pk>/', collector_views.getCollectorProfile, name='collector-details'),
 ]

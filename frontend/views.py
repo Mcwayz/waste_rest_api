@@ -3,7 +3,7 @@ import datetime as date_time
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import render
-from base.models import Collection, Subscription
+from base.models import Collection
 from .decorators import token_required
 
 
@@ -20,8 +20,8 @@ def dashboard(request):
  # Calculate the date range for active subscriptions (less than 30 days)
     today = timezone.now().date()
     thirty_days_ago = today - date_time.timedelta(days=30)
-    active_subscriptions_count = Subscription.objects.filter(sub_date__gte=thirty_days_ago).count()
-    all_subscriptions_count = Subscription.objects.count()
+    active_subscriptions_count = Collection.objects.filter(sub_date__gte=thirty_days_ago).count()
+    all_subscriptions_count = Collection.objects.count()
     collection_requests_count = Collection.objects.filter(is_collected=False).count()
     complete_collections_count = Collection.objects.filter(is_collected=True).count()
     overdue_subscriptions_count = all_subscriptions_count - active_subscriptions_count

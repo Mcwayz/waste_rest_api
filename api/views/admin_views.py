@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from base.models import CustomerProfile, Collection, Waste, CollectorProfile, Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, RequestSerializer, RatingSerializer, CollectionSerializer, CustomerLocationSerializer
+from base.models import Collection, Waste,  Requests, Ratings
+from ..serializers.customer_serializer import WasteSerializer,RequestSerializer, RatingSerializer, CollectionSerializer
 
 
 #                            #
@@ -35,34 +35,6 @@ def getCollected(request):
     return Response(serializer.data)
 
 
-# Get All Collectors
-@api_view(['GET'])
-def getCollectors(request):
-    collectors = CollectorProfile.objects.all()
-    serializer = CollectorSerializer(collectors, many=True)
-    return Response(serializer.data) 
-
-# Get Collector
-@api_view(['GET'])
-def getCollector(request, pk):
-    collectors = CollectorProfile.objects.filter(pk=pk)
-    serializer = CollectorSerializer(collectors, many=True)
-    return Response(serializer.data) 
-
-# Get All Customers
-@api_view(['GET'])
-def getCustomers(request):
-    customers = CustomerProfile.objects.all()
-    serializer = CustomerSerializer(customers, many=True)
-    return Response(serializer.data) 
-
-# Get Customer
-@api_view(['GET'])
-def getCustomer(request, pk):
-    customer = CustomerProfile.objects.filter(pk=pk)
-    serializer = CustomerSerializer(customer, many=True)
-    return Response(serializer.data) 
-
 # Get Collection Details
 @api_view(['GET'])
 def collectionDetails(request, pk):
@@ -77,6 +49,21 @@ def wasteDetails(request, pk):
     waste = get_object_or_404(Waste, pk=pk)
     serializier = WasteSerializer(waste)
     return Response(serializier.data)
+
+# Get All Requests
+@api_view(['GET'])
+def getRequests(request):
+    requests = Requests.objects.all()
+    serializer = RequestSerializer(requests, many=True)
+    return Response(serializer.data) 
+
+
+# Get Driver Rating
+@api_view(['GET'])
+def getDriverRating(request, collector_id):
+    rating = Ratings.objects.filter(collector_id=collector_id)
+    serializer = RatingSerializer(rating, many=True)
+    return Response(serializer.data) 
 
 
 #                            #
@@ -102,7 +89,7 @@ def wasteDetails(request, pk):
 
 
 
-
+# Add Waste Type
 @api_view(['POST'])
 def addWaste(request):
     serializer = WasteSerializer(data=request.data)
@@ -111,6 +98,24 @@ def addWaste(request):
         return Response(serializer.data)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+# Create User Account
+@api_view(['POST'])
+def create_user(request):
+    data = json.loads(request.body)
+    form = UserCreationForm(data)
+    if form.is_valid():
+        user = form.save(commit=False)
+        user.username = data['username']
+        user.email = data['email']
+        user.first_name = data.get('first_name')
+        user.last_name = data.get('last_name')
+        user.password1 = data['password1']
+        user.password2 = data['password2']
+        user.save()
+        return Response({'Success': True, 'User_id': user.id}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'Success': False, 'Errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 #                            #
 #                            #
