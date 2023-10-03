@@ -65,6 +65,14 @@ def getDriverRating(request, collector_id):
     serializer = RatingSerializer(rating, many=True)
     return Response(serializer.data) 
 
+# Get Cancelled Requests
+@api_view(['GET'])
+def getCancelledRequests(request):
+    cancelled = Requests.objects.filter(request_status='Canceled')
+    serializer = RequestSerializer(cancelled, many=True)
+    return Response(serializer.data)
+    
+
 
 #                            #
 #                            #
