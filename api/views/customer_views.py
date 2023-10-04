@@ -149,10 +149,10 @@ def cancel_request(request, request_id):
     # For example, you might want to check if the request can be canceled
 
     # Perform the cancellation logic here (e.g., update the request status)
-    request_obj.request_status = 'Canceled'
+    request_obj.request_status = 'Cancelled'
     request_obj.save()
 
-    return Response({'Message': 'Request Canceled Successfully'}, status=status.HTTP_200_OK)
+    return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
 
 
 # Add Rating
