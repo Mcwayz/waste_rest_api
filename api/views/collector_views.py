@@ -114,28 +114,30 @@ def addCollection(request):
     
     
 # Add Collector Profile
-
 @api_view(['POST'])
 def addCollectorProfile(request):
     if request.method == 'POST':
-        auth_id = request.data.get('auth_id')
-
-        try:
-            user = User.objects.get(id=auth_id)
-        except User.DoesNotExist:
-            return Response({'Message': 'User Not Found'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Create a serializer for the CollectorProfile model and provide the data
+        # Deserialize the request data using the CollectorDetailsSerializer
         serializer = CollectorDetailsSerializer(data=request.data)
 
         if serializer.is_valid():
-            # Save the CollectorProfile and associate it with the user
-            collector_profile = serializer.save(auth=user)
-            return Response({'Success': True, 'Auth_ID': auth_id, 'Collector_Profile_ID': collector_profile.collector_id}, status=status.HTTP_201_CREATED)
+            # Save the serialized data to create a new CollectorProfile instance
+            collector_profile = serializer.save()
+
+            return Response(
+                {
+                    'Success': True,
+                    'Auth_ID': collector_profile.auth_id,
+                    'Collector_Profile_ID': collector_profile.collector_id
+                },
+                status=status.HTTP_201_CREATED
+            )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({'Message': 'Invalid Request Method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
 
 
 # Cancelling a Collection REquest

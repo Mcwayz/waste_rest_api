@@ -10,11 +10,13 @@ from rest_framework_simplejwt.views import (
 #URLs / Routes for endpoints
 
 urlpatterns = [
+    path('addUser/', admin_views.create_user),
     path('addWasteType/', admin_views.addWaste),
     path('wasteTypes/', customer_views.getWaste),
     path('customerRequests/', admin_views.getRequests),
     path('addCollection/', collector_views.addCollection),
     path('customers/', customer_views.getCustomerProfiles),
+    path('addCustomerProfile/', customer_views.addProfile),
     path('collectors/', collector_views.getCollectorProfiles),
     path('updateCustomer/<str:pk>/', customer_views.updateUser),
     path('updateCollector/<str:pk>/', collector_views.updateUser),
