@@ -114,28 +114,6 @@ def addCollection(request):
     
     
 # Add Collector Profile
-@api_view(['POST'])
-def addCollectorProfile(request):
-    if request.method == 'POST':
-        # Deserialize the request data using the CollectorDetailsSerializer
-        serializer = CollectorDetailsSerializer(data=request.data)
-
-        if serializer.is_valid():
-            # Save the serialized data to create a new CollectorProfile instance
-            collector_profile = serializer.save()
-
-            return Response(
-                {
-                    'Success': True,
-                    'Auth_ID': collector_profile.auth_id,
-                    'Collector_Profile_ID': collector_profile.collector_id
-                },
-                status=status.HTTP_201_CREATED
-            )
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    return Response({'Message': 'Invalid Request Method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 

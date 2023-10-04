@@ -29,9 +29,6 @@ class CustomerSerializer(serializers.ModelSerializer):
 # Collector Serializer
 class CollectorDetailsSerializer(serializers.ModelSerializer):
     auth_id = serializers.SerializerMethodField()
-    email = serializers.CharField(source='auth.email')
-    lastname = serializers.CharField(source='auth.last_name')
-    firstname = serializers.CharField(source='auth.first_name')
 
     def get_auth_id(self, obj):
         return obj.auth_id if obj.auth else None
