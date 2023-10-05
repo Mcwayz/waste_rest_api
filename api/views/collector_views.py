@@ -115,27 +115,28 @@ def addCollection(request):
     
 # Add Collector Profile
 @api_view(['POST'])
-def addProfile(request):
+def addCollectorProfile(request):
     if request.method == 'POST':
-        auth_id = request.data.get('auth_id')
-        
-        try:
-            user = User.objects.get(id=auth_id)
-        except User.DoesNotExist:
-            return Response({'Message': 'User Not Found'}, status=404)
-        
-        # Create a CustomerProfile instance without passing 'data'
-        collector_profile = CollectorProfile.objects.create(
-            vehicle=request.data.get('vehicle'),
-            latitude=request.data.get('latitude'),
-            longitude=request.data.get('longitude'),
-            work_area=request.data.get('work_area'),
-            auth=user
-        )
-        
-        return Response({'Success': True, 'Auth_id': auth_id}, status=status.HTTP_201_CREATED)
+        # Deserialize the request data using the CollectorDetailsSerializer
+        serializer = CollectorDetailsSerializer(data=request.data)
 
-    return Response({'Message': 'Invalid Request Method'}, status=405)
+        if serializer.is_valid():
+            # Save the serialized data to create a new CollectorProfile instance
+            collector_profile = serializer.save()
+
+            return Response(
+                {
+                    'Success': True,
+                    'Auth_ID': collector_profile.auth_id,
+                    'Collector_Profile_ID': collector_profile.collector_id
+                },
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({'Message': 'Invalid Request Method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 
 
