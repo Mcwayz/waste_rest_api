@@ -114,7 +114,28 @@ def addCollection(request):
     
     
 # Add Collector Profile
+@api_view(['POST'])
+def addProfile(request):
+    if request.method == 'POST':
+        auth_id = request.data.get('auth_id')
+        
+        try:
+            user = User.objects.get(id=auth_id)
+        except User.DoesNotExist:
+            return Response({'Message': 'User Not Found'}, status=404)
+        
+        # Create a CustomerProfile instance without passing 'data'
+        collector_profile = CollectorProfile.objects.create(
+            vehicle=request.data.get('vehicle'),
+            latitude=request.data.get('latitude'),
+            longitude=request.data.get('longitude'),
+            work_area=request.data.get('work_area'),
+            auth=user
+        )
+        
+        return Response({'Success': True, 'Auth_id': auth_id}, status=status.HTTP_201_CREATED)
 
+    return Response({'Message': 'Invalid Request Method'}, status=405)
 
 
 

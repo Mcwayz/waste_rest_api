@@ -51,7 +51,6 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ('collection_id', 'request', 'collector', 'request_date', 'collection_date', 'collection_price')
         
 # Collector Location Serializer
-        
 class CustomerLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requests
