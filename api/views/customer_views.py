@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from ..utills.utills import get_collectors_within_radius
-from base.models import CustomerProfile, Collection, Waste, CollectorProfile, Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, RatingSerializer, CollectionSerializer, CustomerLocationSerializer
+from base.models import CustomerProfile, Collection, Waste,Requests, Ratings
+from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CustomerLocationSerializer
 
 
 #                            #
@@ -114,28 +114,17 @@ def create_user(request):
     
     
 # Add Customer Profile
+
 @api_view(['POST'])
 def addProfile(request):
     if request.method == 'POST':
         auth_id = request.data.get('auth_id')
-        
-        try:
-            user = User.objects.get(id=auth_id)
-        except User.DoesNotExist:
-            return Response({'Message': 'User Not Found'}, status=404)
-        
-        # Create a CustomerProfile instance without passing 'data'
-        customer_profile = CustomerProfile.objects.create(
-            latitude=request.data.get('latitude'),
-            longitude=request.data.get('longitude'),
-            address=request.data.get('address'),
-            auth=user
-        )
-        
-        return Response({'Success': True, 'Auth_id': auth_id}, status=status.HTTP_201_CREATED)
-
-    return Response({'Message': 'Invalid Request Method'}, status=405)
-
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # Save the validated data to the database
+            return Response({'Success': True, 'Auth_ID': auth_id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 # Cancelling a Collection REquest
 @api_view(['POST']) 

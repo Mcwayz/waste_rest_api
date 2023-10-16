@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view
-from base.models import CustomerProfile, Collection, Waste, CollectorProfile, Requests, Ratings
-from ..serializers.collector_serializer import WasteSerializer, CollectorWasteSerializer, CustomerSerializer, CollectorDetailsSerializer, RequestSerializer, CollectionSerializer, CollectorLocationUpdateSerializer
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings
+from ..serializers.collector_serializer import CollectorProfileSerializer, RequestSerializer, CollectionSerializer, CollectorLocationUpdateSerializer
 
 
 #                            #
@@ -25,7 +25,7 @@ from ..serializers.collector_serializer import WasteSerializer, CollectorWasteSe
 def getRequests(request):
     status = request.data.get('request_status')
     requests = Requests.objects.filter(request_status=status)
-    serializer = WasteSerializer(requests, many=True)
+    serializer = RequestSerializer(requests, many=True)
     return Response(serializer.data) 
 
 
@@ -33,7 +33,7 @@ def getRequests(request):
 @api_view(['GET'])
 def getCollectorProfile(request, pk):
     profile = get_object_or_404(CollectorProfile, pk=pk)
-    serializer = CollectorDetailsSerializer(profile, many=True)
+    serializer = CollectorProfileSerializer(profile, many=True)
     return Response(serializer.data)
 
 
@@ -41,7 +41,7 @@ def getCollectorProfile(request, pk):
 @api_view(['GET'])
 def getCollectorProfiles(request):
     profile = CollectorProfile.objects.all()
-    serializer = CollectorDetailsSerializer(profile, many=True)
+    serializer = CollectorProfileSerializer(profile, many=True)
     return Response(serializer.data)
 
 
@@ -97,7 +97,7 @@ def create_user(request):
         user.password1 = data['password1']
         user.password2 = data['password2']
         user.save()
-        return Response({'Success': True, 'User_id': user.id}, status=status.HTTP_201_CREATED)
+        return Response({'Success': True, 'User_ID': user.id}, status=status.HTTP_201_CREATED)
     else:
         return Response({'Success': False, 'Errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -111,55 +111,21 @@ def addCollection(request):
         return Response(serializer.data)
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-# Add Collector Profile
-@api_view(['POST'])
-def addCollectorProfile(request):
-    if request.method == 'POST':
-        # Deserialize the request data using the CollectorDetailsSerializer
-        serializer = CollectorDetailsSerializer(data=request.data)
-
-        if serializer.is_valid():
-            # Save the serialized data to create a new CollectorProfile instance
-            collector_profile = serializer.save()
-
-            return Response(
-                {
-                    'Success': True,
-                    'Auth_ID': collector_profile.auth_id,
-                    'Collector_Profile_ID': collector_profile.collector_id
-                },
-                status=status.HTTP_201_CREATED
-            )
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    return Response({'Message': 'Invalid Request Method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-
-
-# Cancelling a Collection REquest
+# Cancelling a Collection Request
 @api_view(['POST']) 
 def cancel_request(request, request_id):
     try:
         request_obj = Requests.objects.get(pk=request_id)
     except Requests.DoesNotExist:
         return Response({'Message': 'Request Not Found'}, status=status.HTTP_404_NOT_FOUND)
-
-    # Check if the authenticated user has permission to cancel this request
     if request.user != request_obj.customer.auth:
         return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-
-    # You may want to add additional checks or business logic here
-    # For example, you might want to check if the request can be canceled
-
-    # Perform the cancellation logic here (e.g., update the request status)
-    request_obj.request_status = 'Canceled'
+    request_obj.request_status = 'Cancelled'
     request_obj.save()
 
-    return Response({'Message': 'Request Canceled Successfully'}, status=status.HTTP_200_OK)
+    return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
 
 
 
@@ -188,7 +154,7 @@ def cancel_request(request, request_id):
 @api_view(['PUT'])
 def updateUser(request, pk):
     user = CustomerProfile.objects.get(user_id=pk)
-    serializer = CollectorDetailsSerializer(instance=user, data=request.data)
+    serializer = CollectorProfileSerializer(instance=user, data=request.data)
     if serializer.is_valid():
         serializer.save() 
         return Response(serializer.data)

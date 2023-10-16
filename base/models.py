@@ -17,18 +17,19 @@ class CustomerProfile(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     address = models.TextField(max_length=200)
-    auth = models.OneToOneField(User, on_delete=models.CASCADE)
+    auth = models.ForeignKey(User, on_delete=models.CASCADE)
     
     
 # Collectors (Driver) Model
 class CollectorProfile(models.Model):
     collector_id = models.AutoField(primary_key=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     vehicle = models.CharField(max_length=200)
     work_area = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
     auth = models.ForeignKey(User, on_delete=models.CASCADE)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+
     
     
 # Driver Waste Type Model
