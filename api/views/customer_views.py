@@ -68,8 +68,8 @@ def viewAvailableDrivers(request):
     serializer = CustomerLocationSerializer(data=request.data)
     
     if serializer.is_valid():
-        latitude = serializer.validated_data['latitude']
-        longitude = serializer.validated_data['longitude']
+        latitude = str(serializer.validated_data['latitude'])  # Convert to string
+        longitude = str(serializer.validated_data['longitude'])  # Convert to string
         
         # Query available collectors within a radius (e.g., 10 kilometers)
         collectors = get_collectors_within_radius(latitude, longitude, radius_km=10)
@@ -119,7 +119,7 @@ def create_user(request):
 def addProfile(request):
     if request.method == 'POST':
         auth_id = request.data.get('auth_id')
-        serializer = CustomerSerializer(data=request.data)
+        serializer = CollectorSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()  # Save the validated data to the database
             return Response({'Success': True, 'Auth_ID': auth_id}, status=status.HTTP_201_CREATED)

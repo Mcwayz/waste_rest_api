@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from base.models import CustomerProfile, Waste, CollectorProfile, CollectorWaste, Requests, Collection
+from base.models import Waste, CollectorProfile, CollectorWaste, Requests, Collection
 
     
 # Waste Type Serializer
@@ -19,10 +17,10 @@ class CollectorWasteSerializer(serializers.ModelSerializer):
         
         
 # Collector Serializer
-class CollectorProfileSerializer(serializers.ModelSerializer):
+class CollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectorProfile
-        fields = ('collector_id', 'vehicle', 'work_area', 'latitude', 'longitude', 'auth')
+        fields = ('collector_id', 'vehicle', 'work_area', 'latitude', 'longitude', 'timestamp', 'auth')
 
 
 # Request Serializer

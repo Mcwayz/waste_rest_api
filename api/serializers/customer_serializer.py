@@ -20,7 +20,7 @@ class CollectorSerializer(serializers.ModelSerializer):
     # Include user-related fields directly or reference them using UserSerializer
     class Meta:
         model = CollectorProfile
-        fields = ('collector_id', 'vehicle', 'work_area', 'latitude', 'longitude')
+        fields = ('collector_id', 'vehicle', 'work_area', 'latitude', 'longitude', 'timestamp')
 
 # User Serializer (for referencing user-related fields)
 class UserSerializer(serializers.ModelSerializer):

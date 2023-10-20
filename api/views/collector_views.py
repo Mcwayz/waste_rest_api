@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings
-from ..serializers.collector_serializer import CollectorProfileSerializer, RequestSerializer, CollectionSerializer, CollectorLocationUpdateSerializer
+from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer, CollectorLocationUpdateSerializer
 
 
 #                            #
@@ -33,7 +33,7 @@ def getRequests(request):
 @api_view(['GET'])
 def getCollectorProfile(request, pk):
     profile = get_object_or_404(CollectorProfile, pk=pk)
-    serializer = CollectorProfileSerializer(profile, many=True)
+    serializer = CollectorSerializer(profile, many=True)
     return Response(serializer.data)
 
 
@@ -41,7 +41,7 @@ def getCollectorProfile(request, pk):
 @api_view(['GET'])
 def getCollectorProfiles(request):
     profile = CollectorProfile.objects.all()
-    serializer = CollectorProfileSerializer(profile, many=True)
+    serializer = CollectorSerializer(profile, many=True)
     return Response(serializer.data)
 
 
@@ -126,6 +126,18 @@ def cancel_request(request, request_id):
     request_obj.save()
 
     return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
+
+
+# Add Collector Profile
+@api_view(['POST'])
+def addProfile(request):
+    if request.method == 'POST':
+        auth_id = request.data.get('auth')
+        serializer = CollectorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # Save the validated data to the database
+            return Response({'Success': True, 'Auth_ID': auth_id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

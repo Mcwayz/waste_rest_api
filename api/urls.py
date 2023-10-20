@@ -17,6 +17,7 @@ urlpatterns = [
     path('addCollection/', collector_views.addCollection),
     path('customers/', customer_views.getCustomerProfiles),
     path('addCustomerProfile/', customer_views.addProfile),
+    path('addCollectorProfile/', collector_views.addProfile),
     path('collectors/', collector_views.getCollectorProfiles),
     path('updateCustomer/<str:pk>/', customer_views.updateUser),
     path('updateCollector/<str:pk>/', collector_views.updateUser),
