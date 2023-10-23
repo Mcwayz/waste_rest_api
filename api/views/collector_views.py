@@ -166,7 +166,7 @@ def addProfile(request):
 @api_view(['PUT'])
 def updateUser(request, pk):
     user = CustomerProfile.objects.get(user_id=pk)
-    serializer = CollectorProfileSerializer(instance=user, data=request.data)
+    serializer = CollectorSerializer(instance=user, data=request.data)
     if serializer.is_valid():
         serializer.save() 
         return Response(serializer.data)

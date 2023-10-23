@@ -1,13 +1,19 @@
 import json
 from datetime import datetime
+from django.db.models import F
 from rest_framework import status
+from django.contrib.gis.measure import D
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
+from django.contrib.gis.db.models import Point
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.forms import UserCreationForm
 from ..utills.utills import get_collectors_within_radius
-from base.models import CustomerProfile, Collection, Waste,Requests, Ratings
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.db.models import functions as geo_functions
+from base.models import CollectorProfile, CustomerProfile, Collection, Waste,Requests, Ratings
 from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CustomerLocationSerializer
 
 
@@ -62,24 +68,49 @@ def getCustomerProfiles(request):
 
 
 
-# Customer to view available Collectors within the area.
+# # Customer to view available Collectors within the area.
+# @api_view(['POST'])
+# def viewAvailableDrivers(request):
+#     serializer = CustomerLocationSerializer(data=request.data)
+    
+#     if serializer.is_valid():
+#         latitude = str(serializer.validated_data['latitude'])  # Convert to string
+#         longitude = str(serializer.validated_data['longitude'])  # Convert to string
+        
+#         # Query available collectors within a radius (e.g., 10 kilometers)
+#         collectors = get_collectors_within_radius(latitude, longitude, radius_km=10)
+        
+#         # Serialize the collector profiles
+#         collector_data = CollectorSerializer(collectors, many=True).data
+        
+#         return Response(collector_data, status=status.HTTP_200_OK)
+#     else:
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+   
 @api_view(['POST'])
 def viewAvailableDrivers(request):
-    serializer = CustomerLocationSerializer(data=request.data)
-    
-    if serializer.is_valid():
-        latitude = str(serializer.validated_data['latitude'])  # Convert to string
-        longitude = str(serializer.validated_data['longitude'])  # Convert to string
-        
-        # Query available collectors within a radius (e.g., 10 kilometers)
-        collectors = get_collectors_within_radius(latitude, longitude, radius_km=10)
-        
-        # Serialize the collector profiles
-        collector_data = CollectorSerializer(collectors, many=True).data
-        
-        return Response(collector_data, status=status.HTTP_200_OK)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        latitude = float(request.query_params.get('latitude'))
+        longitude = float(request.query_params.get('longitude'))
+    except (ValueError, TypeError):
+        return Response({"message": "Invalid latitude or longitude provided."}, status=400)
+
+    # Create a point from the customer's location
+    customer_location = Point(longitude, latitude, srid=4326)
+
+    # Define a search radius (15 kilometers)
+    search_radius = D(km=15)
+
+    # Query collectors within the specified radius
+    collectors = CollectorProfile.objects.filter(
+        location__distance_lte=(customer_location, search_radius)
+    )
+
+    # Serialize the collector profiles
+    collector_data = CollectorSerializer(collectors, many=True).data
+
+    return Response(collector_data, status=200)
     
     
 # Update Customer Record

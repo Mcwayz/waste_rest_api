@@ -6,8 +6,8 @@ EARTH_RADIUS_KM = 6371  # Earth radius in kilometers
 
 def get_collectors_within_radius(customer_latitude, customer_longitude, radius_km=10):
     # Convert latitude and longitude to radians
-    customer_latitude_rad = Radians(Func(F(customer_latitude)))
-    customer_longitude_rad = Radians(Func(F(customer_longitude)))
+    customer_latitude_rad = Radians(Func(customer_latitude))
+    customer_longitude_rad = Radians(Func(customer_longitude))
 
     # Calculate the distance formula using Haversine formula
     collectors = CollectorProfile.objects.annotate(
