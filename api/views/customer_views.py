@@ -1,18 +1,12 @@
 import json
+import math
 from datetime import datetime
-from django.db.models import F
 from rest_framework import status
-from django.contrib.gis.measure import D
-from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from django.contrib.gis.db.models import Point
-from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.forms import UserCreationForm
 from ..utills.utills import get_collectors_within_radius
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.db.models import functions as geo_functions
 from base.models import CollectorProfile, CustomerProfile, Collection, Waste,Requests, Ratings
 from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CustomerLocationSerializer
 
@@ -91,24 +85,41 @@ def getCustomerProfiles(request):
 @api_view(['POST'])
 def viewAvailableDrivers(request):
     try:
-        latitude = float(request.query_params.get('latitude'))
-        longitude = float(request.query_params.get('longitude'))
+        data = request.data  # Get data from the request body
+        latitude = float(data.get('latitude'))
+        longitude = float(data.get('longitude'))
     except (ValueError, TypeError):
-        return Response({"message": "Invalid latitude or longitude provided."}, status=400)
+        return Response({"message": "Invalid latitude or longitude provided."}, status=400)     
 
-    # Create a point from the customer's location
-    customer_location = Point(longitude, latitude, srid=4326)
+    # Define the search radius in kilometers (15 kilometers)
+    search_radius = 15.0
 
-    # Define a search radius (15 kilometers)
-    search_radius = D(km=15)
+    # Convert latitude and longitude from degrees to radians
+    customer_lat_rad = math.radians(latitude)
+    customer_lon_rad = math.radians(longitude)
 
-    # Query collectors within the specified radius
-    collectors = CollectorProfile.objects.filter(
-        location__distance_lte=(customer_location, search_radius)
-    )
+    # Query all collector profiles from the database
+    collectors = CollectorProfile.objects.all()
+
+    # Filter collectors within the specified radius
+    collectors_within_radius = []
+
+    for collector in collectors:
+        collector_lat_rad = math.radians(collector.latitude)
+        collector_lon_rad = math.radians(collector.longitude)
+
+        # Haversine formula for distance calculation
+        dlon = collector_lon_rad - customer_lon_rad
+        dlat = collector_lat_rad - customer_lat_rad
+        a = math.sin(dlat/2)**2 + math.cos(customer_lat_rad) * math.cos(collector_lat_rad) * math.sin(dlon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        distance_km = 6371 * c  # Radius of the Earth in kilometers
+
+        if distance_km <= search_radius:
+            collectors_within_radius.append(collector)
 
     # Serialize the collector profiles
-    collector_data = CollectorSerializer(collectors, many=True).data
+    collector_data = CollectorSerializer(collectors_within_radius, many=True).data
 
     return Response(collector_data, status=200)
     

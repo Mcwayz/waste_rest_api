@@ -1,7 +1,6 @@
 from django.db import models
 from decimal import Decimal
 from django.utils import timezone
-from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 # Waste Type Model
@@ -24,7 +23,8 @@ class CustomerProfile(models.Model):
 # Collectors (Driver) Model
 class CollectorProfile(models.Model):
     collector_id = models.AutoField(primary_key=True)
-    location = models.PointField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     vehicle = models.CharField(max_length=200)
     work_area = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)

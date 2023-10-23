@@ -15,9 +15,6 @@ from pathlib import Path
 from datetime import timedelta
 
 
-GDAL_LIBRARY_PATH = '/usr/lib/libgdal.so'  # Update with the actual path to your GDAL library
-os.environ['GDAL_LIBRARY_PATH'] = GDAL_LIBRARY_PATH
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
-    'django.contrib.gis',
     'rest_framework',
     'frontend',
     'base',
