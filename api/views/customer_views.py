@@ -60,27 +60,6 @@ def getCustomerProfiles(request):
 #                            #
 #                            #
 
-
-
-# # Customer to view available Collectors within the area.
-# @api_view(['POST'])
-# def viewAvailableDrivers(request):
-#     serializer = CustomerLocationSerializer(data=request.data)
-    
-#     if serializer.is_valid():
-#         latitude = str(serializer.validated_data['latitude'])  # Convert to string
-#         longitude = str(serializer.validated_data['longitude'])  # Convert to string
-        
-#         # Query available collectors within a radius (e.g., 10 kilometers)
-#         collectors = get_collectors_within_radius(latitude, longitude, radius_km=10)
-        
-#         # Serialize the collector profiles
-#         collector_data = CollectorSerializer(collectors, many=True).data
-        
-#         return Response(collector_data, status=status.HTTP_200_OK)
-#     else:
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
    
 @api_view(['POST'])
 def viewAvailableDrivers(request):
@@ -179,11 +158,6 @@ def cancel_request(request, request_id):
     # Check if the authenticated user has permission to cancel this request
     if request.user != request_obj.customer.auth:
         return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-
-    # You may want to add additional checks or business logic here
-    # For example, you might want to check if the request can be canceled
-
-    # Perform the cancellation logic here (e.g., update the request status)
     request_obj.request_status = 'Cancelled'
     request_obj.save()
 
@@ -201,10 +175,6 @@ def add_rating(request, collection_id):
     # Check if the authenticated user is the customer who made the request
     if request.user != collection.request.customer.auth:
         return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-
-    # You can add additional validation logic for the rating data here
-    # For example, validate that the rating score is within a certain range
-
     rating_score = request.data.get('rating_score')
     if rating_score is None:
         return Response({'mMssage': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
