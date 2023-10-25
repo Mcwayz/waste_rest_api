@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 # Waste Type Model
 class Waste(models.Model):
     waste_id = models.AutoField(primary_key=True)
@@ -31,14 +32,12 @@ class CollectorProfile(models.Model):
     auth = models.ForeignKey(User, on_delete=models.CASCADE)
 
     
-    
 # Driver Waste Type Model
 class CollectorWaste(models.Model):
     collector_profile_id = models.AutoField(primary_key=True)
     waste = models.ForeignKey(Waste, on_delete=models.CASCADE, related_name='collector_wastes')
     collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector')
 
-    
 
 # Collections Model
 class Collection(models.Model):

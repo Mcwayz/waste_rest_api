@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from ..utills.utills import get_collectors_within_radius
 from base.models import CollectorProfile, CustomerProfile, Collection, Waste,Requests, Ratings
 from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CustomerLocationSerializer
 
