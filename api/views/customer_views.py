@@ -1,6 +1,5 @@
 import json
 import math
-from datetime import datetime
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -91,12 +90,10 @@ def viewAvailableDrivers(request):
         dlat = collector_lat_rad - customer_lat_rad
         a = math.sin(dlat/2)**2 + math.cos(customer_lat_rad) * math.cos(collector_lat_rad) * math.sin(dlon/2)**2
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance_km = 6371 * c  # Radius of the Earth in kilometers
+        distance_km = 6371 * c  
 
         if distance_km <= search_radius:
             collectors_within_radius.append(collector)
-
-    # Serialize the collector profiles
     collector_data = CollectorSerializer(collectors_within_radius, many=True).data
 
     return Response(collector_data, status=200)
