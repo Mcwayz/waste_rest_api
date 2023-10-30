@@ -83,9 +83,6 @@ def getCancelledRequests(request):
 
 
 
-
-
-
 #                            #
 #                            #
 #                            #

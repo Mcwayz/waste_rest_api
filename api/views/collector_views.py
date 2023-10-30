@@ -18,6 +18,7 @@ from ..serializers.collector_serializer import CollectorSerializer, RequestSeria
 #                            #
 
 
+
 # Get Customer Requests
 @api_view(['GET'])
 def getRequests(request):
@@ -25,6 +26,7 @@ def getRequests(request):
     requests = Requests.objects.filter(request_status=status)
     serializer = RequestSerializer(requests, many=True)
     return Response(serializer.data) 
+
 
 
 # Get Collector Profile
@@ -35,12 +37,14 @@ def getCollectorProfile(request, pk):
     return Response(serializer.data)
 
 
+
 # Get Collector Profiles
 @api_view(['GET'])
 def getCollectorProfiles(request):
     profile = CollectorProfile.objects.all()
     serializer = CollectorSerializer(profile, many=True)
     return Response(serializer.data)
+
 
 
 # Get Completed Collections 
