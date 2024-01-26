@@ -30,7 +30,7 @@ def dashboard(request):
         item['sub_date'] = sub_date
 
 
-    context = {
+    context = { 
         'data': data, 
         'collection_requests_count': collection_requests_count,
         'complete_collections_count': complete_collections_count,
