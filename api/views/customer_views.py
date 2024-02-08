@@ -115,11 +115,11 @@ def create_user_and_profile(request):
                 profile_serializer.save()
                 
                 # Return success response
-                return Response({'message': 'User and Profile Created successfully'}, status=status.HTTP_201_CREATED)
+                return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 # Delete the user if profile creation fails
                 user_instance.delete()
-                return Response({'error': 'Profile creation failed'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Return error response if user serialization fails
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
