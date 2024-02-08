@@ -95,43 +95,34 @@ def updateUser(request, pk):
 
 
 
-# Create the customer account 
-
+# Create User and Profile
 
 @api_view(['POST'])
-def create_customer_account(request):
-    user_serializer = UserSerializer(data=request.data)
-    if user_serializer.is_valid():
-        with transaction.atomic():
-            try:
-                user_instance = user_serializer.save()
-            except IntegrityError as e:
-                logger.error(f"IntegrityError: {e}")
-                return Response({'Success': False, 'Errors': 'Username Already Exists.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            # If user_instance is an integer, retrieve the User object
-            if isinstance(user_instance, int):
-                try:
-                    user_instance = User.objects.get(id=user_instance)
-                except User.DoesNotExist:
-                    logger.error("User with provided ID Does Not Exist.")
-                    return Response({'Success': False, 'Errors': 'Invalid User ID.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            auth_user = user_instance  # Use the User instance
-            auth_user_id = auth_user.id
-            
-            logger.error(f"User ID: {auth_user_id}")
-            profile_data = {'address': request.data.get('address'), 'auth': auth_user}
+def create_user_and_profile(request):
+    if request.method == 'POST':
+        # Deserialize the request data using UserSerializer
+        user_serializer = UserSerializer(data=request.data)
+        if user_serializer.is_valid():
+            # Save the user
+            user_instance = user_serializer.save()
+            # Extract address from request data
+            address = request.data.get('address')
+            # Create profile using User instance and address
+            profile_data = {'address': address, 'auth': user_instance}
             profile_serializer = CustomerProfileSerializer(data=profile_data)
             if profile_serializer.is_valid():
+                # Save the profile
                 profile_serializer.save()
-                return Response({'Success': True, 'User_ID': auth_user_id}, status=status.HTTP_201_CREATED)
+                
+                # Return success response
+                return Response({'message': 'User and Profile Created successfully'}, status=status.HTTP_201_CREATED)
             else:
+                # Delete the user if profile creation fails
                 user_instance.delete()
-                return Response({'Success': False, 'Errors': profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        logger.error(f"user_serializer errors: {user_serializer.errors}")
-        return Response({'Success': False, 'Errors': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Profile creation failed'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Return error response if user serialization fails
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Cancel a Collection Request

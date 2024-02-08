@@ -19,11 +19,6 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         model = CustomerProfile
         fields = ['customer_id', 'address', 'auth']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['auth'] = representation['auth'].pk
-        return representation
-
 
 
 # User Serializer (for referencing user-related fields)

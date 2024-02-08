@@ -14,7 +14,7 @@ urlpatterns = [
     path('collectors/', collector_views.getCollectorProfiles),
     path('updateCustomer/<str:pk>/', customer_views.updateUser),
     path('updateCollector/<str:pk>/', collector_views.updateUser),
-    path('addCustomerProfile/', customer_views.create_customer_account),
+    path('addCustomerProfile/', customer_views.create_user_and_profile),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('completeTasks/<str:pk>/', collector_views.getCompletedCollections), 
