@@ -1,58 +1,71 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from base.models import Ratings, CustomerProfile, Waste, Collection, CollectorProfile, Requests
+
 
 # Waste Serializer
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waste
-        fields = ('waste_id', 'waste_type', 'collection_price', 'waste_desc')
+        fields = '__all__'
+        
 
 # Customer Serializer
-class CustomerSerializer(serializers.ModelSerializer):
-    # Include user-related fields directly or reference them using UserSerializer
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+    auth = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = CustomerProfile
-        fields = ('customer_id', 'latitude', 'longitude', 'address')
+        fields = ['customer_id', 'address', 'auth']
 
-# Collector Serializer
-class CollectorSerializer(serializers.ModelSerializer):
-    # Include user-related fields directly or reference them using UserSerializer
-    class Meta:
-        model = CollectorProfile
-        fields = ('collector_id', 'vehicle', 'work_area', 'latitude', 'longitude', 'timestamp')
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['auth'] = representation['auth'].pk
+        return representation
+
+
 
 # User Serializer (for referencing user-related fields)
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = get_user_model()
-        fields = ('id', 'email', 'first_name', 'last_name')
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = User.objects.create(**validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user.id  # Return just the user ID
+    
 
 # Request Serializer
+
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requests
-        fields = ('customer', 'waste', 'number_of_bags', 'request_status', 'collection_price')
+        fields = '__all__'
+
 
 # Rating Serializer
+
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ratings
-        fields = ('rating_score', 'collection')
-        depth = 1  # Include details of the related collection
+        fields = '__all__'
 
 # Collection Serializer
-class CollectionSerializer(serializers.ModelSerializer):
-    # Include collector details using CollectorSerializer or just reference collector_id
-    collector = CollectorSerializer()
 
+class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ('collection_id', 'request', 'collector', 'request_date', 'collection_date', 'collection_price')
-        
-# Collector Location Serializer
-        
-class CustomerLocationSerializer(serializers.ModelSerializer):
+        fields = '__all__'
+
+# Collector Profile Serializer
+class CollectorProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Requests
-        fields = ('latitude', 'longitude')
+        model = CollectorProfile
+        fields = '__all__'

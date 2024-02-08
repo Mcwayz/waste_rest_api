@@ -1,24 +1,23 @@
 import json
-import math
+import logging
 from rest_framework import status
+from django.db import transaction
+from django.db import IntegrityError
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
-from base.models import CollectorProfile, CustomerProfile, Collection, Waste,Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, CustomerSerializer, CollectorSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CustomerLocationSerializer
+from base.models import CollectorProfile, CustomerProfile, Collection, Waste, Requests, Ratings
+from ..serializers.customer_serializer import WasteSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CollectorProfileSerializer, CustomerProfileSerializer
 
 
-#                            #
-#                            #
-#                            #
-#    GET Request Methods     #
-#                            #
-#                            #
-#                            #
+logger = logging.getLogger(__name__)
+
+# GET Request Methods
 
 
 # Get Waste Types
+
 @api_view(['GET'])
 def getWaste(request):
     waste = Waste.objects.all()
@@ -26,39 +25,162 @@ def getWaste(request):
     return Response(serializer.data) 
 
 
-# Get Customer Collection
+# Get Collector Details
+
+@api_view(['GET'])
+def view_collector_profile(request, collector_id):
+    try:
+        collector = CollectorProfile.objects.get(pk=collector_id)
+    except CollectorProfile.DoesNotExist:
+        return Response({'Message': 'Collector Profile Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CollectorProfileSerializer(collector)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# Get Collection Details
+
 @api_view(['GET'])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
 
+
 # Get Customer Profile
+
 @api_view(['GET'])
 def getCustomerProfile(request, pk):
     profile = get_object_or_404(CustomerProfile, pk=pk)
-    serializer = CustomerSerializer(profile)
+    serializer = CustomerProfileSerializer(profile)
     return Response(serializer.data)
 
 
-# Get Customers
+# Get all Customer Profiles
 
 @api_view(['GET'])
 def getCustomerProfiles(request):
-    profile = CustomerProfile.objects.all()
-    serializer = CustomerSerializer(profile, many=True)
+    profiles = CustomerProfile.objects.all()
+    serializer = CustomerProfileSerializer(profiles, many=True)
     return Response(serializer.data)
 
 
-#                            #
-#                            #
-#                            #
-#   GET Request Ends Here    #
-#                            #
-#                            #
-#                            #
+# End of GET Request Methods
 
-   
+
+# POST Request Methods
+
+@api_view(['POST'])
+def add_collection_request(request):
+    if request.method == 'POST':
+        serializer = RequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Update Customer Record
+
+
+@api_view(['POST'])
+def updateUser(request, pk):
+    user = CustomerProfile.objects.get(pk=pk)
+    serializer = CustomerProfileSerializer(instance=user, data=request.data)
+    if serializer.is_valid():
+        serializer.save() 
+        return Response(serializer.data)
+    else:
+        return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# Create the customer account 
+
+
+@api_view(['POST'])
+def create_customer_account(request):
+    user_serializer = UserSerializer(data=request.data)
+    if user_serializer.is_valid():
+        with transaction.atomic():
+            try:
+                user_instance = user_serializer.save()
+            except IntegrityError as e:
+                logger.error(f"IntegrityError: {e}")
+                return Response({'Success': False, 'Errors': 'Username Already Exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # If user_instance is an integer, retrieve the User object
+            if isinstance(user_instance, int):
+                try:
+                    user_instance = User.objects.get(id=user_instance)
+                except User.DoesNotExist:
+                    logger.error("User with provided ID Does Not Exist.")
+                    return Response({'Success': False, 'Errors': 'Invalid User ID.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            auth_user = user_instance  # Use the User instance
+            auth_user_id = auth_user.id
+            
+            logger.error(f"User ID: {auth_user_id}")
+            profile_data = {'address': request.data.get('address'), 'auth': auth_user}
+            profile_serializer = CustomerProfileSerializer(data=profile_data)
+            if profile_serializer.is_valid():
+                profile_serializer.save()
+                return Response({'Success': True, 'User_ID': auth_user_id}, status=status.HTTP_201_CREATED)
+            else:
+                user_instance.delete()
+                return Response({'Success': False, 'Errors': profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        logger.error(f"user_serializer errors: {user_serializer.errors}")
+        return Response({'Success': False, 'Errors': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Cancel a Collection Request
+
+
+@api_view(['POST']) 
+def cancel_request(request, request_id):
+    request_obj = get_object_or_404(Requests, pk=request_id)
+    if request.user != request_obj.customer.auth:
+        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+    request_obj.request_status = 'Cancelled'
+    request_obj.save()
+    return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
+
+
+# Add Rating
+
+@api_view(['POST'])
+def add_rating(request, collection_id):
+    collection = get_object_or_404(Collection, pk=collection_id)
+    if request.user != collection.request.customer.auth:
+        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+    rating_score = request.data.get('rating_score')
+    if rating_score is None:
+        return Response({'Message': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
+    rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
+    return Response({'Message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
+
+
+# End of POST Request Methods
+
+
+# PUT Method
+
+# Update Customer Request Location
+@api_view(['PUT'])
+def updateUser(request, pk):
+    user = CustomerProfile.objects.get(pk=pk)
+    serializer = UserSerializer(instance=user, data=request.data)
+    if serializer.is_valid():
+        serializer.save() 
+        return Response(serializer.data)
+    else:
+        return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    
+    
+'''
 @api_view(['POST'])
 def viewAvailableDrivers(request):
     try:
@@ -94,136 +216,7 @@ def viewAvailableDrivers(request):
 
         if distance_km <= search_radius:
             collectors_within_radius.append(collector)
-    collector_data = CollectorSerializer(collectors_within_radius, many=True).data
+    collector_data = CollectorProfileSerializer(collectors_within_radius, many=True).data
 
     return Response(collector_data, status=200)
-    
-    
-# Update Customer Record
-@api_view(['POST'])
-def updateUser(request, pk):
-    user = CustomerProfile.objects.get(user_id=pk)
-    serializer = CustomerSerializer(instance=user, data=request.data)
-    if serializer.is_valid():
-        serializer.save() 
-        return Response(serializer.data)
-    else:
-        return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-# Create Customer Account
-@api_view(['POST'])
-def create_user(request):
-    data = json.loads(request.body)
-    form = UserCreationForm(data)
-    if form.is_valid():
-        user = form.save(commit=False)
-        user.username = data['username']
-        user.email = data['email']
-        user.first_name = data.get('first_name')
-        user.last_name = data.get('last_name')
-        user.password1 = data['password1']
-        user.password2 = data['password2']
-        user.save()
-        return Response({'Success': True, 'User_id': user.id}, status=status.HTTP_201_CREATED)
-    else:
-        return Response({'Success': False, 'Errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-# Add Customer Profile
-
-@api_view(['POST'])
-def addProfile(request):
-    if request.method == 'POST':
-        auth_id = request.data.get('auth_id')
-        serializer = CollectorSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()  # Save the validated data to the database
-            return Response({'Success': True, 'Auth_ID': auth_id}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-# Cancelling a Collection REquest
-@api_view(['POST']) 
-def cancel_request(request, request_id):
-    try:
-        request_obj = Requests.objects.get(pk=request_id)
-    except Requests.DoesNotExist:
-        return Response({'Message': 'Request Not Found'}, status=status.HTTP_404_NOT_FOUND)
-
-    # Check if the authenticated user has permission to cancel this request
-    if request.user != request_obj.customer.auth:
-        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-    request_obj.request_status = 'Cancelled'
-    request_obj.save()
-
-    return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
-
-
-# Add Rating
-@api_view(['POST'])
-def add_rating(request, collection_id):
-    try:
-        collection = Collection.objects.get(pk=collection_id)
-    except Collection.DoesNotExist:
-        return Response({'Message': 'Collection Not Found'}, status=status.HTTP_404_NOT_FOUND)
-
-    # Check if the authenticated user is the customer who made the request
-    if request.user != collection.request.customer.auth:
-        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-    rating_score = request.data.get('rating_score')
-    if rating_score is None:
-        return Response({'mMssage': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
-
-    # Create a new rating object and associate it with the collection
-    rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
-
-    return Response({'message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
-
-    
-
-
-#                            #
-#                            #
-#                            #
-# End - POST Request Methods #
-#                            #
-#                            #
-#                            # 
-    
-    
-# ---------PUT Method--------#
-    
-    
-    
-# Update Customer Request Location 
-@api_view(['PUT'])
-def updateCustomerLocation(request, customer_id):
-    try:
-        customer_profile = RequestSerializer.objects.get(customer_id=customer_id)
-        #Check if the customer id exisits in the profile
-    except CustomerProfile.DoesNotExist:
-        return Response({"Message": "Customer Profile Not Found."}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'PUT':
-        serializer = CustomerLocationSerializer(customer_profile, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"Message": "Customer Request Location Updated Successfully."}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# Update Customer Request Location
-@api_view(['PUT'])
-def updateUser(request, pk):
-    user = CustomerProfile.objects.get(user_id=pk)
-    serializer = UserSerializer(instance=user, data=request.data)
-    if serializer.is_valid():
-        serializer.save() 
-        return Response(serializer.data)
-    else:
-        return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-    
+'''
