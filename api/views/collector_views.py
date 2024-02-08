@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
-from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer
+from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer, UserSerializer
 
 # GET Request Methods
 
@@ -49,16 +49,6 @@ def getCollectorRatings(request, pk):
 
 # POST Request Methods
 
-# Create Customer Account
-@api_view(['POST'])
-def create_user(request):
-    data = json.loads(request.body)
-    form = UserCreationForm(data)
-    if form.is_valid():
-        user = form.save()
-        return Response({'Success': True, 'User_ID': user.id}, status=status.HTTP_201_CREATED)
-    else:
-        return Response({'Success': False, 'Errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 # Add Collection
 @api_view(['POST'])
@@ -81,14 +71,34 @@ def cancel_request(request, request_id):
     return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
 
 # Add Collector Profile
+
 @api_view(['POST'])
-def addProfile(request):
-    serializer = CollectorSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def create_user_and_profile(request):
+    if request.method == 'POST':
+        # Deserialize the request data using UserSerializer
+        user_serializer = UserSerializer(data=request.data)
+        if user_serializer.is_valid():
+            # Save the user
+            user_instance = user_serializer.save()
+            # Extract address from request data
+            vehicle = request.data.get('vehicle')
+            work_area = request.data.get('work_area')
+            # Create profile using User instance and address
+            profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance}
+            profile_serializer = CollectorSerializer(data=profile_data)
+            if profile_serializer.is_valid():
+                # Save the profile
+                profile_serializer.save()
+                
+                # Return success response
+                return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
+            else:
+                # Delete the user if profile creation fails
+                user_instance.delete()
+                return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Return error response if user serialization fails
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # End Of POST Methods
 
