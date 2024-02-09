@@ -1,8 +1,6 @@
 import json
 import logging
 from rest_framework import status
-from django.db import transaction
-from django.db import IntegrityError
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -12,6 +10,7 @@ from ..serializers.customer_serializer import WasteSerializer, UserSerializer, R
 
 
 logger = logging.getLogger(__name__)
+
 
 # GET Request Methods
 
@@ -42,6 +41,7 @@ def view_collector_profile(request, collector_id):
 
 @api_view(['GET'])
 def collectionDetails(request, pk):
+    
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
@@ -65,10 +65,14 @@ def getCustomerProfiles(request):
     return Response(serializer.data)
 
 
+
+
 # End of GET Request Methods
 
 
+
 # POST Request Methods
+
 
 @api_view(['POST'])
 def add_collection_request(request):
@@ -94,34 +98,24 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # Create User and Profile
 
 @api_view(['POST'])
 def create_user_and_profile(request):
     if request.method == 'POST':
-        # Deserialize the request data using UserSerializer
         user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
-            # Save the user
             user_instance = user_serializer.save()
-            # Extract address from request data
             address = request.data.get('address')
-            # Create profile using User instance and address
             profile_data = {'address': address, 'auth': user_instance}
             profile_serializer = CustomerProfileSerializer(data=profile_data)
             if profile_serializer.is_valid():
-                # Save the profile
                 profile_serializer.save()
-                
-                # Return success response
                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
-                # Delete the user if profile creation fails
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # Return error response if user serialization fails
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -157,7 +151,10 @@ def add_rating(request, collection_id):
 
 # PUT Method
 
+
+
 # Update Customer Request Location
+
 @api_view(['PUT'])
 def updateUser(request, pk):
     user = CustomerProfile.objects.get(pk=pk)

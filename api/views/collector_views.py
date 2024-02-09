@@ -75,36 +75,30 @@ def cancel_request(request, request_id):
 @api_view(['POST'])
 def create_user_and_profile(request):
     if request.method == 'POST':
-        # Deserialize the request data using UserSerializer
         user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
-            # Save the user
             user_instance = user_serializer.save()
-            # Extract address from request data
             vehicle = request.data.get('vehicle')
             work_area = request.data.get('work_area')
-            # Create profile using User instance and address
             profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance}
             profile_serializer = CollectorSerializer(data=profile_data)
             if profile_serializer.is_valid():
-                # Save the profile
                 profile_serializer.save()
-                
-                # Return success response
                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
-                # Delete the user if profile creation fails
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # Return error response if user serialization fails
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # End Of POST Methods
 
 # PUT Request Methods
 
+
+
 # Update Customer Request Location
+
 @api_view(['PUT'])
 def updateUser(request, pk):
     user = CustomerProfile.objects.get(user_id=pk)
@@ -115,7 +109,9 @@ def updateUser(request, pk):
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Complete Collection
+
 @api_view(['PUT'])
 def completeCollection(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
@@ -123,18 +119,18 @@ def completeCollection(request, collection_id):
     collection.save()
     return Response({'Message': 'Collection Marked as Complete'}, status=status.HTTP_200_OK)
 
+
 # Approve Collection Request
+
 @api_view(['PUT'])
 def claimRequest(request):
     request_id = request.data.get('request_id')
     new_status = 'Claimed'
     
     try:
-        # Get the request object to update
         request_to_update = Requests.objects.get(pk=request_id)
         request_to_update.request_status = new_status
         request_to_update.save()
-        
         return Response({"Message": "Collection Request Updated And Status Claimed."}, status=status.HTTP_200_OK)
 
     except Requests.DoesNotExist:
