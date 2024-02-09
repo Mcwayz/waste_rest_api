@@ -9,7 +9,12 @@ from ..serializers.collector_serializer import CollectorSerializer, RequestSeria
 
 # GET Request Methods
 
+
+
+
 # Get Customer Requests
+
+
 @api_view(['GET'])
 def getRequests(request):
     status = request.query_params.get('request_status')
@@ -17,40 +22,61 @@ def getRequests(request):
     serializer = RequestSerializer(requests, many=True)
     return Response(serializer.data) 
 
+
+
 # Get Collector Profile
+
+
 @api_view(['GET'])
 def getCollectorProfile(request, pk):
     profile = get_object_or_404(CollectorProfile, pk=pk)
     serializer = CollectorSerializer(profile)
     return Response(serializer.data)
 
+
+
 # Get Collector Profiles
+
+
 @api_view(['GET'])
 def getCollectorProfiles(request):
     profiles = CollectorProfile.objects.all()
     serializer = CollectorSerializer(profiles, many=True)
     return Response(serializer.data)
 
+
+
 # Get Completed Collections 
+
+
 @api_view(['GET'])
 def getCompletedCollections(request, pk):
     collections = Collection.objects.filter(collector=pk)
     serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data)
 
+
+
 # Get Collector Ratings
+
+
 @api_view(['GET'])
 def getCollectorRatings(request, pk):
     ratings = Ratings.objects.filter(collector=pk)
     serializer = CollectionSerializer(ratings, many=True)
     return Response(serializer.data)
 
+
+
 # End Of GET Request Methods
+
+
 
 # POST Request Methods
 
 
 # Add Collection
+
 @api_view(['POST'])
 def addCollection(request):
     serializer = CollectionSerializer(data=request.data)
@@ -60,7 +86,10 @@ def addCollection(request):
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 # Cancelling a Collection Request
+
 @api_view(['POST']) 
 def cancel_request(request, request_id):
     request_obj = get_object_or_404(Requests, pk=request_id)
@@ -69,6 +98,8 @@ def cancel_request(request, request_id):
     request_obj.request_status = 'Cancelled'
     request_obj.save()
     return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
+
+
 
 # Add Collector Profile
 
@@ -92,6 +123,9 @@ def create_user_and_profile(request):
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # End Of POST Methods
+
+
+
 
 # PUT Request Methods
 

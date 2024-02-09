@@ -118,6 +118,21 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Add Customer Collection Request
+
+
+@api_view(['POST'])
+def add_request(request, collection_id):
+    collection = get_object_or_404(Collection, pk=collection_id)
+    if request.user != collection.request.customer.auth:
+        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+    rating_score = request.data.get('rating_score')
+    if rating_score is None:
+        return Response({'Message': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
+    rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
+    return Response({'Message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
+
+
 
 # Cancel a Collection Request
 
