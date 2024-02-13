@@ -5,7 +5,6 @@ from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer
 
@@ -182,7 +181,6 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # Update Collection Request
 
     
@@ -201,7 +199,7 @@ def updateRequest(request):
 
 
 # Complete Collection Request   
-    
+   
     
 @api_view(['PUT'])
 def completeCollection(request):
@@ -215,10 +213,15 @@ def completeCollection(request):
             collection_to_update.save()
             request_to_update.request_status = new_status
             request_to_update.save()
-            return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+            return Response({
+                "Message": "Collection Request Updated And Status Changed.",
+                "collection_id": collection_to_update.collection_id
+            }, status=status.HTTP_200_OK)
         else:
             return Response({"Message": "Collection Not Found."}, status=status.HTTP_404_NOT_FOUND)
     except Requests.DoesNotExist:
         return Response({"Message": "Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    
     
 # End Of PUT Request Methods
