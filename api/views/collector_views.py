@@ -1,11 +1,12 @@
 import json
 from rest_framework import status
+from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
-from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer
+from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer
 
 
 
@@ -15,13 +16,25 @@ from ..serializers.collector_serializer import CollectorSerializer, RequestSeria
 
 # Get Customer Requests
 
-
 @api_view(['GET'])
-def getRequests(request):
-    status = request.query_params.get('request_status')
-    requests = Requests.objects.filter(request_status=status)
-    serializer = RequestSerializer(requests, many=True)
-    return Response(serializer.data) 
+def get_customer_requests(request): 
+    customer_requests = Requests.objects.select_related('customer__auth').all()
+    serialized_requests = []
+    for request_obj in customer_requests:
+        serialized_request = {
+            'request_id': request_obj.request_id,
+            'location': request_obj.location,
+            'number_of_bags': request_obj.number_of_bags,
+            'request_status': request_obj.request_status,
+            'request_date': request_obj.request_date,
+            'collection_price': str(request_obj.collection_price),
+            'waste': request_obj.waste_id,
+            'first_name': request_obj.customer.auth.first_name,
+            'last_name': request_obj.customer.auth.last_name
+        }
+        serialized_requests.append(serialized_request)
+    
+    return Response(serialized_requests)
 
 
 
@@ -50,10 +63,13 @@ def getCollectorProfiles(request):
 
 
 @api_view(['GET'])
-def getCompletedCollections(request, pk):
-    collections = Collection.objects.filter(collector=pk)
-    serializer = CollectionSerializer(collections, many=True)
-    return Response(serializer.data)
+def collections_by_collector(request, collector_id):
+    try:
+        collections = Collection.objects.filter(collector_id=collector_id)
+        serializer = CompletedCollectionSerializer(collections, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Collection.DoesNotExist:
+        return Response({"Message": "Collections not found for this collector."}, status=status.HTTP_404_NOT_FOUND)
 
 
 # Get Collector Ratings
@@ -72,16 +88,40 @@ def getCollectorRatings(request, pk):
 # POST Request Methods
 
 
+
 # Add Collection
+
 
 @api_view(['POST'])
 def addCollection(request):
     serializer = CollectionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        request_id = request.data.get('request')
+        new_status = request.data.get('status')
+        
+        # Call the update_request_status function with the correct arguments
+        success, message = update_request_status(request_id, new_status)
+        
+        if success:
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"Message": message}, status=status.HTTP_404_NOT_FOUND)
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Functional Update Status Function
+
+
+def update_request_status(request_id, new_status):
+    try:
+        request_to_update = Requests.objects.get(pk=request_id)
+        request_to_update.request_status = new_status
+        request_to_update.save()
+        return True, "Collection Request Updated And Status Changed."
+    except Requests.DoesNotExist:
+        return False, "Collection Request Not Found."
 
 
 # Cancelling a Collection Request
@@ -154,19 +194,18 @@ def completeCollection(request, collection_id):
     return Response({'Message': 'Collection Marked as Complete'}, status=status.HTTP_200_OK)
 
 
-# Approve Collection Request
+# Update Collection Request
 
 
 @api_view(['PUT'])
-def claimRequest(request):
+def updateRequest(request):
     request_id = request.data.get('request_id')
-    new_status = 'Claimed'
-    
+    new_status = request.data.get('status')
     try:
         request_to_update = Requests.objects.get(pk=request_id)
         request_to_update.request_status = new_status
         request_to_update.save()
-        return Response({"Message": "Collection Request Updated And Status Claimed."}, status=status.HTTP_200_OK)
+        return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
 
     except Requests.DoesNotExist:
         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)

@@ -6,15 +6,19 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Collection, Waste, Requests, Ratings
+from ..serializers.collector_serializer import  CompletedCollectionSerializer
 from ..serializers.customer_serializer import WasteSerializer, RequestSerializer, RatingSerializer, CollectionSerializer
 
 # GET Request Methods
 
+# Get Completed Collections 
+
+
 @api_view(['GET'])
-def getCollections(request):
-    collections = Collection.objects.all()
-    serializer = CollectionSerializer(collections, many=True)
-    return Response(serializer.data) 
+def get_completed_collections(request):
+    completed_collections = Collection.objects.filter(request__request_status='Complete')
+    serializer = CompletedCollectionSerializer(completed_collections, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getCollected(request):

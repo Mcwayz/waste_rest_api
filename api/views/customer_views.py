@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from base.models import CollectorProfile, CustomerProfile, Collection, Waste, Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CollectorProfileSerializer, CustomerProfileSerializer, CustomerProfilesSerializer
+from ..serializers.customer_serializer import WasteSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CollectorProfileSerializer, CustomerProfileSerializer, CustomerProfilesSerializer, CompletedCollectionSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -65,7 +65,14 @@ def getCustomerProfiles(request):
     return Response(serializer.data)
 
 
-
+@api_view(['GET'])
+def completed_collections_by_customer(request, customer_id):
+    try:
+        collections = Collection.objects.filter(request__customer_id=customer_id, request__request_status='Complete')
+        serializer = CompletedCollectionSerializer(collections, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Collection.DoesNotExist:
+        return Response({"Message": "Completed collections not found for this customer."}, status=status.HTTP_404_NOT_FOUND)
 
 # End of GET Request Methods
 
@@ -118,19 +125,30 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 # Add Customer Collection Request
 
-
 @api_view(['POST'])
-def add_request(request, collection_id):
-    collection = get_object_or_404(Collection, pk=collection_id)
-    if request.user != collection.request.customer.auth:
-        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-    rating_score = request.data.get('rating_score')
-    if rating_score is None:
-        return Response({'Message': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
-    rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
-    return Response({'Message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
+def create_request(request):
+    if request.method == 'POST':
+        serializer = RequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['POST'])
+# def add_request(request, collection_id):
+#     collection = get_object_or_404(Collection, pk=collection_id)
+#     if request.user != collection.request.customer.auth:
+#         return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+#     rating_score = request.data.get('rating_score')
+#     if rating_score is None:
+#         return Response({'Message': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
+#     rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
+#     return Response({'Message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
 
 
 
@@ -165,7 +183,6 @@ def add_rating(request, collection_id):
 
 
 # PUT Method
-
 
 
 # Update Customer Request Location
