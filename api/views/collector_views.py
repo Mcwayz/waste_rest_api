@@ -5,10 +5,11 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
-from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer, UserSerializer
+from ..serializers.collector_serializer import CollectorSerializer, RequestSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer
+
+
 
 # GET Request Methods
-
 
 
 
@@ -41,9 +42,8 @@ def getCollectorProfile(request, pk):
 @api_view(['GET'])
 def getCollectorProfiles(request):
     profiles = CollectorProfile.objects.all()
-    serializer = CollectorSerializer(profiles, many=True)
+    serializer = CollectorsSerializer(profiles, many=True)
     return Response(serializer.data)
-
 
 
 # Get Completed Collections 
@@ -56,7 +56,6 @@ def getCompletedCollections(request, pk):
     return Response(serializer.data)
 
 
-
 # Get Collector Ratings
 
 
@@ -67,9 +66,7 @@ def getCollectorRatings(request, pk):
     return Response(serializer.data)
 
 
-
 # End Of GET Request Methods
-
 
 
 # POST Request Methods
@@ -87,8 +84,8 @@ def addCollection(request):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # Cancelling a Collection Request
+
 
 @api_view(['POST']) 
 def cancel_request(request, request_id):
@@ -102,6 +99,7 @@ def cancel_request(request, request_id):
 
 
 # Add Collector Profile
+
 
 @api_view(['POST'])
 def create_user_and_profile(request):
@@ -122,8 +120,8 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# End Of POST Methods
 
+# End Of POST Methods
 
 
 
@@ -132,6 +130,7 @@ def create_user_and_profile(request):
 
 
 # Update Customer Request Location
+
 
 @api_view(['PUT'])
 def updateUser(request, pk):
@@ -146,6 +145,7 @@ def updateUser(request, pk):
 
 # Complete Collection
 
+
 @api_view(['PUT'])
 def completeCollection(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
@@ -155,6 +155,7 @@ def completeCollection(request, collection_id):
 
 
 # Approve Collection Request
+
 
 @api_view(['PUT'])
 def claimRequest(request):
@@ -169,5 +170,6 @@ def claimRequest(request):
 
     except Requests.DoesNotExist:
         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 # End Of PUT Request Methods

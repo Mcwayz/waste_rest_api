@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from base.models import CollectorProfile, CustomerProfile, Collection, Waste, Requests, Ratings
-from ..serializers.customer_serializer import WasteSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CollectorProfileSerializer, CustomerProfileSerializer
+from ..serializers.customer_serializer import WasteSerializer, UserSerializer, RequestSerializer, CollectionSerializer, CollectorProfileSerializer, CustomerProfileSerializer, CustomerProfilesSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -61,7 +61,7 @@ def getCustomerProfile(request, pk):
 @api_view(['GET'])
 def getCustomerProfiles(request):
     profiles = CustomerProfile.objects.all()
-    serializer = CustomerProfileSerializer(profiles, many=True)
+    serializer = CustomerProfilesSerializer(profiles, many=True)
     return Response(serializer.data)
 
 

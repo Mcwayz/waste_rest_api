@@ -26,6 +26,20 @@ class CollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectorProfile
         fields = ('collector_id', 'vehicle', 'work_area', 'timestamp', 'auth')
+        
+        
+        
+# Collector Serializer
+
+class CollectorsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='auth.username')
+    email = serializers.EmailField(source='auth.email')
+    first_name = serializers.CharField(source='auth.first_name')
+    last_name = serializers.CharField(source='auth.last_name')
+    class Meta:
+        model = CollectorProfile
+        fields = ('collector_id',  'username', 'email', 'first_name', 'last_name','vehicle', 'work_area', 'timestamp')
+
 
 
 # Request Serializer

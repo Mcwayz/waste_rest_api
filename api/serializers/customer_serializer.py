@@ -21,6 +21,20 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
 
 
+# Customer Serializer
+
+class CustomerProfilesSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='auth.username')
+    email = serializers.EmailField(source='auth.email')
+    first_name = serializers.CharField(source='auth.first_name')
+    last_name = serializers.CharField(source='auth.last_name')
+    address = serializers.CharField()
+
+    class Meta:
+        model = CustomerProfile
+        fields = ['customer_id', 'username', 'email', 'first_name', 'last_name', 'address']
+
+
 # User Serializer (for referencing user-related fields)
 
 class UserSerializer(serializers.ModelSerializer):
