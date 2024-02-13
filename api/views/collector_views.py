@@ -1,4 +1,5 @@
 import json
+from django.utils import timezone
 from rest_framework import status
 from django.http import HttpRequest
 from rest_framework.response import Response
@@ -184,7 +185,7 @@ def updateUser(request, pk):
 
 # Update Collection Request
 
-
+    
 @api_view(['PUT'])
 def updateRequest(request):
     request_id = request.data.get('request_id')
@@ -199,4 +200,25 @@ def updateRequest(request):
         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
 
 
+# Complete Collection Request   
+    
+    
+@api_view(['PUT'])
+def completeCollection(request):
+    request_id = request.data.get('request')
+    new_status = request.data.get('status')
+    try:
+        request_to_update = get_object_or_404(Requests, pk=request_id)
+        collection_to_update = request_to_update.collections_requested.first()
+        if collection_to_update:
+            collection_to_update.collection_date = timezone.now()
+            collection_to_update.save()
+            request_to_update.request_status = new_status
+            request_to_update.save()
+            return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Message": "Collection Not Found."}, status=status.HTTP_404_NOT_FOUND)
+    except Requests.DoesNotExist:
+        return Response({"Message": "Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+    
 # End Of PUT Request Methods

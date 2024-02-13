@@ -72,7 +72,7 @@ def completed_collections_by_customer(request, customer_id):
         serializer = CompletedCollectionSerializer(collections, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Collection.DoesNotExist:
-        return Response({"Message": "Completed collections not found for this customer."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"Message": "Completed Collections Not Found For This Customer."}, status=status.HTTP_404_NOT_FOUND)
 
 # End of GET Request Methods
 
@@ -137,18 +137,6 @@ def create_request(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# @api_view(['POST'])
-# def add_request(request, collection_id):
-#     collection = get_object_or_404(Collection, pk=collection_id)
-#     if request.user != collection.request.customer.auth:
-#         return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-#     rating_score = request.data.get('rating_score')
-#     if rating_score is None:
-#         return Response({'Message': 'Rating Score is Required'}, status=status.HTTP_400_BAD_REQUEST)
-#     rating = Ratings.objects.create(rating_score=rating_score, collection=collection)
-#     return Response({'Message': 'Rating Added Successfully'}, status=status.HTTP_201_CREATED)
 
 
 
