@@ -69,7 +69,7 @@ def collections_by_collector(request, collector_id):
         serializer = CompletedCollectionSerializer(collections, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Collection.DoesNotExist:
-        return Response({"Message": "Collections not found for this collector."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"Message": "Collections Not Found For This Collector."}, status=status.HTTP_404_NOT_FOUND)
 
 
 # Get Collector Ratings
@@ -99,10 +99,7 @@ def addCollection(request):
         serializer.save()
         request_id = request.data.get('request')
         new_status = request.data.get('status')
-        
-        # Call the update_request_status function with the correct arguments
         success, message = update_request_status(request_id, new_status)
-        
         if success:
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -149,7 +146,8 @@ def create_user_and_profile(request):
             user_instance = user_serializer.save()
             vehicle = request.data.get('vehicle')
             work_area = request.data.get('work_area')
-            profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance}
+            waste = request.data.get('waste') 
+            profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance, 'waste':waste}
             profile_serializer = CollectorSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_serializer.save()
@@ -182,16 +180,6 @@ def updateUser(request, pk):
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# Complete Collection
-
-
-@api_view(['PUT'])
-def completeCollection(request, collection_id):
-    collection = get_object_or_404(Collection, pk=collection_id)
-    collection.complete = True
-    collection.save()
-    return Response({'Message': 'Collection Marked as Complete'}, status=status.HTTP_200_OK)
 
 
 # Update Collection Request

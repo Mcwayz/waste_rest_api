@@ -12,6 +12,15 @@ class CustomerProfile(models.Model):
     auth = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+# Waste Type Model
+
+class Waste(models.Model):
+    waste_id = models.AutoField(primary_key=True)
+    waste_type = models.CharField(max_length=100)
+    waste_desc = models.CharField(max_length=500)
+    collection_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
+    
+    
 # Collectors (Driver) Model
 
 class CollectorProfile(models.Model):
@@ -20,22 +29,7 @@ class CollectorProfile(models.Model):
     work_area = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
     auth = models.ForeignKey(User, on_delete=models.CASCADE)
-
-# Waste Type Model
-
-class Waste(models.Model):
-    waste_id = models.AutoField(primary_key=True)
-    waste_type = models.CharField(max_length=100)
-    waste_desc = models.CharField(max_length=500)
-    collection_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
-
-
-# Driver Waste Type Model
-
-class CollectorWaste(models.Model):
-    collector_profile_id = models.AutoField(primary_key=True)
     waste = models.ForeignKey(Waste, on_delete=models.CASCADE, related_name='collector_wastes')
-    collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector')
 
 
 # User Requests Model

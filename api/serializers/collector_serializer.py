@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from base.models import Waste, CollectorProfile, CollectorWaste, Requests, Collection
+from base.models import Waste, CollectorProfile,Requests, Collection
 
 # Waste Type Serializer
 
@@ -11,21 +11,15 @@ class WasteSerializer(serializers.ModelSerializer):
 
 
 
-# Collector Categories Serializer
-
-class CollectorWasteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CollectorWaste
-        fields = ('collector', 'waste')
-
 
 # Collector Serializer
 
 class CollectorSerializer(serializers.ModelSerializer):
     auth = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    waste = serializers.PrimaryKeyRelatedField(queryset=Waste.objects.all())
     class Meta:
         model = CollectorProfile
-        fields = ('collector_id', 'vehicle', 'work_area', 'timestamp', 'auth')
+        fields = ('collector_id', 'vehicle', 'work_area', 'timestamp', 'auth', 'waste')
         
         
         
@@ -36,9 +30,10 @@ class CollectorsSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='auth.email')
     first_name = serializers.CharField(source='auth.first_name')
     last_name = serializers.CharField(source='auth.last_name')
+    waste = serializers.CharField(source='waste.waste_type')
     class Meta:
         model = CollectorProfile
-        fields = ('collector_id',  'username', 'email', 'first_name', 'last_name','vehicle', 'work_area', 'timestamp')
+        fields = ('collector_id',  'username', 'email', 'first_name', 'last_name','vehicle', 'work_area', 'waste', 'timestamp')
 
 
 
