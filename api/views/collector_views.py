@@ -214,8 +214,9 @@ def completeCollection(request):
             request_to_update.request_status = new_status
             request_to_update.save()
             return Response({
-                "Message": "Collection Request Updated And Status Changed.",
-                "collection_id": collection_to_update.collection_id
+                "collection_id": collection_to_update.collection_id,
+                "Message": "Collection Request Updated And Status Changed."
+                
             }, status=status.HTTP_200_OK)
         else:
             return Response({"Message": "Collection Not Found."}, status=status.HTTP_404_NOT_FOUND)
