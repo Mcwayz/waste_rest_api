@@ -1446,8 +1446,9 @@
       </header>
   
       <!-- [ Header ] end -->
-<!-- [ Main Content ] start -->
-<section class="pc-container">
+
+ <!-- [ Main Content ] start -->
+ <section class="pc-container">
     <div class="pc-content">
       <!-- [ breadcrumb ] start -->
       <div class="page-header">
@@ -1457,12 +1458,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Add Type</li>
+                <li class="breadcrumb-item" aria-current="page">Waste Type</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Add Type</h2>
+                <h2 class="mb-0">Waste Type</h2>
               </div>
             </div>
           </div>
@@ -1473,57 +1474,56 @@
 
       <!-- [ Main Content ] start -->
       <div class="row">
-        <div class="col-md-12">
+        <!-- [ basic-table ] start -->
+        <div class="col-xl-12">
           <div class="card">
             <div class="card-header">
-              <h5>Add Type</h5>
+              <h5>Waste Type</h5>
+              <span class="d-block m-t-5">Below is a list of <code>waste types</code> </span>
             </div>
-            <div class="card-body">
-
-                <form method="POST" action="{% url 'Add WasteType' %}">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom01">Waste Type</label>
-                            <input type="text" class="form-control" id="validationCustom01" name="waste_type" placeholder="Waste Type" required>
-                            <div class="valid-feedback"> Looks good! </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom02">Collection Price</label>
-                            <input type="number" class="form-control" id="validationCustom02" name="collection_price" placeholder="Price" required>
-                            <div class="valid-feedback"> Looks good! </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="validationCustom03">Waste Type Description</label>
-                            <input type="text" class="form-control" id="validationCustom03" name="waste_desc" placeholder="Description" required>
-                            <div class="invalid-feedback"> Please provide a valid description. </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                </form>
+            <div class="card-body table-border-style">
+              <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
+              <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
+              <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
+              <button class="btn btn-light-primary btn-sm json">Export JSON</button>
+              <div class="table-responsive">
                 
-
-              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-              <script>
-                  $(document).ready(function() {
-                      // Check if the URL has an 'alert' parameter with the value 'success'
-                      const urlParams = new URLSearchParams(window.location.search);
-                      const alertParam = urlParams.get('alert');
-                      if (alertParam === 'success') {
-                          alert('Waste type created successfully!');
-                      }
-                  });
-              </script>
+                <table class="table" id="pc-dt-export">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Waste Type</th>
+                      <th>Price</th>
+                      <th>Description</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for waste_type in waste_types %}
+                    <tr>
+                      <td>{{ waste_type.waste_id }}</td>
+                      <td>{{ waste_type.waste_type }}</td>
+                      <td>{{ waste_type.collection_price }}</td>
+                      <td>{{ waste_type.waste_desc }}</td>
+                      <td>
+                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> / 
+                        <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                
+              </div>
             </div>
           </div>
         </div>
-        <!-- [ form-element ] end -->
+        <!-- [ basic-table ] end -->
       </div>
+      <!-- [ Main Content ] end -->
     </div>
-    <!-- [ Main Content ] end -->
   </section>
   <!-- [ Main Content ] end -->
-
 
 
 
@@ -1537,5 +1537,40 @@
 <script src="{% static 'assets/js/config.js' %}"></script>
 <script src="{% static 'assets/js/pcoded.js' %}"></script>
 <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
+
+<!-- [Page Specific JS] start -->
+<script  src="{% static 'assets/js/plugins/simple-datatables.js' %}"></script>
+<script>
+  const table = new simpleDatatables.DataTable('#pc-dt-export');
+  document.querySelector('button.csv').addEventListener('click', () => {
+    table.export({
+      type: 'csv',
+      download: true,
+      lineDelimiter: '\n\n',
+      columnDelimiter: ';'
+    });
+  });
+  document.querySelector('button.sql').addEventListener('click', () => {
+    table.export({
+      type: 'sql',
+      download: true,
+      tableName: 'export_table'
+    });
+  });
+  document.querySelector('button.pdf').addEventListener('click', () => {
+    table.export({
+      type: 'pdf',
+      download: true
+    });
+  });
+  document.querySelector('button.json').addEventListener('click', () => {
+    table.export({
+      type: 'json',
+      download: true,
+      escapeHTML: true,
+      space: 3
+    });
+  });
+</script>
 </body>
 </html>

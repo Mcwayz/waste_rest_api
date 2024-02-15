@@ -1,9 +1,9 @@
 import requests
 import datetime as date_time
-from datetime import timedelta
-from django.utils import timezone
-from django.shortcuts import render
-from base.models import Collection
+from .forms import WasteForm
+from base.models import Waste
+from django.urls import reverse
+from django.shortcuts import render, redirect
 
 
 
@@ -21,6 +21,53 @@ def index(request):
     return render(request, 'frontend/index.html')
 
 
+def addType(request):
+    return render(request, 'frontend/waste/add_type.html')
+
+
+
+
+# Create Waste Type
+
+def create_waste(request):
+    if request.method == 'POST':
+        form = WasteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('Waste Type') + '?alert=success')
+    else:
+        form = WasteForm()
+    return render(request, 'frontend/waste/add_type.html', {'form': form})
+
+
+
+
+# Waste Type Route
+
+def WasteType(request):
+    waste_types = Waste.objects.all()
+    return render(request, 'frontend/waste/waste_type.html', {'waste_types': waste_types})
+
+
+
+
+# Edit Waste Type 
+
+def edit_waste(request, pk):
+    # Your view logic here
+    return render(request, 'edit_waste.html', {'pk': pk})
+
+
+
+# Delete Waste Type
+
+def delete_waste(request, pk):
+    # Your view logic here
+    return render(request, 'delete_waste.html', {'pk': pk})
+
+
+
+
 def users(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/users")
@@ -34,8 +81,11 @@ def collections(request):
     return render(request, 'frontend/collections.html')
 
 
+
+    """
+    
 def collection_requests(request):
-    # Make a request to the endpoint to retrieve data
+
     response = requests.get(f"{base}/api/collection-requests")
     data = response.json()
     for item in data:
@@ -50,7 +100,7 @@ def collection_requests(request):
 
 
 def collection_details(request, pk):
-    # Make a request to the endpoint to retrieve data
+
     api_url = f"{base}/api/collection-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
@@ -63,7 +113,6 @@ def collection_details(request, pk):
 
 
 def collection_summary(request, pk):
-    # Make a request to the endpoint to retrieve data
     api_url = f"{base}/api/collection-details/{pk}"
     response = requests.get(api_url)
     details = response.json()
@@ -83,5 +132,7 @@ def map_view(request):
 
 def add_user(request):
     return render(request, 'frontend/add-user.html')
+
+    """
 
 
