@@ -21,6 +21,14 @@ def index(request):
     return render(request, 'frontend/index.html')
 
 
+def addType(request):
+    return render(request, 'frontend/waste/add_type.html')
+
+
+def WasteType(request):
+    
+    return render(request, 'frontend/waste/waste_type.html')
+
 def users(request):
     # Make a request to the endpoint to retrieve data
     response = requests.get(f"{base}/api/users")
