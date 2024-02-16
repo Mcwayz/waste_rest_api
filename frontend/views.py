@@ -61,7 +61,7 @@ def edit_waste(request, pk):
             return redirect('Waste Type')
     else:
         form = WasteForm(instance=waste)
-    return render(request, 'edit_waste.html', {'form': form})
+    return render(request, 'edit_waste.html', {'form': form, 'waste': waste})
 
 
 
