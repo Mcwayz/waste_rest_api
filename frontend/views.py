@@ -72,7 +72,7 @@ def delete_waste(request, pk):
     waste = get_object_or_404(Waste, pk=pk)
     if request.method == 'POST':
         waste.delete()
-        return redirect('Waste Type')
+        return redirect('Waste Type') 
     return render(request, 'delete_waste.html', {'waste': waste})
 
 
