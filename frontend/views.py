@@ -3,7 +3,7 @@ import datetime as date_time
 from .forms import WasteForm
 from base.models import Waste
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 
@@ -50,21 +50,30 @@ def WasteType(request):
 
 
 
-
-# Edit Waste Type 
+# Edit Waste Type
 
 def edit_waste(request, pk):
-    # Your view logic here
-    return render(request, 'edit_waste.html', {'pk': pk})
+    waste = get_object_or_404(Waste, pk=pk)
+    if request.method == 'POST':
+        form = WasteForm(request.POST, instance=waste)
+        if form.is_valid():
+            form.save()
+            return redirect('Waste Type')
+    else:
+        form = WasteForm(instance=waste)
+    return render(request, 'edit_waste.html', {'form': form})
 
 
 
-# Delete Waste Type
+#Delete Waste Type
+
 
 def delete_waste(request, pk):
-    # Your view logic here
-    return render(request, 'delete_waste.html', {'pk': pk})
-
+    waste = get_object_or_404(Waste, pk=pk)
+    if request.method == 'POST':
+        waste.delete()
+        return redirect('Waste Type')
+    return render(request, 'delete_waste.html', {'waste': waste})
 
 
 
