@@ -61,7 +61,7 @@ def edit_waste(request, pk):
             return redirect('Waste Type')
     else:
         form = WasteForm(instance=waste)
-    return render(request, 'edit_waste.html', {'form': form, 'waste': waste})
+    return render(request, 'frontend/waste/edit_waste.html', {'form': form, 'waste': waste})
 
 
 
@@ -73,7 +73,7 @@ def delete_waste(request, pk):
     if request.method == 'POST':
         waste.delete()
         return redirect('Waste Type') 
-    return render(request, 'delete_waste.html', {'waste': waste})
+    return render(request, 'frontend/waste/delete_waste.html', {'waste': waste})
 
 
 

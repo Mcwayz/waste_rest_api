@@ -1504,9 +1504,9 @@
                       <td>{{ waste_type.waste_id }}</td>
                       <td>{{ waste_type.waste_type }}</td>
                       <td>{{ waste_type.collection_price }}</td>
-                      <td>{{ waste_type.waste_desc }}</td>
+                      <td>{{ waste_type.waste_desc|truncatechars:130 }}</td>
                       <td>
-                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> / 
+                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> -
                         <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
                       </td>
                     </tr>
