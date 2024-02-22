@@ -1,7 +1,8 @@
 import requests
 import datetime as date_time
 from .forms import WasteForm
-from base.models import Waste
+from rest_framework.response import Response
+from base.models import Waste, Collection
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -25,8 +26,6 @@ def addType(request):
     return render(request, 'frontend/waste/add_type.html')
 
 
-
-
 # Create Waste Type
 
 def create_waste(request):
@@ -40,14 +39,27 @@ def create_waste(request):
     return render(request, 'frontend/waste/add_type.html', {'form': form})
 
 
-
-
 # Waste Type Route
 
 def WasteType(request):
     waste_types = Waste.objects.all()
     return render(request, 'frontend/waste/waste_type.html', {'waste_types': waste_types})
 
+
+
+# Completed Collections
+
+def get_completed_collections(request):
+    response = requests.get(f'{base}/api/completedCollections/')
+    if response.status_code == 200:
+        completed_collections = response.json()
+        for collection in completed_collections:
+            collection_date_str = collection['collection_date']
+            collection_date = date_time.datetime.fromisoformat(collection_date_str)
+            collection['collection_date'] = collection_date.strftime('%Y-%m-%d %H:%M:%S')
+        return render(request, 'frontend/collections/collections.html', {'completed_collections': completed_collections})
+    else:
+        return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
 
 
 # Edit Waste Type
@@ -85,29 +97,10 @@ def users(request):
     return render(request, 'frontend/manage-users.html', context)
 
 
-def collections(request):
-
-    return render(request, 'frontend/collections.html')
-
 
 
     """
     
-def collection_requests(request):
-
-    response = requests.get(f"{base}/api/collection-requests")
-    data = response.json()
-    for item in data:
-        request_date = date_time.datetime.strptime(item['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        user_collect_date = date_time.datetime.strptime(item['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        item['assigned_date'] = request_date
-        item['user_collect_date'] = user_collect_date
-    context = {'data': data}
-    print(data)
-    return render(request, 'frontend/collection-requests.html', context)
-
-
-
 def collection_details(request, pk):
 
     api_url = f"{base}/api/collection-details/{pk}"
