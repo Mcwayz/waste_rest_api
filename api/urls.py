@@ -29,5 +29,6 @@ urlpatterns = [
     path('customerCollections/<int:customer_id>/', customer_views.completed_collections_by_customer),
     path('collectionDetails/<str:pk>/', customer_views.collectionDetails, name='collection-details'),
     path('collectorDetails/<str:pk>/', collector_views.getCollectorProfile, name='collector-details'),
+    path('completedCollection/<int:request_id>/', admin_views.get_completed_collection, name='get_completed_collection'),
     
 ]

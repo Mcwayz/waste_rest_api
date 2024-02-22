@@ -20,6 +20,14 @@ def get_completed_collections(request):
     serializer = CompletedCollectionSerializer(completed_collections, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def get_completed_collection(request, request_id):
+    completed_collection = get_object_or_404(Collection, request_id=request_id, request__request_status='Complete')
+    serializer = CompletedCollectionSerializer(completed_collection)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 def getCollected(request):
     collections = Collection.objects.filter(is_collected=True)

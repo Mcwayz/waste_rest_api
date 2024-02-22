@@ -60,6 +60,21 @@ def get_completed_collections(request):
         return render(request, 'frontend/collections/collections.html', {'completed_collections': completed_collections})
     else:
         return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    
+    
+    
+# Completed Collection
+
+def get_completed_collection(request, request_id):
+    response = requests.get(f'{base}/api/completedCollection/{request_id}/')
+    if response.status_code == 200:
+        completed_collection = response.json()
+        collection_date_str = completed_collection['collection_date']
+        collection_date = date_time.datetime.fromisoformat(collection_date_str)
+        completed_collection['collection_date'] = collection_date.strftime('%Y-%m-%d %H:%M:%S')
+        return render(request, 'frontend/collections/view_collection.html', {'completed_collection': completed_collection})
+    else:
+        return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
 
 
 # Edit Waste Type

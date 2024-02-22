@@ -41,8 +41,7 @@ def view_collector_profile(request, collector_id):
 
 @api_view(['GET'])
 def collectionDetails(request, pk):
-    
-    collection = get_object_or_404(Collection, pk=pk)
+    collection = get_object_or_404(Collection, request_id=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
 

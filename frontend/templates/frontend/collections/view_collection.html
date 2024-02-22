@@ -1463,7 +1463,8 @@
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Waste Collection</h2>
+                <br>
+                <h2 class="mb-0">Collection </h2>
               </div>
             </div>
           </div>
@@ -1473,33 +1474,48 @@
 
 
 <!-- [ Main Content ] start -->
-
-<div class="row">
-    <div class="col-md-12">
+<div class="row justify-content-center">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h3>Waste Collection Details </h3>
+                <h3 class="text-center">Waste Collection Details</h3>
             </div>
-            <div class="card-body">
-                <h4>Collection Details Summary</h4>
-                <p><strong>Waste Type:</strong> {{ collection.waste_type }}</p>
-                <p><strong>Request Date:</strong> {{ collection.request_date }}</p>
-                <p><strong>Customer Name:</strong> {{ collection.customer_name }}</p>
-                <p><strong>Collection Location:</strong> {{ collection.location }}</p>
-                <p><strong>Collector Name:</strong> {{ collection.collector_name }}</p>
-                <p><strong>Collection Date:</strong> {{ collection.collection_date }}</p>
-                <p><strong>Collection Price:</strong> {{ collection.collection_price }}</p>
-                <p><strong>Collection Status:</strong> {{ collection.request_status }}</p>
 
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Waste Type:</strong> {{ completed_collection.waste }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Request Date:</strong> {{ completed_collection.request_date }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Customer Name:</strong> {{ completed_collection.customer_name }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Location:</strong> {{ completed_collection.location }}</span>
+                        <hr class="border border-primary-subtle" />
+                    </div>
+                    <div class="col-md-6">
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector Name:</strong> {{ completed_collection.collector_name }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Date:</strong> {{ completed_collection.collection_date }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Price:</strong> {{ completed_collection.collection_price }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Status:</strong> <label class="badge bg-light-success">{{ completed_collection.request_status }}</label></span>
+                        <hr class="border border-primary-subtle" />
+                    </div>
+                </div>
                 <form action="{% url 'Collections' %}" method="post">
                     {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">Back</button>
+                    <button class="btn btn-primary mt-4" type="submit">Back</button>
                 </form>
             </div>
         </div>
     </div>
-    <!-- [ form-element ] end -->
 </div>
+
+
+
+
 </div>
 </section>
 

@@ -1479,7 +1479,7 @@
           <div class="card">
             <div class="card-header">
               <h5>Collections</h5>
-              <span class="d-block m-t-5">Below is a list of <code>completed waste collections</code> </span>
+              <span class="d-block m-t-5">Below is a list of <code>completed waste</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -1489,34 +1489,34 @@
               <div class="table-responsive">
                 
                 <table class="table" id="pc-dt-export">
-                  <thead>
-                    <tr>
-                      <th>Request ID</th>
-                      <th>Waste Type</th>
-                      <th>Collector</th>
-                      <th>Customer</th>
-                      <th>Location</th>
-                      <th>Collection Status</th>
-                      <th>Collection Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for collection in completed_collections %}
-                    <tr>
-                      <td>{{ collection.request_id }}</td>
-                      <td>{{ collection.waste }}</td>
-                      <td>{{ collection.collector_name }}</td>
-                      <td>{{ collection.customer_name }}</td>
-                      <td>{{ collection.location }}</td>
-                      <td>{{ collection.request_status }}</td>
-                      <td>{{ collection.collection_date }}</td>
-                      <td>
-                        <a href="#">Details</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Waste Type</th>
+                            <th>Collector</th>
+                            <th>Customer</th>
+                            <th>Location</th>
+                            <th>Collection Status</th>
+                            <th>Collection Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for collection in completed_collections %}
+                        <tr>
+                            <td>{{ collection.request_id }}</td>
+                            <td>{{ collection.waste }}</td>
+                            <td>{{ collection.collector_name }}</td>
+                            <td>{{ collection.customer_name }}</td>
+                            <td>{{ collection.location }}</td>
+                            <td>{{ collection.request_status }}</td>
+                            <td>{{ collection.collection_date }}</td>
+                            <td>
+                                <a href="{% url 'view_collection' collection.request_id %}">Details</a> 
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 
               </div>
