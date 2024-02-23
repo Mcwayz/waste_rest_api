@@ -18,7 +18,7 @@ from ..serializers.collector_serializer import CollectorSerializer, CompletedCol
 
 @api_view(['GET'])
 def get_customer_requests(request): 
-    customer_requests = Requests.objects.select_related('customer__auth').all()
+    customer_requests = Requests.objects.filter(request_status='pending').select_related('customer__auth').all()
     serialized_requests = []
     for request_obj in customer_requests:
         serialized_request = {

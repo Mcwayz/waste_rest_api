@@ -65,6 +65,7 @@ def get_completed_collections(request):
     
 # Completed Collection
 
+
 def get_completed_collection(request, request_id):
     response = requests.get(f'{base}/api/completedCollection/{request_id}/')
     if response.status_code == 200:
@@ -78,6 +79,7 @@ def get_completed_collection(request, request_id):
 
 
 # Edit Waste Type
+
 
 def edit_waste(request, pk):
     waste = get_object_or_404(Waste, pk=pk)
@@ -110,46 +112,5 @@ def users(request):
     data = response.json()
     context = {'data': data}
     return render(request, 'frontend/manage-users.html', context)
-
-
-
-
-    """
-    
-def collection_details(request, pk):
-
-    api_url = f"{base}/api/collection-details/{pk}"
-    response = requests.get(api_url)
-    details = response.json()
-    request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    user_collect_date = date_time.datetime.strptime(details['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    context = {'collection': details, 'request_date': request_date, 'user_collect_date':user_collect_date}
-    print(details)
-    return render(request, 'frontend/collection_details.html', context)
-
-
-
-def collection_summary(request, pk):
-    api_url = f"{base}/api/collection-details/{pk}"
-    response = requests.get(api_url)
-    details = response.json()
-    request_date = date_time.datetime.strptime(details['request_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    user_collect_date = date_time.datetime.strptime(details['user_collect_date'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    context = {'collection': details, 'request_date': request_date, 'user_collect_date':user_collect_date}
-    print(details)
-    return render(request, 'frontend/collection_summary.html', context)
-
-
-
-def map_view(request):
-    latitude = request.GET.get('latitude')
-    longitude = request.GET.get('longitude')
-    return render(request, 'frontend/map.html', {'latitude': latitude, 'longitude': longitude})
-
-
-def add_user(request):
-    return render(request, 'frontend/add-user.html')
-
-    """
 
 
