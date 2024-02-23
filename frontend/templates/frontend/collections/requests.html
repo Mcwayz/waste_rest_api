@@ -504,12 +504,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Collections</li>
+                <li class="breadcrumb-item" aria-current="page">Collection Requests</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Collections</h2>
+                <h2 class="mb-0"> Pending Collection Requests</h2>
               </div>
             </div>
           </div>
@@ -525,7 +525,7 @@
           <div class="card">
             <div class="card-header">
               <h5>Collections</h5>
-              <span class="d-block m-t-5">Below is a list of <code>completed waste</code> </span>
+              <span class="d-block m-t-5">Below is a list of <code>Pending Requests</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -538,28 +538,26 @@
                     <thead>
                         <tr>
                             <th>Request ID</th>
-                            <th>Waste Type</th>
-                            <th>Collector</th>
-                            <th>Customer</th>
                             <th>Location</th>
-                            <th>Collection Status</th>
-                            <th>Collection Date</th>
-                            <th>Action</th>
+                            <th>Number of Bags</th>
+                            <th>Request Status</th>
+                            <th>Request Date</th>
+                            <th>Collection Price</th>
+                            <th>Waste</th>
+                            <th>Customer Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for collection in completed_collections %}
+                        {% for request_data in customer_requests %}
                         <tr>
-                            <td>{{ collection.request_id }}</td>
-                            <td>{{ collection.waste }}</td>
-                            <td>{{ collection.collector_name }}</td>
-                            <td>{{ collection.customer_name }}</td>
-                            <td>{{ collection.location }}</td>
-                            <td>{{ collection.request_status }}</td>
-                            <td>{{ collection.collection_date }}</td>
-                            <td>
-                                <a href="{% url 'view_collection' collection.request_id %}">Details</a> 
-                            </td>
+                            <td>{{ request_data.request_id }}</td>
+                            <td>{{ request_data.location }}</td>
+                            <td>{{ request_data.number_of_bags }}</td>
+                            <td>{{ request_data.request_status }}</td>
+                            <td>{{ request_data.request_date }}</td>
+                            <td>{{ request_data.collection_price }}</td>
+                            <td>{{ request_data.waste }}</td>
+                            <td>{{ request_data.first_name }} {{ request_data.last_name }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

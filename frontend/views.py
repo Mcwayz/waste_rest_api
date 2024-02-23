@@ -76,6 +76,27 @@ def get_completed_collection(request, request_id):
         return render(request, 'frontend/collections/view_collection.html', {'completed_collection': completed_collection})
     else:
         return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    
+    
+    
+# Pending Requests
+
+
+def get_customer_requests(request):
+    response = requests.get(f'{base}/api/customerRequests/')
+    if response.status_code == 200:
+        customer_requests = response.json()
+        for request_data in customer_requests:
+            request_date_str = request_data['request_date']
+            # Parse the date string
+            request_date = date_time.datetime.strptime(request_date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+            # Format the date
+            request_data['request_date'] = request_date.strftime('%Y-%m-%d %H:%M:%S')
+        return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
+    else:
+        return render(request, 'frontend/collections/requests.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+
+
 
 
 # Edit Waste Type
