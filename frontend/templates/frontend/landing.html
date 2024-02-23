@@ -1,58 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Live Preview | Able Pro Dashboard Template</title>
+    <title>Waste Colleciton Dashboard</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Able Pro is trending dashboard template made using Bootstrap 5 design framework. Able Pro is available in Bootstrap, React, CodeIgniter, Angular,  and .net Technologies.">
-    <meta name="keywords" content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
-    <meta name="author" content="Phoenixcoded">
-
-    <!-- [Favicon] icon -->
-    <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon">
-
-    <!-- [Page specific CSS] start -->
-    <link href="../assets/css/plugins/animate.min.css" rel="stylesheet" type="text/css" />
+  
+    {% load static %}
+    <link rel="icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+    <link href="{% static 'assets/css/plugins/animate.min.css' %}" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet" />
-    <!-- [Page specific CSS] end -->
-    <!-- [Font] Family -->
-    <link rel="stylesheet" href="../assets/fonts/inter/inter.css" id="main-font-link" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/inter/inter.css' %}" id="main-font-link" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/tabler-icons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/material.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" id="main-style-link" />
+    <link rel="stylesheet" href="{% static 'assets/css/style-preset.css' %}" />
 
-    <!-- [Tabler Icons] https://tablericons.com -->
-    <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
-    <!-- [Feather Icons] https://feathericons.com -->
-    <link rel="stylesheet" href="../assets/fonts/feather.css" />
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-    <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
-    <!-- [Material Icons] https://fonts.google.com/icons -->
-    <link rel="stylesheet" href="../assets/fonts/material.css" />
-    <!-- [Template CSS Files] -->
-    <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
-    <link rel="stylesheet" href="../assets/css/style-preset.css" />
-
-    <link rel="stylesheet" href="../assets/css/landing.css" />
+    <link rel="stylesheet" href="{% static 'assets/css/landing.css' %}" />
   </head>
 
   <body class="landing-page">
-    <!-- [ Main Content ] start -->
-    <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
       <div class="loader-track">
         <div class="loader-fill"></div>
       </div>
     </div>
-    <!-- [ Pre-loader ] End -->
 
-    <!-- [ Header ] start -->
-    <header id="home" style="background-image: url(assets/images/landing/img-headerbg.jpg)">
-      <!-- [ Nav ] start -->
-      <!-- [ Nav ] start -->
+
+
+    <header id="home" style="background-image: url({% static 'assets/images/landing/img-headerbg.jpg' %})">
       <nav class="navbar navbar-expand-md navbar-light default">
         <div class="container">
           <a class="navbar-brand" href="../index.html">
-            <img src="../assets/images/logo-dark.svg" alt="logo" />
+            <img src="{% static 'assets/images/logo-dark.svg' %}" alt="logo" />
           </a>
           <button
             class="navbar-toggler rounded"
@@ -132,37 +115,41 @@
             </div>
           </div>
           <div class="col-md-6">
-            <img src="../assets/images/landing/business-presentation-1.png" width="100%" />
+            <img src="{% static 'assets/images/landing/business-presentation-1.png' %}" width="100%" />
           </div>
         </div>
       </div>
       <div class="technology-block">
         <ul class="list-inline mb-0">
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Bootstrap 5"
-            ><img src="../assets/images/landing/tech-bootstrap.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-bootstrap.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Gulp"
-            ><img src="../assets/images/landing/tech-gulp.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-gulp.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="React 18"
-            ><img src="../assets/images/landing/tech-react.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-react.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Material UI - TypeScript/JavaScript"
-            ><img src="../assets/images/landing/tech-mui.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-mui.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="CodeIgniter"
-            ><img src="../assets/images/landing/tech-codeigniter.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-codeigniter.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title=".net"
-            ><img src="../assets/images/landing/tech-net.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-net.svg' %}" alt="img" class="img-fluid"
           /></li>
           <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Figma Design System"
-            ><img src="../assets/images/landing/tech-figma.svg" alt="img" class="img-fluid"
+            ><img src="{% static 'assets/images/landing/tech-figma.svg' %}" alt="img" class="img-fluid"
           /></li>
         </ul>
       </div>
     </header>
     <!-- [ Header ] End -->
+
+
+
+
     <!-- [ Top Features apps ] start -->
     <section class="bg-white">
       <div class="container title">
@@ -269,86 +256,7 @@
       </div>
     </section>
     <!-- [ working apps ] End -->
-    <!-- [ workspace apps ] start -->
-    <!--
-    <section class="bg-white">
-      <div class="container title">
-        <div class="row justify-content-center text-center wow fadeInUp" data-wow-delay="0.2s">
-          <div class="col-md-8 col-xl-6">
-            <h2 class="mb-3">Complete Combo</h2>
-            <p class="mb-0">Able Pro caters to the needs of both developers and designers, whether they are beginners or experts. </p>
-          </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="row workspace-card-block align-items-center justify-content-center mb-4 mb-sm-5">
-          <div class="col-md-6 col-lg-4">
-            <a href="#workspace_1" class="card wow fadeInUp" data-wow-delay="0.4s">
-              <div class="card-body">
-                <div class="avtar avtar-l">
-                  <svg class="pc-icon">
-                    <use xlink:href="#custom-mouse-circle"></use>
-                  </svg>
-                </div>
-                <div>
-                  <h5 class="mb-3">Figma Design System</h5>
-                  <p class="mb-0 text-muted">Check the live preview of Able Pro Figma design file. Figma file included in all licenses.</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <a href="#workspace_2" class="card wow fadeInUp" data-wow-delay="0.6s">
-              <div class="card-body">
-                <div class="avtar avtar-l">
-                  <svg class="pc-icon">
-                    <use xlink:href="#custom-refresh-2"></use>
-                  </svg>
-                </div>
-                <div>
-                  <h5 class="mb-3">Explore Components</h5>
-                  <p class="mb-0 text-muted">Access all components of Able Pro in one place to make your development work easier.</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <a href="#workspace_3" class="card wow fadeInUp" data-wow-delay="0.8s">
-              <div class="card-body">
-                <div class="avtar avtar-l">
-                  <svg class="pc-icon">
-                    <use xlink:href="#custom-simcard-2"></use>
-                  </svg>
-                </div>
-                <div>
-                  <h5 class="mb-3">Documentation</h5>
-                  <p class="mb-0 text-muted">Find solutions and navigate through our helper guide with ease. </p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="workspace-slider-block rounded wow fadeInUp bg-gray-800" data-wow-delay="0.2s">
-              <div class="workspace-slider owl-carousel owl-theme">
-                <div class="item" data-hash="workspace_1"
-                  ><img src="../assets/images/landing/img-slider.jpg" width="60%" alt="img" class="img-fluid img-ws-slider rounded"
-                /></div>
-                <div class="item" data-hash="workspace_2"
-                  ><img src="../assets/images/landing/img-slider.jpg" width="60%" alt="img" class="img-fluid img-ws-slider rounded"
-                /></div>
-                <div class="item" data-hash="workspace_3"
-                  ><img src="../assets/images/landing/img-slider.jpg" width="60%" alt="img" class="img-fluid img-ws-slider rounded"
-                /></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  -->
-    <!-- [ workspace apps ] End -->
+
     <!-- [ Applications apps ] start -->
     <section class="bg-white">
       <div class="container title mb-0">
@@ -373,6 +281,7 @@
       </div>
     </section>
     <!-- [ Applications apps ] End -->
+    
     <!-- [ support team apps ] start -->
     <section class="bg-white support-team-block" style="background-image: url(../assets/images/landing/img-headerbg.jpg)">
       <div class="container title">
