@@ -115,7 +115,7 @@ def edit_waste(request, pk):
 
 
 
-#Delete Waste Type
+# Delete Waste Type
 
 
 def delete_waste(request, pk):
@@ -124,14 +124,3 @@ def delete_waste(request, pk):
         waste.delete()
         return redirect('Waste Type') 
     return render(request, 'frontend/waste/delete_waste.html', {'waste': waste})
-
-
-
-def users(request):
-    # Make a request to the endpoint to retrieve data
-    response = requests.get(f"{base}/api/users")
-    data = response.json()
-    context = {'data': data}
-    return render(request, 'frontend/manage-users.html', context)
-
-

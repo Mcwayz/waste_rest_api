@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 # User Profile Model
 
+
 class CustomerProfile(models.Model):
     customer_id = models.AutoField(primary_key=True)
     address = models.TextField(max_length=200)
@@ -13,6 +14,7 @@ class CustomerProfile(models.Model):
 
 
 # Waste Type Model
+
 
 class Waste(models.Model):
     waste_id = models.AutoField(primary_key=True)
@@ -22,6 +24,7 @@ class Waste(models.Model):
     
     
 # Collectors (Driver) Model
+
 
 class CollectorProfile(models.Model):
     collector_id = models.AutoField(primary_key=True)
@@ -33,6 +36,7 @@ class CollectorProfile(models.Model):
 
 
 # User Requests Model
+
 
 class Requests(models.Model):
     request_id = models.AutoField(primary_key=True)
@@ -47,6 +51,7 @@ class Requests(models.Model):
 
 # Collections  Model
 
+
 class Collection(models.Model):
     collection_id = models.AutoField(primary_key=True)
     collection_date = models.DateTimeField(default=timezone.now, blank=True)
@@ -56,7 +61,34 @@ class Collection(models.Model):
 
 # Driver Ratings Model
 
+
 class Ratings(models.Model):
     rating_id = models.AutoField(primary_key=True)
     rating_score = models.PositiveIntegerField()
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='ratings')
+
+
+
+# Wallet Model 
+
+
+class Wallet(models.Model):
+    wallet_id = models.AutoField(primary_key=True)
+    wallet_name = models.CharField(max_length=100)
+    balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector_wallet')
+    
+    
+# Wallet History
+
+
+class WalletHistory(models.Model):
+    history_id = models.AutoField(primary_key=True)
+    transaction_type =  models.CharField(max_length=100)
+    transaction_date = models.DateTimeField(default=timezone.now, blank=True)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='wallet_history')
+    old_wallet_balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    new_wallet_balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    transaction_amount = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    
+     
