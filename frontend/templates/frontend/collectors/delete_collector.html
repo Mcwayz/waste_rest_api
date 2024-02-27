@@ -511,15 +511,13 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Collectors</a></li>
-                <li class="breadcrumb-item" aria-current="page">Wallet Details</li>
+                <li class="breadcrumb-item" aria-current="page">Collector Details</li>
               </ul>
             </div>
-
+            <br>
             <div class="col-md-12">
               <div class="page-header-title">
-                <br>
-                <br>
-                <h2 class="mb-0">Wallet</h2>
+                <h2 class="mb-0">Collector</h2>
               </div>
             </div>
           </div>
@@ -532,42 +530,41 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center"> Are You Sure You Want To  Delete Collector's Wallet Details ?</h3>
+                <h3 class="text-center">Collector's Profile Details</h3>
             </div>
 
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
 
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Wallet ID:</strong> {{ wallet.wallet_id }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>ID:</strong> {{ collector_data.wallet_id }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's First Name:</strong> {{ wallet.first_name }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's First Name:</strong> {{ collector_data.first_name }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Last Name:</strong> {{ wallet.last_name }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Last Name:</strong> {{ collector_data.last_name }}</span>
                         <hr class="border border-primary-subtle" />
 
                     </div>
 
                     <div class="col-md-6">
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Vehicle:</strong> {{ wallet.vehicle }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Vehicle:</strong> {{ collector_data.vehicle }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Waste Type:</strong> {{ wallet.waste }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Waste Type:</strong> {{ collector_data.waste }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Wallet Balance:</strong> {{ wallet.wallet_balance }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Wallet Balance:</strong> {{ collector_data.wallet_balance }}</span>
                         <hr class="border border-primary-subtle" />
                     </div>
                 </div>
-                <form action="{% url 'delete_wallet' wallet.pk %}" method="post">
-                  {% csrf_token %}
-                  <button class="btn btn-danger" type="submit">Confirm Delete</button>
-              </form>
+                <form action="{% url 'Collector Wallets' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary mt-4" type="submit">Back</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 </div>
 </section>
-
 
 
 <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>

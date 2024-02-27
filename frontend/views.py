@@ -1,11 +1,11 @@
 import requests
 import datetime as date_time
 from .forms import WasteForm
-from rest_framework.response import Response
-from base.models import Waste, Collection, Wallet, CustomerProfile
 from django.urls import reverse
+from rest_framework.response import Response
+from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
-
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile
 
 
 # Create your views here.
@@ -182,7 +182,28 @@ def list_customers(request):
     return render(request, 'frontend/customers/customers.html', {'customer_data': customer_data})
 
 
-# Get Customers List 
+# Collectors List 
+
+
+def list_collectors(request):
+    collectors = CollectorProfile.objects.all()
+    collectors_data = []
+    for collector in collectors:
+        collector_data = {
+            'user_id': collector.auth.id,
+            'username': collector.auth.username,
+            'first_name': collector.auth.first_name,
+            'last_name': collector.auth.last_name,
+            'email': collector.auth.email,
+            'waste_type': collector.waste.waste_type,
+            'vehicle': collector.vehicle,
+            'work_area': collector.work_area
+        }
+        collectors_data.append(collector_data)
+    return render(request, 'frontend/collectors/collectors.html', {'collectors_data': collectors_data})
+
+
+# Get Customer Details
 
 
 def view_customer(request, user_id):
@@ -196,3 +217,29 @@ def view_customer(request, user_id):
         'address': customer.address
     }
     return render(request, 'frontend/customers/view_customer.html', {'customer_data': customer_data})
+
+
+# Get Collector Details
+
+
+def view_collector(request, user_id):
+    collector =  get_object_or_404(CollectorProfile, auth__id=user_id)
+    collector_data = {
+        'user_id': collector.auth.id,
+        'username': collector.auth.username,
+        'first_name': collector.auth.first_name,
+        'last_name': collector.auth.last_name,
+        'email': collector.auth.email,
+        'waste_type': collector.waste.waste_type,
+        'vehicle': collector.vehicle,
+        'work_area': collector.work_area
+    }
+    return render(request, 'frontend/collectors/view_collector.html', {'collector_data': collector_data})
+
+
+def delete_collector(request, user_id):
+    collector_data = get_object_or_404(CollectorProfile, auth__id=user_id)
+    if request.method == 'POST':
+        collector_data.delete()
+        return redirect('Collectors') 
+    return render(request, 'frontend/collectors/delete_collector.html', {'collector_data': collector_data})
