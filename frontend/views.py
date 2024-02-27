@@ -115,8 +115,6 @@ def get_customer_requests(request):
             "customer": full_name
         }
         customer_requests.append(request_data)
-
-    # Render the template with requests data
     return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
 
 
