@@ -21,7 +21,7 @@ urlpatterns = [
     path('delete-wallet/<int:pk>/',views.delete_wallet, name='delete_wallet'),
     path('customer/<int:user_id>/', views.view_customer, name='view_customer'),
     path('collector/<int:user_id>/', views.view_collector, name='view_collector'),
-    path('delete-collector/<int:user_id>/',views.delete_collector, name='delete_collector'),
+    path('delete-collector/<int:user_id>/', views.delete_collector, name='delete_collector'),
     path('collection/<int:request_id>/', views.get_completed_collection, name='view_collection'),
     
     ]

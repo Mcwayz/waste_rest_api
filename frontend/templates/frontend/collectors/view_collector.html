@@ -553,13 +553,13 @@
                       <hr class="border border-primary-subtle" />
                         <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Vehicle:</strong> {{ collector_data.vehicle }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Waste Type:</strong> {{ collector_data.waste_type }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Waste Type:</strong> {{ collector_data.waste_type }}</span>
                         <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Work Area:</strong> {{ collector_data.work_area }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Work Area:</strong> {{ collector_data.work_area }}</span>
                         <hr class="border border-primary-subtle" />
                     </div>
                 </div>
-                <form action="{% url 'Collector Wallets' %}" method="post">
+                <form action="{% url 'Collectors' %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-primary mt-4" type="submit">Back</button>
                 </form>

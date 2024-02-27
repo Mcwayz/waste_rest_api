@@ -238,7 +238,17 @@ def view_collector(request, user_id):
 
 
 def delete_collector(request, user_id):
-    collector_data = get_object_or_404(CollectorProfile, auth__id=user_id)
+    collector = get_object_or_404(CollectorProfile, auth__id=user_id)
+    collector_data = {
+        'user_id': collector.auth.id,
+        'username': collector.auth.username,
+        'first_name': collector.auth.first_name,
+        'last_name': collector.auth.last_name,
+        'email': collector.auth.email,
+        'waste_type': collector.waste.waste_type,
+        'vehicle': collector.vehicle,
+        'work_area': collector.work_area
+    }
     if request.method == 'POST':
         collector_data.delete()
         return redirect('Collectors') 
