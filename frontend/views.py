@@ -5,12 +5,10 @@ from django.urls import reverse
 from rest_framework.response import Response
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests
 
 
 # Create your views here.
-
-base = "http://127.0.0.1:8000"
 
 
 def dashboard(request):
@@ -49,17 +47,30 @@ def WasteType(request):
 
 # Completed Collections
 
+
 def get_completed_collections(request):
-    response = requests.get(f'{base}/api/completedCollections/')
-    if response.status_code == 200:
-        completed_collections = response.json()
-        for collection in completed_collections:
-            collection_date_str = collection['collection_date']
-            collection_date = date_time.datetime.fromisoformat(collection_date_str)
-            collection['collection_date'] = collection_date.strftime('%Y-%m-%d %H:%M:%S')
-        return render(request, 'frontend/collections/collections.html', {'completed_collections': completed_collections})
-    else:
-        return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    collection_data = Collection.objects.filter(request__request_status='Complete')
+
+    completed_collections = []
+    for collection_obj in collection_data:
+        request_obj = collection_obj.request
+        customer_name = f"{request_obj.customer.auth.first_name} {request_obj.customer.auth.last_name}"
+        collector_name = f"{collection_obj.collector.auth.first_name} {collection_obj.collector.auth.last_name}"
+
+        collection_info = {
+            "request_id": request_obj.request_id,
+            "location": request_obj.location,
+            "request_status": request_obj.request_status,
+            "request_date": request_obj.request_date,
+            "collection_date": collection_obj.collection_date,
+            "collection_price": str(request_obj.collection_price),
+            "waste": request_obj.waste.waste_type,
+            "customer_name": customer_name.strip(),
+            "collector_name": collector_name.strip()
+        }
+        completed_collections.append(collection_info)
+
+    return render(request, 'frontend/collections/collections.html', {'completed_collections': completed_collections})
     
     
     
@@ -67,15 +78,20 @@ def get_completed_collections(request):
 
 
 def get_completed_collection(request, request_id):
-    response = requests.get(f'{base}/api/completedCollection/{request_id}/')
-    if response.status_code == 200:
-        completed_collection = response.json()
-        collection_date_str = completed_collection['collection_date']
-        collection_date = date_time.datetime.fromisoformat(collection_date_str)
-        completed_collection['collection_date'] = collection_date.strftime('%Y-%m-%d %H:%M:%S')
-        return render(request, 'frontend/collections/view_collection.html', {'completed_collection': completed_collection})
-    else:
-        return render(request, 'frontend/collections/collections.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    collection_data = get_object_or_404(Collection, request_id=request_id)
+    completed_collection = {
+        "request_id": collection_data.request_id,
+        "location": collection_data.request.location,
+        "request_status": collection_data.request.request_status,
+        "request_date": collection_data.request.request_date,
+        "collection_date": collection_data.collection_date,
+        "collection_price": str(collection_data.request.collection_price),
+        "waste": collection_data.request.waste.waste_type,
+        "customer_name": collection_data.request.customer.auth.first_name + " " + collection_data.request.customer.auth.last_name,
+        "collector_name": collection_data.collector.auth.first_name + " " + collection_data.collector.auth.last_name
+    }
+
+    return render(request, 'frontend/collections/view_collection.html', {'completed_collection': completed_collection})
     
     
     
@@ -83,18 +99,25 @@ def get_completed_collection(request, request_id):
 
 
 def get_customer_requests(request):
-    response = requests.get(f'{base}/api/customerRequests/')
-    if response.status_code == 200:
-        customer_requests = response.json()
-        for request_data in customer_requests:
-            request_date_str = request_data['request_date']
-            # Parse the date string
-            request_date = date_time.datetime.strptime(request_date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
-            # Format the date
-            request_data['request_date'] = request_date.strftime('%Y-%m-%d %H:%M:%S')
-        return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
-    else:
-        return render(request, 'frontend/collections/requests.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    requests = Requests.objects.filter(request_status='Pending')
+    customer_requests = []
+    for request_obj in requests: 
+        full_name = f"{request_obj.customer.auth.first_name} {request_obj.customer.auth.last_name}"
+
+        request_data = {
+            "request_id": request_obj.request_id,
+            "location": request_obj.location,
+            "number_of_bags": request_obj.number_of_bags,
+            "request_status": request_obj.request_status,
+            "request_date": request_obj.request_date,
+            "collection_price": str(request_obj.collection_price),
+            "waste": request_obj.waste.waste_type,
+            "customer": full_name
+        }
+        customer_requests.append(request_data)
+
+    # Render the template with requests data
+    return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
 
 
 
@@ -102,12 +125,20 @@ def get_customer_requests(request):
 
 
 def get_collector_wallets(request):
-    response = requests.get(f'{base}/api/wallets/')
-    if response.status_code == 200:
-        collector_wallets = response.json()
-        return render(request, 'frontend/wallet/wallets.html', {'collector_wallets': collector_wallets})
-    else:
-        return render(request, 'frontend/wallet/wallets.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    wallets = Wallet.objects.all()
+    collector_wallets = []
+    for wallet in wallets:
+        collector_data = {
+            "wallet_id": wallet.wallet_id,
+            "first_name": wallet.collector.auth.first_name,
+            "last_name": wallet.collector.auth.last_name,
+            "vehicle": wallet.collector.vehicle,
+            "work_area": wallet.collector.work_area,
+            "waste": wallet.collector.waste.waste_type,
+            "wallet_balance": str(wallet.balance)
+        }
+        collector_wallets.append(collector_data)
+    return render(request, 'frontend/wallet/wallets.html', {'collector_wallets': collector_wallets})
     
 
 # Edit Waste Type
@@ -137,18 +168,21 @@ def delete_waste(request, pk):
 
 
 
-
-
 # View Wallet
 
 
 def view_wallet(request, wallet_id):
-    response = requests.get(f'{base}/api/view-wallet/{wallet_id}/')
-    if response.status_code == 200:
-        wallet = response.json()
-        return render(request, 'frontend/wallet/view_wallet.html', {'wallet': wallet})
-    else:
-        return render(request, 'frontend/wallet/view_wallet.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    wallet = get_object_or_404(Wallet, wallet_id=wallet_id)
+    wallet_data = {
+        "wallet_id": wallet.wallet_id,
+        "first_name": wallet.collector.auth.first_name,
+        "last_name": wallet.collector.auth.last_name,
+        "vehicle": wallet.collector.vehicle,
+        "work_area": wallet.collector.work_area,
+        "waste": wallet.collector.waste.waste_type,
+        "wallet_balance": str(wallet.balance)
+    }
+    return render(request, 'frontend/wallet/view_wallet.html', {'wallet': wallet_data})
 
 
 # Delete Collector Wallet
@@ -235,6 +269,10 @@ def view_collector(request, user_id):
         'work_area': collector.work_area
     }
     return render(request, 'frontend/collectors/view_collector.html', {'collector_data': collector_data})
+
+
+
+# Delete Collector Profile
 
 
 def delete_collector(request, user_id):
