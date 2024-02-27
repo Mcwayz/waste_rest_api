@@ -28,6 +28,7 @@ urlpatterns = [
     path('collectorCollections/<int:collector_id>/', collector_views.collections_by_collector),
     path('collector/<int:collector_id>/', collector_views.collector_data, name='collector-data'),
     path('customerDetails/<str:pk>/', customer_views.getCustomerProfile, name='customer-details'),
+    path('view-wallet/<int:wallet_id>/', collector_views.collector_data, name='collectors-data'),
     path('customerCollections/<int:customer_id>/', customer_views.completed_collections_by_customer),
     path('collectionDetails/<str:pk>/', customer_views.collectionDetails, name='collection-details'),
     path('collectorDetails/<str:pk>/', collector_views.getCollectorProfile, name='collector-details'),

@@ -110,7 +110,7 @@ class CollectorDataSerializer(serializers.ModelSerializer):
     work_area = serializers.CharField()
     waste = serializers.CharField(source='waste.waste_type')
     wallet_balance = serializers.DecimalField(max_digits=10, decimal_places=2, source='wallet.balance')
-
+    wallet_id = serializers.IntegerField(source='wallet.wallet_id')
     class Meta:
         model = CollectorProfile
-        fields = ('first_name', 'last_name', 'vehicle', 'work_area', 'waste', 'wallet_balance')
+        fields = ('wallet_id','first_name', 'last_name', 'vehicle', 'work_area', 'waste', 'wallet_balance')

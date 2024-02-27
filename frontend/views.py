@@ -2,7 +2,7 @@ import requests
 import datetime as date_time
 from .forms import WasteForm
 from rest_framework.response import Response
-from base.models import Waste, Collection
+from base.models import Waste, Collection, Wallet
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -110,8 +110,6 @@ def get_collector_wallets(request):
         return render(request, 'frontend/wallet/wallets.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
     
 
-
-
 # Edit Waste Type
 
 
@@ -127,7 +125,6 @@ def edit_waste(request, pk):
     return render(request, 'frontend/waste/edit_waste.html', {'form': form, 'waste': waste})
 
 
-
 # Delete Waste Type
 
 
@@ -137,3 +134,29 @@ def delete_waste(request, pk):
         waste.delete()
         return redirect('Waste Type') 
     return render(request, 'frontend/waste/delete_waste.html', {'waste': waste})
+
+
+
+
+
+# View Wallet
+
+
+def view_wallet(request, wallet_id):
+    response = requests.get(f'{base}/api/view-wallet/{wallet_id}/')
+    if response.status_code == 200:
+        wallet = response.json()
+        return render(request, 'frontend/wallet/view_wallet.html', {'wallet': wallet})
+    else:
+        return render(request, 'frontend/wallet/view_wallet.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+
+
+# Delete Collector Wallet
+
+
+def delete_wallet(request, pk):
+    wallet = get_object_or_404(Wallet, pk=pk)
+    if request.method == 'POST':
+        wallet.delete()
+        return redirect('Waste Type') 
+    return render(request, 'frontend/wallet/delete_wallet.html', {'wallet': wallet})
