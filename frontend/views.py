@@ -2,7 +2,7 @@ import requests
 import datetime as date_time
 from .forms import WasteForm
 from rest_framework.response import Response
-from base.models import Waste, Collection, Wallet
+from base.models import Waste, Collection, Wallet, CustomerProfile
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -160,3 +160,39 @@ def delete_wallet(request, pk):
         wallet.delete()
         return redirect('Waste Type') 
     return render(request, 'frontend/wallet/delete_wallet.html', {'wallet': wallet})
+
+
+
+# Get Customers List 
+
+
+def list_customers(request):
+    customers = CustomerProfile.objects.all()
+    customer_data = []
+    for customer in customers:
+        customer_info = {
+            "user_id": customer.auth.id,
+            "username": customer.auth.username,
+            "email": customer.auth.email,
+            "first_name": customer.auth.first_name,
+            "last_name": customer.auth.last_name,
+            "address": customer.address
+        }
+        customer_data.append(customer_info)
+    return render(request, 'frontend/customers/customers.html', {'customer_data': customer_data})
+
+
+# Get Customers List 
+
+
+def view_customer(request, user_id):
+    customer = get_object_or_404(CustomerProfile, auth__id=user_id)
+    customer_data = {
+        'user_id': customer.auth.id,
+        'username': customer.auth.username,
+        'first_name': customer.auth.first_name,
+        'last_name': customer.auth.last_name,
+        'email': customer.auth.email,
+        'address': customer.address
+    }
+    return render(request, 'frontend/customers/view_customer.html', {'customer_data': customer_data})
