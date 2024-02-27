@@ -75,7 +75,7 @@ class Ratings(models.Model):
 class Wallet(models.Model):
     wallet_id = models.AutoField(primary_key=True)
     balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
-    collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector_wallet')
+    collector = models.OneToOneField(CollectorProfile, on_delete=models.CASCADE)
     
     
 # Wallet History

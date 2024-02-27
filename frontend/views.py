@@ -98,6 +98,11 @@ def get_customer_requests(request):
 
 
 
+# Collector Wallets
+
+
+
+
 
 # Edit Waste Type
 

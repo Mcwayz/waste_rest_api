@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
-from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer
+from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
 
@@ -83,6 +83,30 @@ def collections_by_collector(request, collector_id):
 def getCollectorRatings(request, pk):
     ratings = Ratings.objects.filter(collector=pk)
     serializer = CollectionSerializer(ratings, many=True)
+    return Response(serializer.data)
+
+
+# Get All Collectors Wallet Details
+
+
+@api_view(['GET'])
+def all_collectors_data(request):
+    collectors = CollectorProfile.objects.all()
+    serializer = CollectorDataSerializer(collectors, many=True)
+    return Response(serializer.data)
+
+
+# Get Single Collector Wallet Details
+
+
+@api_view(['GET'])
+def collector_data(request, collector_id):
+    try:
+        collector = CollectorProfile.objects.get(pk=collector_id)
+    except CollectorProfile.DoesNotExist:
+        return Response({'error': 'Collector does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CollectorDataSerializer(collector)
     return Response(serializer.data)
 
 
@@ -169,7 +193,7 @@ def create_user_and_profile(request):
 
 
 def create_wallet_for_collector(profile_instance):
-    # Get the primary key value of the collector profile
+
     collector_pk = profile_instance.pk
 
     wallet_data = {'balance': Decimal(0.0), 'collector': collector_pk}

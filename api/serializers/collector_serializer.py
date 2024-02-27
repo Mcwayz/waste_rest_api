@@ -101,3 +101,15 @@ class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = '__all__'
+        
+        
+class CollectorDataSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='auth.first_name')
+    last_name = serializers.CharField(source='auth.last_name')
+    vehicle = serializers.CharField()
+    work_area = serializers.CharField()
+    wallet_balance = serializers.DecimalField(max_digits=10, decimal_places=2, source='wallet.balance')
+
+    class Meta:
+        model = CollectorProfile
+        fields = ('first_name', 'last_name', 'vehicle', 'work_area', 'wallet_balance')
