@@ -9,6 +9,7 @@ urlpatterns = [
     path('home', views.dashboard, name='Admin Dashboard'),
     path('waste-type', views.WasteType, name='Waste Type'),
     path('add-waste-type', views.create_waste, name='Add WasteType'),
+    path('wallets', views.get_collector_wallets, name='Collector Wallets'), 
     path('requests', views.get_customer_requests, name='Pending Requests'),
     path('edit-waste-type/<int:pk>/', views.edit_waste, name='edit_waste'),
     path('delete-waste/<int:pk>/', views.delete_waste, name='delete_waste'),

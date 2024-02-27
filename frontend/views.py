@@ -101,6 +101,14 @@ def get_customer_requests(request):
 # Collector Wallets
 
 
+def get_collector_wallets(request):
+    response = requests.get(f'{base}/api/wallets/')
+    if response.status_code == 200:
+        collector_wallets = response.json()
+        return render(request, 'frontend/wallet/wallets.html', {'collector_wallets': collector_wallets})
+    else:
+        return render(request, 'frontend/wallet/wallets.html', {'Error_Message': 'Failed To Fetch Data From The Endpoint'})
+    
 
 
 
