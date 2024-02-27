@@ -1,4 +1,6 @@
 import json
+import logging
+from decimal import Decimal
 from django.utils import timezone
 from rest_framework import status
 from django.http import HttpRequest
@@ -6,9 +8,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection
-from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer
+from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer
 
 
+
+logger = logging.getLogger(__name__)
 
 # GET Request Methods
 
@@ -150,13 +154,32 @@ def create_user_and_profile(request):
             profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance, 'waste':waste}
             profile_serializer = CollectorSerializer(data=profile_data)
             if profile_serializer.is_valid():
-                profile_serializer.save()
-                return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
+                profile_instance = profile_serializer.save()
+                # Create wallet for the collector profile
+                create_wallet_for_collector(profile_instance)
+                return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Create a wallet for the collector profile
+
+
+def create_wallet_for_collector(profile_instance):
+    # Get the primary key value of the collector profile
+    collector_pk = profile_instance.pk
+
+    wallet_data = {'balance': Decimal(0.0), 'collector': collector_pk}
+    wallet_serializer = WalletSerializer(data=wallet_data)
+    if wallet_serializer.is_valid():
+        wallet_serializer.save()
+    else:
+        logger.error("Wallet serializer validation failed: %s", wallet_serializer.errors)
+
+
 
 
 # End Of POST Methods

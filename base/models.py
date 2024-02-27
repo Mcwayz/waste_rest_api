@@ -74,8 +74,7 @@ class Ratings(models.Model):
 
 class Wallet(models.Model):
     wallet_id = models.AutoField(primary_key=True)
-    wallet_name = models.CharField(max_length=100)
-    balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     collector = models.ForeignKey(CollectorProfile, on_delete=models.CASCADE, related_name='collector_wallet')
     
     
@@ -87,8 +86,8 @@ class WalletHistory(models.Model):
     transaction_type =  models.CharField(max_length=100)
     transaction_date = models.DateTimeField(default=timezone.now, blank=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='wallet_history')
-    old_wallet_balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
-    new_wallet_balance = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
-    transaction_amount = models.DecimalField(max_digits=1000, decimal_places=2, default=Decimal(0.0))
+    old_wallet_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    new_wallet_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    transaction_amount = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     
      

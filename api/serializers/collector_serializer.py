@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from base.models import Waste, CollectorProfile,Requests, Collection
+from base.models import Waste, CollectorProfile,Requests, Collection, Wallet
 
 # Waste Type Serializer
 
@@ -95,3 +95,9 @@ class CompletedCollectionSerializer(serializers.ModelSerializer):
 
     def get_collector_name(self, obj):
         return f"{obj.collector.auth.first_name} {obj.collector.auth.last_name}"
+    
+    
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = '__all__'
