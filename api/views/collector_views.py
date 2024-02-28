@@ -3,11 +3,12 @@ import logging
 from decimal import Decimal
 from django.utils import timezone
 from rest_framework import status
+from django.db import transaction
 from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
@@ -234,46 +235,108 @@ def updateUser(request, pk):
 
 # Update Collection Request
 
-    
-@api_view(['PUT'])
-def updateRequest(request):
-    request_id = request.data.get('request_id')
-    new_status = request.data.get('status')
-    try:
-        request_to_update = Requests.objects.get(pk=request_id)
-        request_to_update.request_status = new_status
-        request_to_update.save()
-        return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
 
-    except Requests.DoesNotExist:
-        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+# @api_view(['PUT'])
+# def updateRequest(request):
+#     request_id = request.data.get('request_id')
+#     collector_id = request.data.get('collector_id')
+#     new_status = request.data.get('status')
+#     try:
+#         request_to_update = Requests.objects.get(pk=request_id)
+#         collection_price = request_to_update.collection_price
+#         collector_wallet = Wallet.objects.get(collector__collector_id=collector_id)
+#         wallet_balance = collector_wallet.balance
+#         if collection_price <= wallet_balance:
+#             request_to_update.request_status = new_status
+#             request_to_update.save()
+#             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
+
+#     except Requests.DoesNotExist:
+#         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+# # Complete Collection Request   
+   
+    
+# @api_view(['PUT'])
+# def completeCollection(request):
+#     request_id = request.data.get('request')
+#     new_status = request.data.get('status')
+#     try:
+#         request_to_update = get_object_or_404(Requests, pk=request_id)
+#         collection_to_update = request_to_update.collections_requested.first()
+#         if collection_to_update:
+#             collection_to_update.collection_date = timezone.now()
+#             collection_to_update.save()
+#             request_to_update.request_status = new_status
+#             request_to_update.save()
+#             return Response({
+#                 "collection_id": collection_to_update.collection_id,
+#                 "Message": "Collection Request Updated And Status Changed."
+                
+#             }, status=status.HTTP_200_OK)
+#         else:
+#             return Response({"Message": "Collection Not Found."}, status=status.HTTP_404_NOT_FOUND)
+#     except Requests.DoesNotExist:
+#         return Response({"Message": "Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    
+    
+# End Of PUT Request Methods
+
 
 
 # Complete Collection Request   
    
     
 @api_view(['PUT'])
-def completeCollection(request):
-    request_id = request.data.get('request')
+def updateCollectionRequest(request):
+    request_id = request.data.get('request_id')
+    collector_id = request.data.get('collector_id')
     new_status = request.data.get('status')
     try:
-        request_to_update = get_object_or_404(Requests, pk=request_id)
-        collection_to_update = request_to_update.collections_requested.first()
-        if collection_to_update:
-            collection_to_update.collection_date = timezone.now()
-            collection_to_update.save()
+        request_to_update = Requests.objects.get(pk=request_id)
+        collection_price = request_to_update.collection_price
+        collector_wallet = Wallet.objects.get(collector__collector_id=collector_id)
+        wallet_balance = collector_wallet.balance
+        if new_status == 'Complete':
+            if collection_price <= wallet_balance:
+                request_to_update.request_status = new_status
+                request_to_update.save()
+                
+                # Create a new collection record
+                collection = Collection.objects.create(
+                    collection_date=timezone.now(),
+                    request=request_to_update,
+                    collector=collector_wallet.collector
+                )
+                
+                # Deduct the collection price from the collector's wallet balance
+                old_balance = collector_wallet.balance
+                new_balance = old_balance - collection_price
+                collector_wallet.balance = new_balance
+                collector_wallet.save()
+                
+                # Create a wallet history record
+                WalletHistory.objects.create(
+                    transaction_type='Debit',
+                    transaction_date=timezone.now(),
+                    wallet=collector_wallet,
+                    old_wallet_balance=old_balance,
+                    new_wallet_balance=new_balance,
+                    transaction_amount=collection_price
+                )
+                
+                return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
+        else:
             request_to_update.request_status = new_status
             request_to_update.save()
-            return Response({
-                "collection_id": collection_to_update.collection_id,
-                "Message": "Collection Request Updated And Status Changed."
-                
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({"Message": "Collection Not Found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
     except Requests.DoesNotExist:
-        return Response({"Message": "Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
 
-    
-    
-# End Of PUT Request Methods
+
