@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.response import Response
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory
 
 
 # Create your views here.
@@ -171,6 +171,8 @@ def delete_waste(request, pk):
 
 def view_wallet(request, wallet_id):
     wallet = get_object_or_404(Wallet, wallet_id=wallet_id)
+    
+    # Get wallet data
     wallet_data = {
         "wallet_id": wallet.wallet_id,
         "first_name": wallet.collector.auth.first_name,
@@ -180,7 +182,12 @@ def view_wallet(request, wallet_id):
         "waste": wallet.collector.waste.waste_type,
         "wallet_balance": str(wallet.balance)
     }
-    return render(request, 'frontend/wallet/view_wallet.html', {'wallet': wallet_data})
+    
+    # Get wallet history
+    wallet_history = WalletHistory.objects.filter(wallet=wallet)
+    
+    # Pass wallet and wallet history data to the template
+    return render(request, 'frontend/wallet/view_wallet.html', {'wallet': wallet_data, 'wallet_history': wallet_history})
 
 
 # Delete Collector Wallet

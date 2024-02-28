@@ -527,7 +527,7 @@
 
 <!-- [ Main Content ] start -->
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="text-center">Collector's Wallet Details</h3>
@@ -561,6 +561,49 @@
                 </form>
             </div>
         </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Collector Wallets</h5>
+          <span class="d-block m-t-5">Below is a list of <code>Collector's  Wallet History</code> </span>
+        </div>
+        <div class="card-body table-border-style">
+          <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
+          <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
+          <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
+          <button class="btn btn-light-primary btn-sm json">Export JSON</button>
+          <div class="table-responsive">
+            
+            <table class="table" id="pc-dt-export">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Transaction Type</th>
+                  <th>Transaction Date</th>
+                  <th>Previous Balance</th>
+                  <th>Current Balance</th>
+                  <th>Transaction Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for history in wallet_history %}
+                <tr>
+                  <td>{{ history.history_id }}</td>
+                  <td>{{ history.transaction_type }}</td>
+                  <td>{{ history.transaction_date }}</td>
+                  <td>{{ history.old_wallet_balance }}</td>
+                  <td>{{ history.new_wallet_balance }}</td>
+                  <td>{{ history.transaction_amount }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 </div>
