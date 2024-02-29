@@ -12,11 +12,11 @@ from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorPro
 
 
 def dashboard(request):
-    return render(request, 'frontend/dashboard.html')
+    return render(request, 'frontend/base/dashboard.html')
 
 
 def index(request):
-    return render(request, 'frontend/dashboard.html')
+    return render(request, 'frontend/base/landing.html')
 
 
 def addType(request):
