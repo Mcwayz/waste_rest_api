@@ -1,6 +1,8 @@
 import json
 import logging
+from django.conf import settings
 from rest_framework import status
+from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -104,7 +106,8 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Create User and Profile
+#  Create User and Profile
+
 
 @api_view(['POST'])
 def create_user_and_profile(request):
@@ -117,12 +120,38 @@ def create_user_and_profile(request):
             profile_serializer = CustomerProfileSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_serializer.save()
+                
+                # Sending email notification to the user
+                subject = 'Account Creation Notification'
+                message = 'Your eWaste Account Has Been Successfully Created.'
+                from_email = settings.EMAIL_HOST_USER
+                to_email = [user_instance.email]
+                send_mail(subject, message, from_email, to_email, fail_silently=True)
+                
                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['POST'])
+# def create_user_and_profile(request):
+#     if request.method == 'POST':
+#         user_serializer = UserSerializer(data=request.data)
+#         if user_serializer.is_valid():
+#             user_instance = user_serializer.save()
+#             address = request.data.get('address')
+#             profile_data = {'address': address, 'auth': user_instance}
+#             profile_serializer = CustomerProfileSerializer(data=profile_data)
+#             if profile_serializer.is_valid():
+#                 profile_serializer.save()
+#                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
+#             else:
+#                 user_instance.delete()
+#                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

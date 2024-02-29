@@ -2,9 +2,9 @@ import json
 import logging
 from decimal import Decimal
 from django.utils import timezone
+from django.conf import settings
 from rest_framework import status
-from django.db import transaction
-from django.http import HttpRequest
+from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -186,12 +186,43 @@ def create_user_and_profile(request):
                 profile_instance = profile_serializer.save()
                 # Create wallet for the collector profile
                 create_wallet_for_collector(profile_instance)
+                
+                # Sending email notification to the user
+                subject = 'Collector Profile Creation Notification'
+                message = 'Your Collector Profile Has Been Successfully Created.'
+                from_email = settings.EMAIL_HOST_USER
+                to_email = [user_instance.email]
+                send_mail(subject, message, from_email, to_email, fail_silently=True)
+                
                 return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+# @api_view(['POST'])
+# def create_user_and_profile(request):
+#     if request.method == 'POST':
+#         user_serializer = UserSerializer(data=request.data)
+#         if user_serializer.is_valid():
+#             user_instance = user_serializer.save()
+#             vehicle = request.data.get('vehicle')
+#             work_area = request.data.get('work_area')
+#             waste = request.data.get('waste') 
+#             profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance, 'waste':waste}
+#             profile_serializer = CollectorSerializer(data=profile_data)
+#             if profile_serializer.is_valid():
+#                 profile_instance = profile_serializer.save()
+#                 # Create wallet for the collector profile
+#                 create_wallet_for_collector(profile_instance)
+#                 return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
+#             else:
+#                 user_instance.delete()
+#                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Create a wallet for the collector profile
@@ -209,14 +240,10 @@ def create_wallet_for_collector(profile_instance):
         logger.error("Wallet serializer validation failed: %s", wallet_serializer.errors)
 
 
-
-
 # End Of POST Methods
 
 
-
 # PUT Request Methods
-
 
 
 # Update Customer Request Location

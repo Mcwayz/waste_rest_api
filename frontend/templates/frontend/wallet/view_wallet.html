@@ -567,16 +567,17 @@
       <div class="card">
         <div class="card-header">
           <h5>Collector Wallets</h5>
-          <span class="d-block m-t-5">Below is a list of <code>Collector's  Wallet History</code> </span>
+          <span class="d-block m-t-5">Below Is A List Of <code>Collector's  Wallet History</code> </span>
         </div>
         <div class="card-body table-border-style">
           <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
           <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
-          <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
-          <button class="btn btn-light-primary btn-sm json">Export JSON</button>
+          <button class="btn btn-light-primary btn-sm pdf">Export PDF</button> 
+        <button class="btn btn-light-primary btn-sm json">Export JSON</button>
           <div class="table-responsive">
             
             <table class="table" id="pc-dt-export">
+
               <thead>
                 <tr>
                   <th>ID</th>
@@ -587,6 +588,7 @@
                   <th>Transaction Amount</th>
                 </tr>
               </thead>
+
               <tbody>
                 {% for history in wallet_history %}
                 <tr>
@@ -599,6 +601,7 @@
                 </tr>
                 {% endfor %}
               </tbody>
+
             </table>
             
           </div>
@@ -620,7 +623,9 @@
 <script src="{% static 'assets/js/pcoded.js' %}"></script>
 <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
 
+
 <!-- [Page Specific JS] start -->
+
 
 <script  src="{% static 'assets/js/plugins/simple-datatables.js' %}"></script>
 <script>
