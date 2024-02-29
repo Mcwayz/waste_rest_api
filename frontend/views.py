@@ -17,7 +17,7 @@ def dashboard(request):
 
 
 def index(request):
-    return render(request, 'frontend/index.html')
+    return render(request, 'frontend/landing.html')
 
 
 def addType(request):
