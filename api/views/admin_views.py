@@ -34,11 +34,13 @@ def getCollected(request):
     serializer = CollectionSerializer(collections, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def wasteDetails(request, pk):
@@ -46,11 +48,13 @@ def wasteDetails(request, pk):
     serializer = WasteSerializer(waste)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def getRequests(request):
     requests = Requests.objects.all()
     serializer = RequestSerializer(requests, many=True)
     return Response(serializer.data) 
+
 
 @api_view(['GET'])
 def getDriverRating(request, collector_id):
@@ -58,15 +62,19 @@ def getDriverRating(request, collector_id):
     serializer = RatingSerializer(rating, many=True)
     return Response(serializer.data) 
 
+
 @api_view(['GET'])
 def getCancelledRequests(request):
     cancelled = Requests.objects.filter(request_status='Cancelled')
     serializer = RequestSerializer(cancelled, many=True)
     return Response(serializer.data)
 
+
 # End Of GET Request Methods
 
+
 # POST Request Methods
+
 
 @api_view(['POST'])
 def addWaste(request):
@@ -76,6 +84,8 @@ def addWaste(request):
         return Response(serializer.data)
     else:
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['POST'])
 def create_user(request):
@@ -93,9 +103,12 @@ def create_user(request):
     else:
         return Response({'Success': False, 'Errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
 # End Of POST Methods
 
+
 # PUT Request Methods
+
 
 @api_view(['PUT'])
 def updateWaste(request, pk):

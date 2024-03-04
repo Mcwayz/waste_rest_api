@@ -201,28 +201,6 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        
-# @api_view(['POST'])
-# def create_user_and_profile(request):
-#     if request.method == 'POST':
-#         user_serializer = UserSerializer(data=request.data)
-#         if user_serializer.is_valid():
-#             user_instance = user_serializer.save()
-#             vehicle = request.data.get('vehicle')
-#             work_area = request.data.get('work_area')
-#             waste = request.data.get('waste') 
-#             profile_data = {'vehicle': vehicle, 'work_area': work_area,'auth': user_instance, 'waste':waste}
-#             profile_serializer = CollectorSerializer(data=profile_data)
-#             if profile_serializer.is_valid():
-#                 profile_instance = profile_serializer.save()
-#                 # Create wallet for the collector profile
-#                 create_wallet_for_collector(profile_instance)
-#                 return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
-#             else:
-#                 user_instance.delete()
-#                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Create a wallet for the collector profile

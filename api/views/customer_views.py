@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Get Waste Types
 
+
 @api_view(['GET'])
 def getWaste(request):
     waste = Waste.objects.all()
@@ -27,6 +28,7 @@ def getWaste(request):
 
 
 # Get Collector Details
+
 
 @api_view(['GET'])
 def view_collector_profile(request, collector_id):
@@ -41,6 +43,7 @@ def view_collector_profile(request, collector_id):
 
 # Get Collection Details
 
+
 @api_view(['GET'])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, request_id=pk)
@@ -50,6 +53,7 @@ def collectionDetails(request, pk):
 
 # Get Customer Profile
 
+
 @api_view(['GET'])
 def getCustomerProfile(request, pk):
     profile = get_object_or_404(CustomerProfile, pk=pk)
@@ -58,6 +62,7 @@ def getCustomerProfile(request, pk):
 
 
 # Get all Customer Profiles
+
 
 @api_view(['GET'])
 def getCustomerProfiles(request):
