@@ -13,9 +13,7 @@ urlpatterns = [
     path('updateCustomer/<str:pk>/', customer_views.updateUser),
     path('addCollectionRequest/', customer_views.create_request),
     path('updateCollector/<str:pk>/', collector_views.updateUser),
-    
     path('updateRequest/', collector_views.updateCollectionRequest),
-    
     path('customerRequests/', collector_views.get_customer_requests),
     path('addCustomerProfile/', customer_views.create_user_and_profile),
     path('completedCollections/', admin_views.get_completed_collections),
