@@ -4,6 +4,8 @@ from base.models import Ratings, CustomerProfile, Waste, Collection, CollectorPr
 
 
 # Waste Serializer
+
+
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waste
@@ -11,6 +13,7 @@ class WasteSerializer(serializers.ModelSerializer):
         
 
 # Customer Serializer
+
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
     auth = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -22,6 +25,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
 
 # Customer Serializer
+
 
 class CustomerProfilesSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='auth.username')
@@ -37,6 +41,7 @@ class CustomerProfilesSerializer(serializers.ModelSerializer):
 
 # User Serializer (for referencing user-related fields)
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -48,10 +53,11 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             user.set_password(password)
             user.save()
-        return user.id  # Return just the user ID
+        return user.id 
     
 
 # Request Serializer
+
 
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,19 +67,26 @@ class RequestSerializer(serializers.ModelSerializer):
 
 # Rating Serializer
 
+
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ratings
         fields = '__all__'
 
+
 # Collection Serializer
+
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = '__all__'
 
+
+
 # Collector Profile Serializer
+
+
 class CollectorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectorProfile
@@ -81,6 +94,7 @@ class CollectorProfileSerializer(serializers.ModelSerializer):
 
 
 # Completed Task Serialiser
+    
     
 class CompletedCollectionSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField()
