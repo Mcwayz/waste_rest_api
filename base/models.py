@@ -94,11 +94,12 @@ class WalletHistory(models.Model):
 # Commission Model
 
 
-class CommissionCollector(models.Model):
+class CollectorCommission(models.Model):
     txn_id = models.AutoField(primary_key=True)
     collector = models.OneToOneField(CollectorProfile, on_delete=models.CASCADE)
     comission_settlement_date = models.DateTimeField(default=timezone.now, blank=True)
     comission =  models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    extras = models.CharField(max_length=100, default="None")
 
 
 # Waste General Legder Wallet  
