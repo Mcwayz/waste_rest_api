@@ -28,34 +28,67 @@ def dashboard(request):
 
     # Get all collections
     collections = Collection.objects.all()
+
+    # Group collections by month and calculate total income for each month
     collections_by_month = defaultdict(float)
     for collection in collections:
-        month_year = collection.collection_date.strftime("%Y-%m")  # Extract year and month
+        month_year = collection.collection_date.strftime("%Y-%m")
         collections_by_month[month_year] += float(collection.request.collection_price)
+
+    # Group collections by waste type and calculate total income for each waste type
+    collections_by_waste = defaultdict(float)
+    for collection in collections:
+        waste_type = collection.request.waste.waste_type
+        collections_by_waste[waste_type] += float(collection.request.collection_price)
 
     # Prepare data for the JavaScript function
     month_names = [] 
     total_income_by_month = []
     for month_year, total_income in collections_by_month.items():
-        month_names.append(datetime.strptime(month_year, "%Y-%m").strftime("%b %Y"))  # Format month name
+        month_names.append(datetime.strptime(month_year, "%Y-%m").strftime("%b %Y"))
         total_income_by_month.append(total_income)
 
-    # Prepare data for the JavaScript function
-    js_data = {
-        'income_data': total_income_by_month,
-        'categories': month_names,
-    }
-    
+    # Prepare waste data with zero income for waste types with no collections
+    waste_data = []
+    all_waste_types = set(Waste.objects.values_list('waste_type', flat=True))
+    for waste_type in all_waste_types:
+        total_income = collections_by_waste.get(waste_type, 0)
+        waste_data.append({
+            'waste_type': waste_type,
+            'total_income': total_income,
+            'change': ' Real-Time Data'
+        })
+
+    # Get recent collections data
+    recent_collections = Collection.objects.order_by('-collection_date')[:5]
+
+    # Prepare recent collections data for rendering
+
+    recent_collections_data = []
+    for collection in recent_collections:
+        recent_collections_data.append({
+            'customer_initials': collection.request.customer.auth.first_name[0] + collection.request.customer.auth.last_name[0],
+            'customer_name': collection.request.customer.auth.get_full_name(),
+            'waste_type': collection.request.waste.waste_type,
+            'amount': collection.request.collection_price,
+            'collection_date': collection.collection_date
+        })
+
+        
     # Calculate the percentage of requests
-    
     percentage_of_total_requests = (total_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
     percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
     percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
 
     context = {
-        'js_data': js_data,
+        'js_data': {
+            'income_data': total_income_by_month,
+            'categories': month_names,
+        },
+        'waste_data': waste_data,
         'total_users': total_users,
         'total_requests': total_requests,
+        'recent_collections': recent_collections_data,
         'total_complete_collections': total_complete_collections,
         'percentage_of_total_requests': percentage_of_total_requests,
         'percentage_of_pending_requests': percentage_of_pending_requests,
