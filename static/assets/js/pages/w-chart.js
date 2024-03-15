@@ -115,22 +115,26 @@ function floatchart() {
   })();
 
   (function () {
+    // Access data passed from the Django view
+    console.log('Income data:', incomeData);
+    console.log('Categories:', categories);
     var options = {
       chart: {
+        fontFamily: 'Inter var, sans-serif',
         type: 'area',
-        height: 230,
+        height: 370,
         toolbar: {
           show: false
         }
       },
-      colors: ['#0d6efd'],
+      colors: ['#0d6efd', '#8996A4'],
       fill: {
         type: 'gradient',
         gradient: {
           shadeIntensity: 1,
           type: 'vertical',
           inverseColors: false,
-          opacityFrom: 0.5,
+          opacityFrom: 0.2,
           opacityTo: 0
         }
       },
@@ -138,7 +142,7 @@ function floatchart() {
         enabled: false
       },
       stroke: {
-        width: 1
+        width: 3
       },
       plotOptions: {
         bar: {
@@ -147,15 +151,18 @@ function floatchart() {
         }
       },
       grid: {
-        strokeDashArray: 4
+        show: true,
+        borderColor: '#F3F5F7',
+        strokeDashArray: 2
       },
       series: [
         {
-          data: [30, 60, 40, 70, 50, 90, 50, 55, 45, 60, 50, 65]
+          name: 'Income',
+          data: incomeData // Use income data passed from the Django view
         }
       ],
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        categories: categories, // Use categories data passed from the Django view
         axisBorder: {
           show: false
         },
@@ -167,7 +174,6 @@ function floatchart() {
     var chart = new ApexCharts(document.querySelector('#customer-rate-graph'), options);
     chart.render();
   })();
-
   (function () {
     var options = {
       chart: {

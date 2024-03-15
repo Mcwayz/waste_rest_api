@@ -1,9 +1,16 @@
+import pytz
+import calendar
 import requests
-import datetime as date_time
+from decimal import Decimal
+from datetime import datetime
 from .forms import WasteForm
 from django.urls import reverse
+from django.db.models import Sum
+from django.utils import timezone
+from collections import defaultdict
 from rest_framework.response import Response
 from django.core.serializers import serialize
+from django.db.models.functions import TruncMonth, ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
 
@@ -19,12 +26,39 @@ def dashboard(request):
     total_pending_requests = Requests.objects.filter(request_status='pending').count()
     total_complete_collections = Requests.objects.filter(request_status='complete').count()
 
+    # Get all collections
+    collections = Collection.objects.all()
+
+    # Group collections by month and calculate total income per month
+    collections_by_month = defaultdict(float)
+    for collection in collections:
+        month_year = collection.collection_date.strftime("%Y-%m")  # Extract year and month
+        collections_by_month[month_year] += float(collection.request.collection_price)
+
+    # Prepare data for the JavaScript function
+    month_names = []  # List to store month names
+    total_income_by_month = []  # List to store total income for each month
+    for month_year, total_income in collections_by_month.items():
+        month_names.append(datetime.strptime(month_year, "%Y-%m").strftime("%b %Y"))  # Format month name
+        total_income_by_month.append(total_income)
+
+    # Prepare data for the JavaScript function
+    js_data = {
+        'income_data': total_income_by_month,
+        'categories': month_names,
+    }
+
+    # Log the income_data and categories
+    print("Categories:", js_data['categories'])
+    print("Income data:", js_data['income_data'])
+
     # Calculate the percentage of requests
     percentage_of_total_requests = (total_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
-    percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
     percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
+    percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
 
     context = {
+        'js_data': js_data,
         'total_users': total_users,
         'total_requests': total_requests,
         'total_complete_collections': total_complete_collections,

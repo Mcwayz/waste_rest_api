@@ -1,15 +1,44 @@
 import json
+import calendar
+from django.utils import timezone
 from rest_framework import status
+from django.db.models import Func
+from django.db.models import Sum, F
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
+from django.db.models.functions import TruncMonth
 from django.contrib.auth.forms import UserCreationForm
 from base.models import Collection, Waste, Requests, Ratings
+from django.utils.timezone import make_aware, get_current_timezone
 from ..serializers.collector_serializer import  CompletedCollectionSerializer
 from ..serializers.customer_serializer import WasteSerializer, RequestSerializer, RatingSerializer, CollectionSerializer
 
+
 # GET Request Methods
+
+# Doesn't Work
+@api_view(['GET'])
+def total_collections_per_month(request):
+    collections_per_month = Collection.objects.annotate(
+        month=TruncMonth('collection_date')
+    ).values('month').annotate(
+        total_amount=Sum(F('request__collection_price'))
+    ).order_by('month')
+
+    data = {}
+    for collection in collections_per_month:
+        month_start = make_aware(collection['month'], timezone=timezone.get_current_timezone())
+        month_name = calendar.month_name[month_start.month]
+        data[month_name] = collection['total_amount']
+
+    js_data = {
+        'income_data': list(data.values()),
+        'categories': list(data.keys()),
+    }
+
+    return Response(js_data)
 
 # Get Completed Collections 
 
@@ -68,6 +97,7 @@ def getCancelledRequests(request):
     cancelled = Requests.objects.filter(request_status='Cancelled')
     serializer = RequestSerializer(cancelled, many=True)
     return Response(serializer.data)
+
 
 
 # End Of GET Request Methods
