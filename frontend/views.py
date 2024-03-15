@@ -5,14 +5,35 @@ from django.urls import reverse
 from rest_framework.response import Response
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
 
 
 # Create your views here.
 
 
 def dashboard(request):
-    return render(request, 'frontend/base/dashboard.html')
+    # Query for system users
+    total_users = User.objects.count()
+    total_requests_count = Requests.objects.count()
+    total_requests = Requests.objects.exclude(request_status='complete').count()
+    total_pending_requests = Requests.objects.filter(request_status='pending').count()
+    total_complete_collections = Requests.objects.filter(request_status='complete').count()
+
+    # Calculate the percentage of requests
+    percentage_of_total_requests = (total_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
+    percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
+    percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
+
+    context = {
+        'total_users': total_users,
+        'total_requests': total_requests,
+        'total_complete_collections': total_complete_collections,
+        'percentage_of_total_requests': percentage_of_total_requests,
+        'percentage_of_pending_requests': percentage_of_pending_requests,
+        'percentage_of_complete_requests': percentage_of_complete_requests,
+    }
+    return render(request, 'frontend/base/dashboard.html', context)
+
 
 
 def index(request):

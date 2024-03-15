@@ -1,6 +1,6 @@
 import json
-from django.contrib.auth.models import User
 from rest_framework import status
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -122,6 +122,7 @@ def updateWaste(request, pk):
 
 # End Of PUT Request Methods
 
+
 # DELETE Request Methods
 
 @api_view(['DELETE'])
@@ -129,12 +130,12 @@ def delete_user(request, user_id):
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'Message': 'User Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
     if not request.user.is_superuser:
-        return Response({'message': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'Message': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
 
     user.delete()
-    return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    return Response({'Message': 'User Deleted Successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 # DELETE Request Methods END

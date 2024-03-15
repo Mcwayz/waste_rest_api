@@ -533,6 +533,7 @@
 
         <!-- [ Main Content ] start -->
         <div class="row">
+
           <div class="col-md-6 col-xxl-3">
             <div class="card">
               <div class="card-body">
@@ -583,15 +584,16 @@
                       <div id="all-earnings-graph"></div>
                     </div>
                     <div class="col-5">
-                      <h5 class="mb-1">3,020</h5>
+                      <h5 class="mb-1">{{total_users}}</h5>
                       <p class="text-primary mb-0">
-                        <i class="ti ti-arrow-up-right"></i> 100%
+                        <i class="ti ti-arrow-up-right"></i> Users
                       </p>
                     </div>
                   </div>
                 </div>
 
               </div>
+
             </div>
           </div>
 
@@ -656,9 +658,9 @@
                       <div id="page-views-graph"></div>
                     </div>
                     <div class="col-5">
-                      <h5 class="mb-1">290</h5>
+                      <h5 class="mb-1">{{ total_requests }}</h5>
                       <p class="text-warning mb-0">
-                        <i class="ti ti-arrow-up-right"></i> 30.6%
+                        <i class="ti ti-arrow-up-right"></i> {{ percentage_of_total_requests }}% 
                       </p>
                     </div>
                   </div>
@@ -773,9 +775,9 @@
                       <div id="total-task-graph"></div>
                     </div>
                     <div class="col-5">
-                      <h5 class="mb-1">839</h5>
+                      <h5 class="mb-1">{{ total_complete_collections }}</h5>
                       <p class="text-success mb-0">
-                        <i class="ti ti-arrow-up-right"></i> New
+                        <i class="ti ti-arrow-up-right"></i> {{ percentage_of_complete_requests }}%
                       </p>
                     </div>
                   </div>
@@ -825,9 +827,9 @@
                       <div id="download-graph"></div>
                     </div>
                     <div class="col-5">
-                      <h5 class="mb-1">2,067</h5>
+                      <h5 class="mb-1">{{total_pending_requests}}</h5>
                       <p class="text-danger mb-0">
-                        <i class="ti ti-arrow-up-right"></i> 30.6%
+                        <i class="ti ti-arrow-up-right"></i> {{percentage_of_pending_requests}}%
                       </p>
                     </div>
                   </div>
