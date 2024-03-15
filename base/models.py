@@ -90,4 +90,26 @@ class WalletHistory(models.Model):
     new_wallet_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     transaction_amount = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     
+    
+# Commission Model
+
+
+class CommissionCollector(models.Model):
+    txn_id = models.AutoField(primary_key=True)
+    collector = models.OneToOneField(CollectorProfile, on_delete=models.CASCADE)
+    comission_settlement_date = models.DateTimeField(default=timezone.now, blank=True)
+    comission =  models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+
+
+# Waste General Legder Wallet  
+    
+    
+class WasteGL(models.Model):
+    gl_id = models.AutoField(primary_key=True)
+    comission_settlement_date = models.DateTimeField(default=timezone.now, blank=True)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='ledger')
+    service_charge =  models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    old_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    new_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    
      

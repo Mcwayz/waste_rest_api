@@ -92,8 +92,6 @@ def dashboard(request):
     percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
     percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
 
-    print(pie_chart_data)
-    
     context = {
         'js_data': {
             'income_data': total_income_by_month,
