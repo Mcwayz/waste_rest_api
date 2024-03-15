@@ -28,6 +28,18 @@ def dashboard(request):
 
     # Get all collections
     collections = Collection.objects.all()
+    
+    # Group collections by waste type and count the number of collections per waste type
+    collections_by_waste_type = defaultdict(int)
+    for collection in collections:
+        waste_type = collection.request.waste.waste_type
+        collections_by_waste_type[waste_type] += 1
+
+    # Prepare data for the pie chart
+    pie_chart_data = {
+        'series': list(collections_by_waste_type.values()),
+        'labels': list(collections_by_waste_type.keys()),
+    }
 
     # Group collections by month and calculate total income for each month
     collections_by_month = defaultdict(float)
@@ -80,6 +92,8 @@ def dashboard(request):
     percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
     percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
 
+    print(pie_chart_data)
+    
     context = {
         'js_data': {
             'income_data': total_income_by_month,
@@ -88,6 +102,7 @@ def dashboard(request):
         'waste_data': waste_data,
         'total_users': total_users,
         'total_requests': total_requests,
+        'pie_chart_data': pie_chart_data,
         'recent_collections': recent_collections_data,
         'total_complete_collections': total_complete_collections,
         'percentage_of_total_requests': percentage_of_total_requests,

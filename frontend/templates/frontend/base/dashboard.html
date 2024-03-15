@@ -864,7 +864,7 @@
                     <ul class="nav nav-tabs analytics-tab" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="analytics-tab-1" data-bs-toggle="tab" data-bs-target="#analytics-tab-1-pane" type="button" role="tab" aria-controls="analytics-tab-1-pane" aria-selected="true">
-                                Recent Four(4)
+                                Recent Four(5)
                             </button>
                         </li>
                     </ul>
@@ -1014,8 +1014,11 @@
     <script src="{% static 'assets/js/pcoded.js' %}"></script>
     <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
     <script>
+      // Extracting data from Django context variables
+      var series = {{ pie_chart_data.series|safe }};
+      var labels = {{ pie_chart_data.labels|safe }};
       var incomeData = {{ js_data.income_data|safe }};
       var categories = {{ js_data.categories|safe }};
-  </script>
+    </script>
   </body>
 </html>

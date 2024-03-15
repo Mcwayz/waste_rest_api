@@ -233,9 +233,9 @@ function floatchart() {
         height: 320,
         type: 'donut'
       },
-      series: [27, 23, 20, 17],
+      series: series, // Number of Collections
       colors: ['#4680FF', '#E58A00', '#2CA87F', '#4680FF'],
-      labels: ['Total income', 'Total rent', 'Download', 'Views'],
+      labels: labels, // Waste Types
       fill: {
         opacity: [1, 1, 1, 0.3]
       },
