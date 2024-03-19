@@ -304,4 +304,46 @@ def updateCollectionRequest(request):
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
     except Requests.DoesNotExist:
         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+# View General Ledger Wallet
+
+
+@api_view(['GET'])
+def viewGeneralLedgerWallet(request):
+    try:
+        # Get the latest entry in WasteGL
+        latest_entry = WasteGL.objects.latest('comission_settlement_date')
+        
+        # Retrieve transaction history
+        transaction_history = WasteGL.objects.all()
+        
+        # Retrieve current balance
+        current_balance = latest_entry.new_GL_balance
+        
+        # Serialize data
+        serialized_history = []
+        for entry in transaction_history:
+            serialized_entry = {
+                'transaction_type': entry.transaction_type,
+                'comission_settlement_date': entry.comission_settlement_date,
+                'collection_id': entry.collection.collection_id if entry.collection else None,
+                'service_charge': entry.service_charge,
+                'old_GL_balance': entry.old_GL_balance,
+                'new_GL_balance': entry.new_GL_balance,
+                'extras': entry.extras
+            }
+            serialized_history.append(serialized_entry)
+        
+        # Construct response
+        response_data = {
+            'current_balance': current_balance,
+            'transaction_history': serialized_history
+        }
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+    except WasteGL.DoesNotExist:
+        return Response({"Message": "General ledger wallet not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
