@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
@@ -246,13 +246,16 @@ def updateCollectionRequest(request):
     request_id = request.data.get('request_id')
     collector_id = request.data.get('collector_id')
     new_status = request.data.get('status')
+
     try:
         request_to_update = Requests.objects.get(pk=request_id)
         collection_price = request_to_update.collection_price
         collector_wallet = Wallet.objects.get(collector__collector_id=collector_id)
         wallet_balance = collector_wallet.balance
+
         if new_status == 'Complete':
             if collection_price <= wallet_balance:
+                # Update request status
                 request_to_update.request_status = new_status
                 request_to_update.save()
                 
@@ -263,11 +266,23 @@ def updateCollectionRequest(request):
                     collector=collector_wallet.collector
                 )
                 
-                # Deduct the collection price from the collector's wallet balance
+                # Deduct the collection price and service charge from the collector's wallet balance
                 old_balance = collector_wallet.balance
-                new_balance = old_balance - collection_price
+                new_balance = old_balance - collection_price - 2  # Deduct service charge
                 collector_wallet.balance = new_balance
                 collector_wallet.save()
+                
+                # Fund the general Ledger
+                old_gl_balance = WasteGL.objects.latest('comission_settlement_date').new_GL_balance
+                WasteGL.objects.create(
+                    transaction_type='DEPOSIT',
+                    comission_settlement_date=timezone.now(),
+                    collection=collection,
+                    service_charge=2,
+                    old_GL_balance=old_gl_balance - collection_price,  # Adjust old GL balance
+                    new_GL_balance=old_gl_balance,  # New GL balance remains unchanged
+                    extras='Funded by completed collection'
+                )
                 
                 # Create a wallet history record
                 WalletHistory.objects.create(
@@ -283,10 +298,10 @@ def updateCollectionRequest(request):
             else:
                 return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
         else:
+            # Update request status for other cases
             request_to_update.request_status = new_status
             request_to_update.save()
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
     except Requests.DoesNotExist:
         return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
-
 
