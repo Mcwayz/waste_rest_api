@@ -268,7 +268,7 @@ def updateCollectionRequest(request):
                 
                 # Deduct the collection price and service charge from the collector's wallet balance
                 old_balance = collector_wallet.balance
-                new_balance = old_balance - collection_price - 2  # Deduct service charge
+                new_balance = old_balance - collection_price - 2
                 collector_wallet.balance = new_balance
                 collector_wallet.save()
                 
@@ -279,8 +279,8 @@ def updateCollectionRequest(request):
                     comission_settlement_date=timezone.now(),
                     collection=collection,
                     service_charge=2,
-                    old_GL_balance=old_gl_balance - collection_price,  # Adjust old GL balance
-                    new_GL_balance=old_gl_balance,  # New GL balance remains unchanged
+                    old_GL_balance=old_gl_balance - collection_price, 
+                    new_GL_balance=old_gl_balance,  
                     extras='Funded by completed collection'
                 )
                 
@@ -298,7 +298,6 @@ def updateCollectionRequest(request):
             else:
                 return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # Update request status for other cases
             request_to_update.request_status = new_status
             request_to_update.save()
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
@@ -314,11 +313,7 @@ def viewGeneralLedgerWallet(request):
     try:
         # Get the latest entry in WasteGL
         latest_entry = WasteGL.objects.latest('comission_settlement_date')
-        
-        # Retrieve transaction history
         transaction_history = WasteGL.objects.all()
-        
-        # Retrieve current balance
         current_balance = latest_entry.new_GL_balance
         
         # Serialize data
