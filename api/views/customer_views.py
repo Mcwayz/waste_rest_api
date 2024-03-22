@@ -140,25 +140,6 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['POST'])
-# def create_user_and_profile(request):
-#     if request.method == 'POST':
-#         user_serializer = UserSerializer(data=request.data)
-#         if user_serializer.is_valid():
-#             user_instance = user_serializer.save()
-#             address = request.data.get('address')
-#             profile_data = {'address': address, 'auth': user_instance}
-#             profile_serializer = CustomerProfileSerializer(data=profile_data)
-#             if profile_serializer.is_valid():
-#                 profile_serializer.save()
-#                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
-#             else:
-#                 user_instance.delete()
-#                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 # Add Customer Collection Request
 
@@ -219,45 +200,3 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
-    
-'''
-@api_view(['POST'])
-def viewAvailableDrivers(request):
-    try:
-        data = request.data  # Get data from the request body
-        latitude = float(data.get('latitude'))
-        longitude = float(data.get('longitude'))
-    except (ValueError, TypeError):
-        return Response({"message": "Invalid latitude or longitude provided."}, status=400)     
-
-    # Define the search radius in kilometers (15 kilometers)
-    search_radius = 15.0
-
-    # Convert latitude and longitude from degrees to radians
-    customer_lat_rad = math.radians(latitude)
-    customer_lon_rad = math.radians(longitude)
-
-    # Query all collector profiles from the database
-    collectors = CollectorProfile.objects.all()
-
-    # Filter collectors within the specified radius
-    collectors_within_radius = []
-
-    for collector in collectors:
-        collector_lat_rad = math.radians(collector.latitude)
-        collector_lon_rad = math.radians(collector.longitude)
-
-        # Haversine formula for distance calculation
-        dlon = collector_lon_rad - customer_lon_rad
-        dlat = collector_lat_rad - customer_lat_rad
-        a = math.sin(dlat/2)**2 + math.cos(customer_lat_rad) * math.cos(collector_lat_rad) * math.sin(dlon/2)**2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance_km = 6371 * c  
-
-        if distance_km <= search_radius:
-            collectors_within_radius.append(collector)
-    collector_data = CollectorProfileSerializer(collectors_within_radius, many=True).data
-
-    return Response(collector_data, status=200)
-'''
