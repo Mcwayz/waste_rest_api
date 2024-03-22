@@ -18,6 +18,7 @@ from ..serializers.customer_serializer import WasteSerializer, RequestSerializer
 
 # GET Request Methods
 
+
 # Doesn't Work
 @api_view(['GET'])
 def total_collections_per_month(request):
