@@ -33,12 +33,15 @@ from .decorators.security import superuser_required
 urlpatterns = [
     
     path('', views.index, name='Index'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
     path('dashboard/', views.dashboard, name='Dash'),
     path('add-type/', views.addType, name='Add Type'),
     path('waste-type/', views.WasteType, name='Waste Type'),
     path('customers/', views.list_customers, name='Customers'),
     path('collectors/', views.list_collectors, name='Collectors'),
     path('add-waste-type/', views.create_waste, name='Add WasteType'),
+    path('reset-password/', views.reset_password, name='reset_password'),
     path('edit-waste-type/<int:pk>/', views.edit_waste, name='edit_waste'),
     path('wallet/<int:wallet_id>/', views.view_wallet, name='view_wallet'),
     path('wallets/', views.get_collector_wallets, name='Collector Wallets'), 
