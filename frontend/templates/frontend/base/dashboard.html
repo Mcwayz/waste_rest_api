@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="flex-grow-1 ms-3 me-2">
-                  <h6 class="mb-0">Jonh Smith</h6>
+                  <h6 class="mb-0">{{user.first_name}} {{user.last_name}}</h6>
                   <small>Administrator</small>
                 </div>
                 <a
@@ -93,7 +93,7 @@
                     <i class="ti ti-lock"></i>
                     <span>Lock Screen</span>
                   </a>
-                  <a href="#!">
+                  <a href="{% url 'logout' %}">
                     <i class="ti ti-power"></i>
                     <span>Logout</span>
                   </a>
@@ -217,14 +217,14 @@
               ></a>
               <ul class="pc-submenu">
                 <li class="pc-item">
-                  <a class="pc-link" href="/profile"
+                  <a class="pc-link" href="#"
                     >My Profile</a
                   >
                 </li>
                 <li class="pc-item">
                   <a
                     class="pc-link"
-                    href="/password"
+                    href="3"
                     >Password Settings</a
                   >
                 </li>
@@ -434,8 +434,8 @@
                         />
                       </div>
                       <div class="flex-grow-1 ms-3">
-                        <h6 class="mb-1">Carson Darrin 🖖</h6>
-                        <span>carson.darrin@company.io</span>
+                        <h6 class="mb-1">{{user.first_name}}  {{user.last_name}}</h6>
+                        <span>{{user.email}} </span>
                       </div>
                     </div>
 
@@ -474,7 +474,7 @@
                         <span>Share</span>
                       </span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{% url 'reset_password' %}" class="dropdown-item">
                       <span>
                         <svg class="pc-icon text-muted me-2">
                           <use xlink:href="#custom-lock-outline"></use>
@@ -486,11 +486,12 @@
 
                     <hr class="border-secondary border-opacity-50" />
                     <div class="d-grid mb-3">
-                      <button class="btn btn-primary">
+                      <a href="{% url 'logout' %}" class="btn btn-primary">
                         <svg class="pc-icon me-2">
-                          <use xlink:href="#custom-logout-1-outline"></use></svg
-                        >Logout
-                      </button>
+                            <use xlink:href="#custom-logout-1-outline"></use>
+                        </svg>
+                        Logout
+                    </a>
                     </div>
                   </div>
                 </div>

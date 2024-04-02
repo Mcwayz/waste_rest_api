@@ -143,3 +143,12 @@ def delete_user(request, user_id):
     return Response({'Message': 'User Deleted Successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 # DELETE Request Methods END
+
+
+
+
+# total_collections_per_month view
+
+def total_collections_per_month(request):
+    
+    return Response()

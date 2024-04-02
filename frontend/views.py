@@ -7,19 +7,103 @@ from .forms import WasteForm
 from django.urls import reverse
 from django.db.models import Sum
 from django.utils import timezone
+from django.contrib import messages
 from collections import defaultdict
 from rest_framework.response import Response
 from django.core.serializers import serialize
+from django.contrib.auth.decorators import login_required
 from django.db.models.functions import TruncMonth, ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login as auth_login, logout 
 from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
 
 
-# Create your views here.
 
 
+# def login(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         print("Email:", email)
+#         print("Password:", password)
+       
+#         user = authenticate(request, email=email, password=password)
+#         print(user)
+#         if user is not None:
+#             print("user is about")
+#             login(request, user)  # Correct call to login function
+#             return redirect('Dash')  # Redirect to home page after successful login
+#         else:
+#             print("user is not about")
+#             messages.error(request, 'Invalid email or password.')
+#     return render(request, 'frontend/auth/login.html')
+
+
+# Login view
+
+
+def user_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            # Query the database to get the user with the provided email
+            user = User.objects.get(email=email)
+            # Check if the provided password matches the user's password
+            if user.check_password(password):
+                # Authentication successful, log in the user
+                auth_login(request, user)
+                return redirect('Dash')  # Redirect to the home page after successful login
+            else:
+                messages.error(request, 'Invalid email or password.')
+        except User.DoesNotExist:
+            messages.error(request, 'User with this email does not exist.')
+    return render(request, 'frontend/auth/login.html')
+
+
+# Logout View
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+
+# Reset Password View
+
+@login_required
+def reset_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_new_password = request.POST.get('confirm_new_password')
+
+        user = request.user
+
+        # Check if the old password is correct
+        if not user.check_password(old_password):
+            messages.error(request, 'Your old password is incorrect.')
+        # Check if the new password and confirm new password match
+        elif new_password != confirm_new_password:
+            messages.error(request, 'New password and confirm password do not match.')
+        else:
+            # Set the new password
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Your password has been changed successfully.')
+            return redirect('login')  # Redirect to profile page or any other page after successful password change
+
+    return render(request, 'frontend/auth/reset-password.html')
+
+
+# Dashboard View
+
+
+@login_required
 def dashboard(request):
     # Query for system users
+    user = request.user
     total_users = User.objects.count()
     total_requests_count = Requests.objects.count()
     total_requests = Requests.objects.exclude(request_status='complete').count()
@@ -93,6 +177,7 @@ def dashboard(request):
     percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
 
     context = {
+        'user': user,
         'js_data': {
             'income_data': total_income_by_month,
             'categories': month_names,
