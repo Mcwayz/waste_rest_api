@@ -1,20 +1,12 @@
-import pytz
-import calendar
-import requests
-from decimal import Decimal
+
 from datetime import datetime
 from .forms import WasteForm
 from django.urls import reverse
-from django.db.models import Sum
-from django.utils import timezone
 from django.contrib import messages
 from collections import defaultdict
-from rest_framework.response import Response
-from django.core.serializers import serialize
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import TruncMonth, ExtractMonth
+from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login as auth_login, logout 
 from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
 
 
@@ -55,21 +47,16 @@ def reset_password(request):
         old_password = request.POST.get('old_password')
         new_password = request.POST.get('new_password')
         confirm_new_password = request.POST.get('confirm_new_password')
-
         user = request.user
-
-        # Check if the old password is correct
         if not user.check_password(old_password):
             messages.error(request, 'Your old password is incorrect.')
-        # Check if the new password and confirm new password match
         elif new_password != confirm_new_password:
             messages.error(request, 'New password and confirm password do not match.')
         else:
-            # Set the new password
             user.set_password(new_password)
             user.save()
             messages.success(request, 'Your password has been changed successfully.')
-            return redirect('login')  # Redirect to profile page or any other page after successful password change
+            return redirect('login') 
 
     return render(request, 'frontend/auth/reset-password.html')
 
