@@ -315,8 +315,6 @@ def viewGeneralLedgerWallet(request):
         latest_entry = WasteGL.objects.latest('comission_settlement_date')
         transaction_history = WasteGL.objects.all()
         current_balance = latest_entry.new_GL_balance
-        
-        # Serialize data
         serialized_history = []
         for entry in transaction_history:
             serialized_entry = {

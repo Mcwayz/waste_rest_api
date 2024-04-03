@@ -143,6 +143,7 @@ def create_user_and_profile(request):
 
 # Add Customer Collection Request
 
+
 @api_view(['POST'])
 def create_request(request):
     if request.method == 'POST':
@@ -168,6 +169,7 @@ def cancel_request(request, request_id):
 
 
 # Add Rating
+
 
 @api_view(['POST'])
 def add_rating(request, collection_id):
