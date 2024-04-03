@@ -19,26 +19,6 @@ from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorPro
 
 
 
-
-# def login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         print("Email:", email)
-#         print("Password:", password)
-       
-#         user = authenticate(request, email=email, password=password)
-#         print(user)
-#         if user is not None:
-#             print("user is about")
-#             login(request, user)  # Correct call to login function
-#             return redirect('Dash')  # Redirect to home page after successful login
-#         else:
-#             print("user is not about")
-#             messages.error(request, 'Invalid email or password.')
-#     return render(request, 'frontend/auth/login.html')
-
-
 # Login view
 
 
@@ -48,13 +28,10 @@ def user_login(request):
         password = request.POST.get('password')
 
         try:
-            # Query the database to get the user with the provided email
             user = User.objects.get(email=email)
-            # Check if the provided password matches the user's password
             if user.check_password(password):
-                # Authentication successful, log in the user
                 auth_login(request, user)
-                return redirect('Dash')  # Redirect to the home page after successful login
+                return redirect('Dash') 
             else:
                 messages.error(request, 'Invalid email or password.')
         except User.DoesNotExist:
@@ -296,7 +273,6 @@ def get_customer_requests(request):
         }
         customer_requests.append(request_data)
     return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
-
 
 
 # Collector Wallets
