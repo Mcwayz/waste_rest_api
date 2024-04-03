@@ -183,16 +183,12 @@ def create_user_and_profile(request):
             profile_serializer = CollectorSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_instance = profile_serializer.save()
-                # Create wallet for the collector profile
                 create_wallet_for_collector(profile_instance)
-                
-                # Sending email notification to the user
                 subject = 'Collector Profile Creation Notification'
                 message = 'Your Collector Profile Has Been Successfully Created.'
                 from_email = settings.EMAIL_HOST_USER
                 to_email = [user_instance.email]
                 send_mail(subject, message, from_email, to_email, fail_silently=True)
-                
                 return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
