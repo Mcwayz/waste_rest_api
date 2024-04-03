@@ -12,7 +12,6 @@ from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Co
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
-
 logger = logging.getLogger(__name__)
 
 # GET Request Methods
