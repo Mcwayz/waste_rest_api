@@ -238,7 +238,6 @@
     </nav>
     <!-- [ Sidebar Menu ] end -->
 
-
      <!-- [ Header Topbar ] start -->
     <header class="pc-header">
         <div class="header-wrapper">
@@ -499,10 +498,10 @@
       </header>
   
       <!-- [ Header ] end -->
-
- <!-- [ Main Content ] start -->
- <section class="pc-container">
+<!-- [ Main Content ] start -->
+<section class="pc-container">
     <div class="pc-content">
+
       <!-- [ breadcrumb ] start -->
       <div class="page-header">
         <div class="page-block">
@@ -511,12 +510,13 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Waste Type</li>
+                <li class="breadcrumb-item" aria-current="page">Waste Collection</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Waste Type</h2>
+                <br>
+                <h2 class="mb-0">Collection </h2>
               </div>
             </div>
           </div>
@@ -525,60 +525,49 @@
       <!-- [ breadcrumb ] end -->
 
 
-      <!-- [ Main Content ] start -->
-      <div class="row">
-        <!-- [ basic-table ] start -->
-        <div class="col-xl-12">
-          <div class="card">
+<!-- [ Main Content ] start -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
             <div class="card-header">
-              <h5>Waste Type</h5>
-              <span class="d-block m-t-5">Below is a list of <code>waste types</code> </span>
+                <h3 class="text-center">Waste Collection Details</h3>
             </div>
-            <div class="card-body table-border-style">
-              <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
-              <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
-              <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
-              <button class="btn btn-light-primary btn-sm json">Export JSON</button>
-              <div class="table-responsive">
-                
-                <table class="table" id="pc-dt-export">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Waste Type</th>
-                      <th>Price</th>
-                      <th>Description</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for waste_type in waste_types %}
-                    <tr>
-                      <td>{{ waste_type.waste_id }}</td>
-                      <td>{{ waste_type.waste_type }}</td>
-                      <td>{{ waste_type.collection_price }}</td>
-                      <td>{{ waste_type.waste_desc|truncatechars:130 }}</td>
-                      <td>
-                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> -
-                        <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                
-              </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Waste Type:</strong> {{ completed_collection.waste }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Request Date:</strong> {{ completed_collection.request_date }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Customer Name:</strong> {{ completed_collection.customer_name }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Location:</strong> {{ completed_collection.location }}</span>
+                        <hr class="border border-primary-subtle" />
+                    </div>
+                    <div class="col-md-6">
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector Name:</strong> {{ completed_collection.collector_name }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Date:</strong> {{ completed_collection.collection_date }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Price:</strong> {{ completed_collection.collection_price }}</span>
+                        <hr class="border border-primary-subtle" />
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collection Status:</strong> <label class="badge bg-light-success">{{ completed_collection.request_status }}</label></span>
+                        <hr class="border border-primary-subtle" />
+                    </div>
+                </div>
+                <form action="{% url 'Collections' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary mt-4" type="submit">Back</button>
+                </form>
             </div>
-          </div>
         </div>
-        <!-- [ basic-table ] end -->
-      </div>
-      <!-- [ Main Content ] end -->
     </div>
-  </section>
-  <!-- [ Main Content ] end -->
+</div>
+</div>
+</section>
 
-
+<!-- [ Main Content ] end -->
 
 
 <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
@@ -590,40 +579,5 @@
 <script src="{% static 'assets/js/config.js' %}"></script>
 <script src="{% static 'assets/js/pcoded.js' %}"></script>
 <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
-
-<!-- [Page Specific JS] start -->
-<script  src="{% static 'assets/js/plugins/simple-datatables.js' %}"></script>
-<script>
-  const table = new simpleDatatables.DataTable('#pc-dt-export');
-  document.querySelector('button.csv').addEventListener('click', () => {
-    table.export({
-      type: 'csv',
-      download: true,
-      lineDelimiter: '\n\n',
-      columnDelimiter: ';'
-    });
-  });
-  document.querySelector('button.sql').addEventListener('click', () => {
-    table.export({
-      type: 'sql',
-      download: true,
-      tableName: 'export_table'
-    });
-  });
-  document.querySelector('button.pdf').addEventListener('click', () => {
-    table.export({
-      type: 'pdf',
-      download: true
-    });
-  });
-  document.querySelector('button.json').addEventListener('click', () => {
-    table.export({
-      type: 'json',
-      download: true,
-      escapeHTML: true,
-      space: 3
-    });
-  });
-</script>
 </body>
 </html>

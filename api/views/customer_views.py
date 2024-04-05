@@ -1,6 +1,8 @@
 import json
 import logging
+from django.conf import settings
 from rest_framework import status
+from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -17,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Get Waste Types
 
+
 @api_view(['GET'])
 def getWaste(request):
     waste = Waste.objects.all()
@@ -25,6 +28,7 @@ def getWaste(request):
 
 
 # Get Collector Details
+
 
 @api_view(['GET'])
 def view_collector_profile(request, collector_id):
@@ -39,15 +43,16 @@ def view_collector_profile(request, collector_id):
 
 # Get Collection Details
 
+
 @api_view(['GET'])
 def collectionDetails(request, pk):
-    
-    collection = get_object_or_404(Collection, pk=pk)
+    collection = get_object_or_404(Collection, request_id=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
 
 
 # Get Customer Profile
+
 
 @api_view(['GET'])
 def getCustomerProfile(request, pk):
@@ -57,6 +62,7 @@ def getCustomerProfile(request, pk):
 
 
 # Get all Customer Profiles
+
 
 @api_view(['GET'])
 def getCustomerProfiles(request):
@@ -105,7 +111,8 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Create User and Profile
+#  Create User and Profile
+
 
 @api_view(['POST'])
 def create_user_and_profile(request):
@@ -118,13 +125,20 @@ def create_user_and_profile(request):
             profile_serializer = CustomerProfileSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_serializer.save()
+                
+                # Sending email notification to the user
+                subject = 'Account Creation Notification'
+                message = 'Your eWaste Account Has Been Successfully Created.'
+                from_email = settings.EMAIL_HOST_USER
+                to_email = [user_instance.email]
+                send_mail(subject, message, from_email, to_email, fail_silently=True)
+                
                 return Response({'Message': 'User and Profile Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
                 return Response({'Error': 'Profile Creation Failed'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 # Add Customer Collection Request
@@ -186,45 +200,3 @@ def updateUser(request, pk):
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
-    
-'''
-@api_view(['POST'])
-def viewAvailableDrivers(request):
-    try:
-        data = request.data  # Get data from the request body
-        latitude = float(data.get('latitude'))
-        longitude = float(data.get('longitude'))
-    except (ValueError, TypeError):
-        return Response({"message": "Invalid latitude or longitude provided."}, status=400)     
-
-    # Define the search radius in kilometers (15 kilometers)
-    search_radius = 15.0
-
-    # Convert latitude and longitude from degrees to radians
-    customer_lat_rad = math.radians(latitude)
-    customer_lon_rad = math.radians(longitude)
-
-    # Query all collector profiles from the database
-    collectors = CollectorProfile.objects.all()
-
-    # Filter collectors within the specified radius
-    collectors_within_radius = []
-
-    for collector in collectors:
-        collector_lat_rad = math.radians(collector.latitude)
-        collector_lon_rad = math.radians(collector.longitude)
-
-        # Haversine formula for distance calculation
-        dlon = collector_lon_rad - customer_lon_rad
-        dlat = collector_lat_rad - customer_lat_rad
-        a = math.sin(dlat/2)**2 + math.cos(customer_lat_rad) * math.cos(collector_lat_rad) * math.sin(dlon/2)**2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance_km = 6371 * c  
-
-        if distance_km <= search_radius:
-            collectors_within_radius.append(collector)
-    collector_data = CollectorProfileSerializer(collectors_within_radius, many=True).data
-
-    return Response(collector_data, status=200)
-'''

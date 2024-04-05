@@ -216,7 +216,7 @@
                   ><i data-feather="chevron-right"></i></span
               ></a>
               <ul class="pc-submenu">
-                <li class="pc-item">
+                <li class="pc-item">1
                   <a class="pc-link" href="/profile"
                     >My Profile</a
                   >
@@ -237,7 +237,6 @@
       </div>
     </nav>
     <!-- [ Sidebar Menu ] end -->
-
 
      <!-- [ Header Topbar ] start -->
     <header class="pc-header">
@@ -511,12 +510,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Waste Type</li>
+                <li class="breadcrumb-item" aria-current="page">Collections</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Waste Type</h2>
+                <h2 class="mb-0">Collections</h2>
               </div>
             </div>
           </div>
@@ -531,8 +530,8 @@
         <div class="col-xl-12">
           <div class="card">
             <div class="card-header">
-              <h5>Waste Type</h5>
-              <span class="d-block m-t-5">Below is a list of <code>waste types</code> </span>
+              <h5>Collections</h5>
+              <span class="d-block m-t-5">Below is a list of <code>completed waste</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -542,29 +541,34 @@
               <div class="table-responsive">
                 
                 <table class="table" id="pc-dt-export">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Waste Type</th>
-                      <th>Price</th>
-                      <th>Description</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for waste_type in waste_types %}
-                    <tr>
-                      <td>{{ waste_type.waste_id }}</td>
-                      <td>{{ waste_type.waste_type }}</td>
-                      <td>{{ waste_type.collection_price }}</td>
-                      <td>{{ waste_type.waste_desc|truncatechars:130 }}</td>
-                      <td>
-                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> -
-                        <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Waste Type</th>
+                            <th>Collector</th>
+                            <th>Customer</th>
+                            <th>Location</th>
+                            <th>Collection Status</th>
+                            <th>Collection Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for collection in completed_collections %}
+                        <tr>
+                            <td>{{ collection.request_id }}</td>
+                            <td>{{ collection.waste }}</td>
+                            <td>{{ collection.collector_name }}</td>
+                            <td>{{ collection.customer_name }}</td>
+                            <td>{{ collection.location }}</td>
+                            <td>{{ collection.request_status }}</td>
+                            <td>{{ collection.collection_date }}</td>
+                            <td>
+                                <a href="{% url 'view_collection' collection.request_id %}">Details</a> 
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 
               </div>

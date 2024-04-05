@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>eWaste</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% load static %}
+    <link rel="icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'assets/fonts/inter/inter.css' %}" id="main-font-link" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/tabler-icons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/material.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" id="main-style-link" />
+    <link rel="stylesheet" href="{% static 'assets/css/style-preset.css' %}" />
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+
+<body>
+  <!-- [ Pre-loader ] start -->
+  <div class="loader-bg">
+    <div class="loader-track">
+      <div class="loader-fill"></div>
+    </div>
+  </div>
+  <!-- [ Pre-loader ] End -->
+
+  <!-- [ Main Content ] start -->
+
+  <div class="maintenance-block">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card error-card">
+            <div class="card-body">
+              <div class="error-image-block">
+                <div class="row justify-content-center">
+                  <div class="col-12 text-center">
+                    <img class="img-fluid" style="width: 50%" src="{% static 'assets/images/pages/img-error-403.jpg' %}" alt="img">
+                  </div>                  
+                </div>
+              </div>
+              <div class="text-center">
+                <h1 class="mt-4"><b>403 Forbidden Error</b></h1>
+                <p class="mt-2 mb-4 text-sm text-muted">Server Error 403. The Server Understands The Request But Can't Provide Access.<br> Contact The Administrator.</p>
+                <a href="{% url 'Index' %}" class="btn btn-primary mb-3">Go to Homepage</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [ Main Content ] end -->
+  
+  <!-- Required Js -->
+  <script src="{% static 'assets/js/plugins/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/simplebar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/fonts/custom-font.js' %}"></script>
+  <script src="{% static 'assets/js/config.js' %}"></script>
+  <script src="{% static 'assets/js/pcoded.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
+</body>
+<!-- [Body] end -->
+
+</html>

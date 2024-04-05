@@ -510,13 +510,13 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Waste Type</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Collectors</a></li>
+                <li class="breadcrumb-item" aria-current="page">Wallet Details</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Waste Type</h2>
+                <h2 class="mb-0">Wallets</h2>
               </div>
             </div>
           </div>
@@ -531,8 +531,8 @@
         <div class="col-xl-12">
           <div class="card">
             <div class="card-header">
-              <h5>Waste Type</h5>
-              <span class="d-block m-t-5">Below is a list of <code>waste types</code> </span>
+              <h5>Collector Wallets</h5>
+              <span class="d-block m-t-5">Below is a list of <code>Collector Wallets</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -545,22 +545,28 @@
                   <thead>
                     <tr>
                       <th>ID</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
                       <th>Waste Type</th>
-                      <th>Price</th>
-                      <th>Description</th>
+                      <th>Work Area</th>
+                      <th>Vehicle</th>
+                      <th>Wallet Balance</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for waste_type in waste_types %}
+                    {% for collector_wallet in collector_wallets %}
                     <tr>
-                      <td>{{ waste_type.waste_id }}</td>
-                      <td>{{ waste_type.waste_type }}</td>
-                      <td>{{ waste_type.collection_price }}</td>
-                      <td>{{ waste_type.waste_desc|truncatechars:130 }}</td>
+                      <td>{{ collector_wallet.wallet_id }}</td>
+                      <td>{{ collector_wallet.first_name }}</td>
+                      <td>{{ collector_wallet.last_name }}</td>
+                      <td>{{ collector_wallet.waste }}</td>
+                      <td>{{ collector_wallet.work_area }}</td>
+                      <td>{{ collector_wallet.vehicle }}</td>
+                      <td>{{ collector_wallet.wallet_balance}}</td>
                       <td>
-                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> -
-                        <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
+                        <a href="{% url 'view_wallet' collector_wallet.wallet_id %}">View</a> -
+                        <a href="{% url 'delete_wallet' collector_wallet.wallet_id %}">Delete</a>
                       </td>
                     </tr>
                     {% endfor %}

@@ -219,14 +219,15 @@ function floatchart() {
     chart.render();
   })();
   (function () {
+    var pie_chart_data = JSON.parse('{{ pie_chart_data|escapejs }}');
     var options = {
       chart: {
         height: 320,
         type: 'donut'
       },
-      series: [27, 23, 20, 17],
+      series: pie_chart_data.series, // Number of Collections
       colors: ['#4680FF', '#E58A00', '#2CA87F', '#4680FF'],
-      labels: ['Total income', 'Total rent', 'Download', 'Views'],
+      labels: pie_chart_data.labels, // Waste Types
       fill: {
         opacity: [1, 1, 1, 0.3]
       },
@@ -254,17 +255,14 @@ function floatchart() {
       },
       responsive: [
         {
-          breakpoint: 575,
+          breakpoint: 480,
           options: {
-            chart: {
-              height: 250
-            },
             plotOptions: {
               pie: {
                 donut: {
                   size: '65%',
                   labels: {
-                    show: false
+                    show: true
                   }
                 }
               }

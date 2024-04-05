@@ -510,13 +510,13 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Waste Type</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Customers</a></li>
+                <li class="breadcrumb-item" aria-current="page">Customer List</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Waste Type</h2>
+                <h2 class="mb-0">Customers</h2>
               </div>
             </div>
           </div>
@@ -531,8 +531,8 @@
         <div class="col-xl-12">
           <div class="card">
             <div class="card-header">
-              <h5>Waste Type</h5>
-              <span class="d-block m-t-5">Below is a list of <code>waste types</code> </span>
+              <h5>Customers</h5>
+              <span class="d-block m-t-5">Below Is A List Of <code>Customers</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -545,22 +545,25 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Waste Type</th>
-                      <th>Price</th>
-                      <th>Description</th>
+                      <th>Username</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Email Address</th>
+                      <th>Address</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for waste_type in waste_types %}
+                    {% for customer in customer_data %}
                     <tr>
-                      <td>{{ waste_type.waste_id }}</td>
-                      <td>{{ waste_type.waste_type }}</td>
-                      <td>{{ waste_type.collection_price }}</td>
-                      <td>{{ waste_type.waste_desc|truncatechars:130 }}</td>
+                      <td>{{ customer.user_id }}</td>
+                      <td>{{ customer.username }}</td>
+                      <td>{{ customer.first_name }}</td>
+                      <td>{{ customer.last_name }}</td>
+                      <td>{{ customer.email }}</td>
+                      <td>{{ customer.address }}</td>
                       <td>
-                        <a href="{% url 'edit_waste' waste_type.waste_id %}">Edit</a> -
-                        <a href="{% url 'delete_waste' waste_type.waste_id %}">Delete</a>
+                        <a href="{% url 'view_customer' customer.user_id %}">View</a>
                       </td>
                     </tr>
                     {% endfor %}

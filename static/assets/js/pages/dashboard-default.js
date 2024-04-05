@@ -115,7 +115,11 @@ function floatchart() {
     chart.render();
   })();
 
+
   (function () {
+    // Access data passed from the Django view
+    console.log('Income data:', incomeData);
+    console.log('Categories:', categories);
     var options = {
       chart: {
         fontFamily: 'Inter var, sans-serif',
@@ -156,15 +160,11 @@ function floatchart() {
       series: [
         {
           name: 'Income',
-          data: [20, 70, 40, 70, 70, 90, 50, 55, 45, 60, 50, 65]
-        },
-        {
-          name: 'Expense',
-          data: [10, 40, 20, 40, 50, 70, 80, 30, 15, 32, 90, 30]
+          data: incomeData // Use income data passed from the Django view
         }
       ],
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        categories: categories, // Use categories data passed from the Django view
         axisBorder: {
           show: false
         },
@@ -176,6 +176,7 @@ function floatchart() {
     var chart = new ApexCharts(document.querySelector('#customer-rate-graph'), options);
     chart.render();
   })();
+
 
   (function () {
     var options = {
@@ -202,6 +203,8 @@ function floatchart() {
     var chart = new ApexCharts(document.querySelector('#total-tasks-graph'), options);
     chart.render();
   })();
+
+
   (function () {
     var options = {
       chart: {
@@ -228,15 +231,17 @@ function floatchart() {
     chart.render();
   })();
 
+
+
   (function () {
     var options = {
       chart: {
         height: 320,
         type: 'donut'
       },
-      series: [27, 23, 20, 17],
+      series: series, // Number of Collections
       colors: ['#4680FF', '#E58A00', '#2CA87F', '#4680FF'],
-      labels: ['Total income', 'Total rent', 'Download', 'Views'],
+      labels: labels, // Waste Types
       fill: {
         opacity: [1, 1, 1, 0.3]
       },

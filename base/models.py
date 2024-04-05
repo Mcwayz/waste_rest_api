@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 # User Profile Model
 
+
 class CustomerProfile(models.Model):
     customer_id = models.AutoField(primary_key=True)
     address = models.TextField(max_length=200)
@@ -13,6 +14,7 @@ class CustomerProfile(models.Model):
 
 
 # Waste Type Model
+
 
 class Waste(models.Model):
     waste_id = models.AutoField(primary_key=True)
@@ -22,6 +24,7 @@ class Waste(models.Model):
     
     
 # Collectors (Driver) Model
+
 
 class CollectorProfile(models.Model):
     collector_id = models.AutoField(primary_key=True)
@@ -33,6 +36,7 @@ class CollectorProfile(models.Model):
 
 
 # User Requests Model
+
 
 class Requests(models.Model):
     request_id = models.AutoField(primary_key=True)
@@ -47,6 +51,7 @@ class Requests(models.Model):
 
 # Collections  Model
 
+
 class Collection(models.Model):
     collection_id = models.AutoField(primary_key=True)
     collection_date = models.DateTimeField(default=timezone.now, blank=True)
@@ -56,7 +61,62 @@ class Collection(models.Model):
 
 # Driver Ratings Model
 
+
 class Ratings(models.Model):
     rating_id = models.AutoField(primary_key=True)
     rating_score = models.PositiveIntegerField()
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='ratings')
+
+
+
+# Wallet Model 
+
+
+class Wallet(models.Model):
+    wallet_id = models.AutoField(primary_key=True)
+    balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    collector = models.OneToOneField(CollectorProfile, on_delete=models.CASCADE)
+    
+    
+# Wallet History
+
+
+class WalletHistory(models.Model):
+    history_id = models.AutoField(primary_key=True)
+    transaction_type =  models.CharField(max_length=100)
+    transaction_date = models.DateTimeField(default=timezone.now, blank=True)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='wallet_history')
+    old_wallet_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    new_wallet_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    transaction_amount = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    
+    
+# Commission Model
+
+
+class CollectorCommission(models.Model):
+    txn_id = models.AutoField(primary_key=True)
+    collector = models.OneToOneField(CollectorProfile, on_delete=models.CASCADE)
+    comission_settlement_date = models.DateTimeField(default=timezone.now, blank=True)
+    comission =  models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    extras = models.CharField(max_length=100, default="None")
+
+
+# Waste General Legder Wallet  
+    
+    
+class WasteGL(models.Model):
+    TRANSACTION_TYPES = (
+        ('DEPOSIT', 'Deposit'),
+        ('TRANSFER', 'Transfer'),
+    )
+    gl_id = models.AutoField(primary_key=True)
+    transaction_type = models.CharField(max_length=100, choices=TRANSACTION_TYPES)
+    comission_settlement_date = models.DateTimeField(default=timezone.now, blank=True)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='ledger')
+    service_charge =  models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    old_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    new_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+    extras = models.CharField(max_length=100, default="None")
+
+     

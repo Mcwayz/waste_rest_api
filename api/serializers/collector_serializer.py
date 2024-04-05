@@ -1,8 +1,11 @@
+
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from base.models import Waste, CollectorProfile,Requests, Collection
+from base.models import Waste, CollectorProfile, Requests, Collection, Wallet
+
 
 # Waste Type Serializer
+
 
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,9 +13,8 @@ class WasteSerializer(serializers.ModelSerializer):
         fields = ('waste_id', 'waste_type', 'waste_desc', 'collection_price')
 
 
-
-
 # Collector Serializer
+
 
 class CollectorSerializer(serializers.ModelSerializer):
     auth = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -20,10 +22,10 @@ class CollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectorProfile
         fields = ('collector_id', 'vehicle', 'work_area', 'timestamp', 'auth', 'waste')
-        
-        
-        
+
+
 # Collector Serializer
+
 
 class CollectorsSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='auth.username')
@@ -36,18 +38,17 @@ class CollectorsSerializer(serializers.ModelSerializer):
         fields = ('collector_id',  'username', 'email', 'first_name', 'last_name','vehicle', 'work_area', 'waste', 'timestamp')
 
 
-
 # Request Serializer
+
 
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requests
         fields = ('request_id', 'location', 'number_of_bags', 'request_status', 'request_date', 'waste', 'collection_price', 'customer')
-        
-        
 
 
 # Collection Serializer
+
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,6 +57,7 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 # User Serializer (for referencing user-related fields)
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,10 +71,11 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             user.save()
         return user.id  # Return just the user ID
-    
-    
+
+
 # Completed Task Serialiser
-    
+
+
 class CompletedCollectionSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField()
     request_status = serializers.CharField(source='request.request_status')
@@ -95,3 +98,30 @@ class CompletedCollectionSerializer(serializers.ModelSerializer):
 
     def get_collector_name(self, obj):
         return f"{obj.collector.auth.first_name} {obj.collector.auth.last_name}"
+
+
+# Wallet Serializer
+
+
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = '__all__'
+
+
+# Collector Data Serializer
+
+
+class CollectorDataSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='auth.first_name') 
+    last_name = serializers.CharField(source='auth.last_name')  
+    vehicle = serializers.CharField()                             
+    work_area = serializers.CharField()                           
+    waste = serializers.CharField(source='waste.waste_type')      
+    wallet_balance = serializers.DecimalField(max_digits=10, decimal_places=2, source='wallet.balance') 
+    wallet_id = serializers.IntegerField(source='wallet.wallet_id')
+
+    class Meta:
+        model = CollectorProfile 
+        fields = ('wallet_id','first_name', 'last_name', 'vehicle', 'work_area', 'waste', 'wallet_balance') 
+

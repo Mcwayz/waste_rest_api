@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Waste Colleciton Dashboard</title>
+    <!-- [Meta] -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    {% load static %}
+    <link rel="icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+    <link href="{% static 'assets/css/plugins/animate.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/inter/inter.css' %}" id="main-font-link" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/tabler-icons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/fonts/material.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" id="main-style-link" />
+    <link rel="stylesheet" href="{% static 'assets/css/style-preset.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/landing.css' %}" />
+  </head>
+
+  <body class="landing-page">
+    <div class="loader-bg">
+      <div class="loader-track">
+        <div class="loader-fill"></div>
+      </div>
+    </div>
+
+
+
+    <header id="home" style="background-image: url({% static 'assets/images/landing/img-headerbg.jpg' %})">
+      <nav class="navbar navbar-expand-md navbar-light default">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">
+            <img src="{% static 'assets/images/logo-dark.svg' %}" alt="logo" />
+          </a>
+          <a class="btn btn-primary" role="button" href="{% url 'login' %}">login</a>
+          <button
+            class="navbar-toggler rounded"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+        </div>
+      </nav>
+      <!-- [ Nav ] start -->
+
+      <!-- [ Nav ] start -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 text-left">
+            <h1 class="mb-4 wow fadeInUp" data-wow-delay="0.2s"
+              >Explore One of the <span class="text-primary">Featured</span> Dashboard Template in Themeforest</h1
+            >
+            <div class="row justify-content-left wow fadeInUp" data-wow-delay="0.3s">
+              <div class="col-md-8">
+                <p class="text-muted f-16 mb-0"
+                  >Able Pro is the one of the Featured admin dashboard template in Envato Marketplace and used by over 2.5K+ Customers
+                  wordwide.</p
+                >
+              </div>
+            </div>
+            <div class="my-4 my-sm-5 wow fadeInUp" data-wow-delay="0.4s">
+              <a href="elements/bc_alert.html" class="btn btn-outline-secondary me-2">Explore Components</a>
+              <a href="dashboard/index.html" class="btn btn-primary">Live Preview</a>
+            </div>
+            <div class="row justify-content-left text-center wow fadeInUp" data-wow-delay="0.5s">
+              <div class="col-auto">
+                <div class="star mb-2">
+                  <i class="fas fa-star text-warning"></i>
+                  <i class="fas fa-star text-warning"></i>
+                  <i class="fas fa-star text-warning"></i>
+                  <i class="fas fa-star text-warning"></i>
+                  <i class="fas fa-star-half-alt text-warning"></i>
+                </div>
+                <h5 class="mb-0">4.7/5 <small class="text-muted f-w-400"> Ratings</small></h5>
+              </div>
+              <div class="col-auto">
+                <h5 class="mb-2"><small class="text-muted f-w-400"> Sales</small></h5>
+                <h5 class="mb-0">2.5K+</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <img src="{% static 'assets/images/landing/business-presentation-1.png' %}" width="100%" />
+          </div>
+        </div>
+      </div>
+      <div class="technology-block">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Bootstrap 5"
+            ><img src="{% static 'assets/images/landing/tech-bootstrap.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Gulp"
+            ><img src="{% static 'assets/images/landing/tech-gulp.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="React 18"
+            ><img src="{% static 'assets/images/landing/tech-react.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Material UI - TypeScript/JavaScript"
+            ><img src="{% static 'assets/images/landing/tech-mui.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="CodeIgniter"
+            ><img src="{% static 'assets/images/landing/tech-codeigniter.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title=".net"
+            ><img src="{% static 'assets/images/landing/tech-net.svg' %}" alt="img" class="img-fluid"
+          /></li>
+          <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Figma Design System"
+            ><img src="{% static 'assets/images/landing/tech-figma.svg' %}" alt="img" class="img-fluid"
+          /></li>
+        </ul>
+      </div>
+    </header>
+    <!-- [ Header ] End -->
+
+
+
+<!-- [ Top Features apps ] start -->
+<section class="bg-white">
+  <div class="container title">
+    <div class="row justify-content-center text-center wow fadeInUp" data-wow-delay="0.2s">
+      <div class="col-md-8 col-xl-6">
+        <h2 class="mb-3">Complete Combo</h2>
+        <p class="mb-0">Able Pro caters to the needs of both developers and designers, whether they are beginners or experts. </p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row align-items-center justify-content-center mb-4 mb-sm-5">
+      <div class="col-md-6 col-lg-4">
+        <div class="card">
+          <div class="card-body mt-2">
+            <h5 class="mb-3">Figma Design System</h5>
+            <p class="text-muted">Check the live preview of Able Pro Figma design file. Figma file included in all licenses.</p>
+            <img class="pt-2" src="{% static 'path/to/your/image.png' %}" width="100%" />
+            <a class="btn btn-light-dark mt-3" href="#"><i class="ti ti-external-link"></i> Preview Figma</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card bg-gray-100">
+          <div class="card-body mt-2">
+            <h5 class="mb-3">Explore Componentss</h5>
+            <p class="text-muted">Access all components of Able Pro in one place to make your development work easier.</p>
+            <img class="pt-2" src="{% static 'path/to/your/image.png' %}" width="100%" />
+            <a class="btn btn-light-dark mt-3" href="#"><i class="ti ti-external-link"></i> View All Components</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card">
+          <div class="card-body mt-2">
+            <h5 class="mb-3">Documentation</h5>
+            <p class="text-muted">Find solutions and navigate through our helper guide with ease. </p>
+            <img class="pt-2" src="{% static 'path/to/your/image.png' %}" width="100%" />
+            <a class="btn btn-light-dark mt-3" href="#"><i class="ti ti-external-link"></i> Check Documentation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- [ Top Features ] End -->
+
+    
+<!-- [ companies apps ] start -->
+<section class="bg-white">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-md-12">
+        <h2>Trusted By</h2>
+        <p class="my-4 wow fadeInUp" data-wow-delay="0.2s"
+          >From Startups to Fortune 500 companies using our Template for their product.</p
+        >
+        <div class="row justify-content-center client-block g-5">
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.4s"
+            ><img src="{% static 'assets/images/landing/client-eagames.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.4s"
+            ><img src="{% static 'assets/images/landing/client-vodafone.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.4s"
+            ><img src="{% static 'assets/images/landing/client-crystal-1.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.5s"
+            ><img src="{% static 'assets/images/landing/client-haswent-2.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.6s"
+            ><img src="{% static 'assets/images/landing/client-haxter-3.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.7s"
+            ><img src="{% static 'assets/images/landing/client-montecito-4.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.8s"
+            ><img src="{% static 'assets/images/landing/client-slingshot.svg' %}" alt="img" class="img-fluid"
+          /></div>
+          <div class="col-auto wow fadeInRight" data-wow-delay="0.9s"
+            ><img src="{% static 'assets/images/landing/client-totalstudio-5.svg' %}" alt="img" class="img-fluid"
+          /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ companies apps ] End -->
+
+
+<!-- [ footer apps ] start -->
+<footer class="footer" style="background-image: url({% static 'assets/images/landing/img-headerbg.jpg' %})">
+  <div class="container title mb-0">
+    <div class="row align-items-center wow fadeInUp" data-wow-delay="0.2s">
+      <div class="col-md-8">
+        <h2 class="mb-3">Stay connected with us</h2>
+        <p class="mb-4 mb-md-0"
+          >Simply submit your email, we share you the top news related to Able Pro feature updates, roadmap, and news.</p
+        >
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col"><input type="email" class="form-control" placeholder="Enter your email" /></div>
+          <div class="col-auto"><button class="btn btn-primary">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="border-top border-bottom footer-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+          <img src="{% static 'assets/images/logo-dark.svg' %}" alt="image" class="img-fluid mb-3" />
+          <p class="mb-4"
+            >Phoenixcoded has gained the trust of over 5.5K customers since 2015, thanks to our commitment to delivering high-quality
+            products. Our experienced team players are responsible for managing Able Pro.</p
+          >
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-sm-4 wow fadeInUp" data-wow-delay="0.6s">
+              <h5 class="mb-4">Company</h5>
+              <ul class="list-unstyled footer-link">
+                <li><a href="#" >Profile</a></li>
+                <li><a href="#" >Portfolio</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-4 wow fadeInUp" data-wow-delay="0.8s">
+              <h5 class="mb-4">Help & Support</h5>
+              <ul class="list-unstyled footer-link">
+                <li><a href="#" >Documentation</a></li>
+                <li><a href="#" >Support</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-4 wow fadeInUp" data-wow-delay="1s">
+              <h5 class="mb-4">Useful Resources</h5>
+              <ul class="list-unstyled footer-link">
+                <li><a href="#">Support Policy</a></li>
+                <li><a href="#">Licenses Term</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</footer>
+<!-- [ footer apps ] End -->
+
+
+<!-- [ Main Content ] end -->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<!-- Required Js -->
+<script src="{% static 'assets/js/plugins/popper.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/simplebar.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/fonts/custom-font.js' %}"></script>
+<script src="{% static 'assets/js/config.js' %}"></script>
+<script src="{% static 'assets/js/pcoded.js' %}"></script>
+<script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
+
+<!-- [Page Specific JS] start -->
+<script src="{% static 'assets/js/plugins/wow.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/jquery.marquee/1.4.0/jquery.marquee.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="{% static 'assets/js/plugins/Jarallax.js' %}"></script>
+    <script>
+      // Start [ Menu hide/show on scroll ]
+      let ost = 0;
+      document.addEventListener('scroll', function () {
+        let cOst = document.documentElement.scrollTop;
+        if (cOst == 0) {
+          document.querySelector('.navbar').classList.add('top-nav-collapse');
+        } else if (cOst > ost) {
+          document.querySelector('.navbar').classList.add('top-nav-collapse');
+          document.querySelector('.navbar').classList.remove('default');
+        } else {
+          document.querySelector('.navbar').classList.add('default');
+          document.querySelector('.navbar').classList.remove('top-nav-collapse');
+        }
+        ost = cOst;
+      });
+      // End [ Menu hide/show on scroll ]
+      var wow = new WOW({
+        animateClass: 'animated'
+      });
+      wow.init();
+
+      // slider start
+      $('.screen-slide').owlCarousel({
+        loop: true,
+        margin: 30,
+        center: true,
+        nav: false,
+        dotsContainer: '.app_dotsContainer',
+        URLhashListener: true,
+        items: 1
+      });
+      $('.workspace-slider').owlCarousel({
+        loop: true,
+        margin: 30,
+        center: true,
+        nav: false,
+        dotsContainer: '.workspace-card-block',
+        URLhashListener: true,
+        items: 1.5
+      });
+      // slider end
+      // marquee start
+      $('.marquee').marquee({
+        duration: 500000,
+        pauseOnHover: true,
+        startVisible: true,
+        duplicated: true
+      });
+      $('.marquee-1').marquee({
+        duration: 500000,
+        pauseOnHover: true,
+        startVisible: true,
+        duplicated: true,
+        direction: 'right'
+      });
+      // marquee end
+    </script>
+    <!-- [Page Specific JS] end -->
+    <div class="pct-c-btn">
+      <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas_pc_layout">
+        <svg class="pc-icon">
+          <use xlink:href="#custom-setting-2"></use>
+        </svg>
+      </a>
+    </div>
+    <div class="offcanvas border-0 pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Settings</h5>
+        <button type="button" class="btn btn-icon btn-link-danger" data-bs-dismiss="offcanvas" aria-label="Close"
+          ><i class="ti ti-x"></i
+        ></button>
+      </div>
+      <div class="pct-body" style="height: calc(100% - 85px)">
+        <div class="offcanvas-body py-0">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="pc-dark">
+                <h6 class="mb-1">Theme Mode</h6>
+                <p class="text-muted text-sm">Choose light or dark mode or Auto</p>
+                <div class="row theme-layout">
+                  <div class="col-4">
+                    <div class="d-grid">
+                      <button class="preset-btn btn active" data-value="true" onclick="layout_change('light');">
+                        <svg class="pc-icon text-warning">
+                          <use xlink:href="#custom-sun-1"></use>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-grid">
+                      <button class="preset-btn btn" data-value="false" onclick="layout_change('dark');">
+                        <svg class="pc-icon">
+                          <use xlink:href="#custom-moon"></use>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-grid">
+                      <button class="preset-btn btn" data-value="default" onclick="layout_change_default();">
+                        <svg class="pc-icon">
+                          <use xlink:href="#custom-setting-2"></use>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <h6 class="mb-1">Theme Contrast</h6>
+              <p class="text-muted text-sm">Choose theme contrast</p>
+              <div class="row theme-contrast">
+                <div class="col-6">
+                  <div class="d-grid">
+                    <button class="preset-btn btn" data-value="true" onclick="layout_sidebar_change('true');">
+                      <svg class="pc-icon">
+                        <use xlink:href="#custom-mask"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-grid">
+                    <button class="preset-btn btn active" data-value="false" onclick="layout_sidebar_change('false');">
+                      <svg class="pc-icon">
+                        <use xlink:href="#custom-mask-1-outline"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <h6 class="mb-1">Custom Theme</h6>
+              <p class="text-muted text-sm">Choose your Primary color</p>
+              <div class="theme-color preset-color">
+                <a href="#!" class="active" data-value="preset-1"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-2"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-3"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-4"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-5"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-6"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-7"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-8"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-9"><i class="ti ti-check"></i></a>
+                <a href="#!" data-value="preset-10"><i class="ti ti-check"></i></a>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <h6 class="mb-1">Sidebar Caption</h6>
+              <p class="text-muted text-sm">Sidebar Caption Hide/Show</p>
+              <div class="row theme-nav-caption">
+                  <div class="col-6">
+                      <div class="d-grid">
+                          <button class="preset-btn btn active" data-value="true" onclick="layout_caption_change('true');">
+                              <img src="{% static 'assets/images/customizer/img-caption-1.svg' %}" alt="img" class="img-fluid" width="70%" />
+                          </button>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-grid">
+                          <button class="preset-btn btn" data-value="false" onclick="layout_caption_change('false');">
+                              <img src="{% static 'assets/images/customizer/img-caption-2.svg' %}" alt="img" class="img-fluid" width="70%" />
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </li>
+          
+          <li class="list-group-item">
+              <div class="pc-rtl">
+                  <h6 class="mb-1">Theme Layout</h6>
+                  <p class="text-muted text-sm">LTR/RTL</p>
+                  <div class="row theme-direction">
+                      <div class="col-6">
+                          <div class="d-grid">
+                              <button class="preset-btn btn active" data-value="false" onclick="layout_rtl_change('false');">
+                                  <img src="{% static 'assets/images/customizer/img-layout-1.svg' %}" alt="img" class="img-fluid" width="70%" />
+                              </button>
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="d-grid">
+                              <button class="preset-btn btn" data-value="true" onclick="layout_rtl_change('true');">
+                                  <img src="{% static 'assets/images/customizer/img-layout-2.svg' %}" alt="img" class="img-fluid" width="70%" />
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </li>
+          
+          <li class="list-group-item">
+              <div class="pc-container-width">
+                  <h6 class="mb-1">Layout Width</h6>
+                  <p class="text-muted text-sm">Choose Full or Container Layout</p>
+                  <div class="row theme-container">
+                      <div class="col-6">
+                          <div class="d-grid">
+                              <button class="preset-btn btn active" data-value="false" onclick="change_box_container('false')">
+                                  <img src="{% static 'assets/images/customizer/img-container-1.svg' %}" alt="img" class="img-fluid" width="70%" />
+                              </button>
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="d-grid">
+                              <button class="preset-btn btn" data-value="true" onclick="change_box_container('true')">
+                                  <img src="{% static 'assets/images/customizer/img-container-2.svg' %}" alt="img" class="img-fluid" width="70%" />
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </li>
+          
+
+
+            <li class="list-group-item">
+              <div class="d-grid">
+                <button class="btn btn-light-danger" id="layoutreset">Reset Layout</button>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
