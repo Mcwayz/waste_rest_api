@@ -72,6 +72,7 @@ def user_logout(request):
 
 # Reset Password View
 
+
 @login_required
 def reset_password(request):
     if request.method == 'POST':
@@ -95,6 +96,51 @@ def reset_password(request):
             return redirect('login')  # Redirect to profile page or any other page after successful password change
 
     return render(request, 'frontend/auth/reset-password.html')
+
+
+# Views for the Profile
+
+# Profile Information
+
+
+
+def user_profile(request):
+    user = request.user
+    context = {
+        'user': user,
+    }
+    return render(request, 'frontend/profile/profile.html', context) 
+
+
+# Update Profile Information 
+
+
+def edit_profile_info(request):
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+
+        # Update user information
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.username = username
+        user.email = email
+        user.save()
+
+        # Display success message
+        messages.success(request, 'Your information has been updated successfully.')
+
+        # Redirect to profile page or any other page after updating
+        return redirect('user_profile')  # Change 'user_profile' to the name of your profile view
+    
+    return render(request, 'frontend/profile/profile.html')
+
+
+
 
 
 # Dashboard View
