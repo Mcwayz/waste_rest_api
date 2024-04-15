@@ -552,6 +552,7 @@
                       <th>New GL Balance</th>
                       <th>Service Charge</th>
                       <th>Transaction Date</th>
+                      <th>Comment</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -564,11 +565,11 @@
                       <td>{{ wallet.new_GL_balance }}</td>
                       <td>{{ wallet.service_charge }}</td>
                       <td>{{ wallet.transaction_date}}</td>
+                      <td>{{ wallet.extras}}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
                 </table>
-                
               </div>
             </div>
           </div>
