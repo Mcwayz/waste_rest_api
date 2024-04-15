@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from base.models import Waste, CollectorProfile, Requests, Collection, Wallet
+from base.models import Waste, CollectorProfile, Requests, Collection, Wallet, WasteGL, WalletHistory
 
 
 # Waste Type Serializer

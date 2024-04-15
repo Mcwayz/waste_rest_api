@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from .forms import WasteForm
 from django.urls import reverse
@@ -67,7 +66,6 @@ def reset_password(request):
 # Profile Information
 
 
-
 def user_profile(request):
     user = request.user
     context = {
@@ -102,9 +100,6 @@ def edit_profile_info(request):
         return redirect('user_profile')  # Change 'user_profile' to the name of your profile view
     
     return render(request, 'frontend/profile/profile.html')
-
-
-
 
 
 # Dashboard View

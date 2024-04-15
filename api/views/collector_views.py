@@ -235,7 +235,6 @@ def updateUser(request, pk):
 
 # Update / Complete Collection Request   
    
-    
 @api_view(['PUT'])
 def updateCollectionRequest(request):
     request_id = request.data.get('request_id')
@@ -268,20 +267,27 @@ def updateCollectionRequest(request):
                 collector_wallet.save()
                 
                 # Transfer 5% of the collection price to the collector commission
-                commission_amount = collection_price * Decimal('0.05')
+                commission_amount = collection_price * Decimal('0.03')
                 collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
                 collector_commission.comission += commission_amount
                 collector_commission.save()
-                
+                try:
+                    latest_entry = WasteGL.objects.latest('transaction_date')
+                    old_gl_balance = latest_entry.new_GL_balance
+                except WasteGL.DoesNotExist:
+                    old_gl_balance = Decimal('0.0')  
+                    
+                new_gl_balance = max(0, old_gl_balance + collection_price)
+                new_gl_balance_after_commission = max(0, new_gl_balance - commission_amount)
+                                
                 # Fund the general Ledger
-                old_gl_balance = WasteGL.objects.latest('transaction_date').new_GL_balance
                 WasteGL.objects.create(
                     transaction_type='DEPOSIT',
                     transaction_date=timezone.now(),
                     collection=collection,
-                    service_charge=2,  # Set service charge to 2
-                    old_GL_balance=old_gl_balance - collection_price, 
-                    new_GL_balance=old_gl_balance - commission_amount,  
+                    service_charge=2.0,  # Set service charge to 2
+                    old_GL_balance=old_gl_balance,
+                    new_GL_balance=new_gl_balance_after_commission - service_charge,
                     extras='Funded By Completed Collection'
                 )
                 
@@ -303,9 +309,9 @@ def updateCollectionRequest(request):
             request_to_update.save()
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
     except Requests.DoesNotExist:
-        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND) 
-
-
+        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    
 # View General Ledger Wallet
 
 
