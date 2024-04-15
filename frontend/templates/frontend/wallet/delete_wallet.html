@@ -41,6 +41,8 @@
       </div>
     </div>
     <!-- [ Pre-loader ] End -->
+
+
     <!-- [ Sidebar Menu ] start -->
     <nav class="pc-sidebar">
       <div class="navbar-wrapper">
@@ -66,7 +68,7 @@
                 </div>
 
                 <div class="flex-grow-1 ms-3 me-2">
-                  <h6 class="mb-0">Jonh Smith</h6>
+                  <h6 class="mb-0">{{user.first_name}} {{user.last_name}}</h6>
                   <small>Administrator</small>
                 </div>
                 <a
@@ -93,7 +95,7 @@
                     <i class="ti ti-lock"></i>
                     <span>Lock Screen</span>
                   </a>
-                  <a href="#!">
+                  <a href="{% url 'logout' %}">
                     <i class="ti ti-power"></i>
                     <span>Logout</span>
                   </a>
@@ -164,6 +166,12 @@
                   </span><span class="pc-mtext">Wallets</span></a >
             </li>
 
+            <li class="pc-item">
+              <a href="/ledger" class="pc-link">
+                <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
+                  </span><span class="pc-mtext">General Ledger</span></a >
+            </li>
+
             <li class="pc-item pc-caption">
               <label>Collections Data</label>
               <i class="ti ti-forms"></i>
@@ -217,17 +225,11 @@
               ></a>
               <ul class="pc-submenu">
                 <li class="pc-item">
-                  <a class="pc-link" href="/profile"
+                  <a class="pc-link" href="{% url 'user_profile' %}"
                     >My Profile</a
                   >
                 </li>
-                <li class="pc-item">
-                  <a
-                    class="pc-link"
-                    href="/password"
-                    >Password Settings</a
-                  >
-                </li>
+                
 
               </ul>
             </li>
