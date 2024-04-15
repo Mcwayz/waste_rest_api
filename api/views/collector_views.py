@@ -287,7 +287,7 @@ def updateCollectionRequest(request):
                     collection=collection,
                     service_charge=2.0,  # Set service charge to 2
                     old_GL_balance=old_gl_balance,
-                    new_GL_balance=new_gl_balance_after_commission - service_charge,
+                    new_GL_balance=new_gl_balance_after_commission - Decimal('2.0'),
                     extras='Funded By Completed Collection'
                 )
                 

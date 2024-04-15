@@ -492,7 +492,9 @@ def general_ledger(request):
         total_value += waste_ledger.new_GL_balance
         entry = {
             'gl_id': waste_ledger.gl_id,
+            'extras': waste_ledger.extras,
             'old_GL_balance': waste_ledger.old_GL_balance,
+            'new_GL_balance': waste_ledger.new_GL_balance,
             'service_charge': waste_ledger.service_charge,
             'transaction_type': waste_ledger.transaction_type,
             'transaction_date': waste_ledger.transaction_date,
