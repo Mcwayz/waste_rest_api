@@ -27,17 +27,19 @@ from .decorators.security import superuser_required
 # ]
 
 
-# Define Custom Function to Check If The User is a Superuser
+# Define Custom Function to Check If The User is a Superuser general_ledger
 
 
 urlpatterns = [
     
     path('', views.index, name='Index'),
     path('login/', views.user_login, name='login'),
-    path('logout/', views.user_logout, name='logout'),
     path('dashboard/', views.dashboard, name='Dash'),
     path('add-type/', views.addType, name='Add Type'),
+    path('logout/', views.user_logout, name='logout'),
+    path('ledger/', views.general_ledger, name='ledger'),
     path('waste-type/', views.WasteType, name='Waste Type'),
+    path('profile/', views.user_profile, name='user_profile'),
     path('customers/', views.list_customers, name='Customers'),
     path('collectors/', views.list_collectors, name='Collectors'),
     path('add-waste-type/', views.create_waste, name='Add WasteType'),
@@ -51,6 +53,7 @@ urlpatterns = [
     path('delete-wallet/<int:pk>/',views.delete_wallet, name='delete_wallet'),
     path('customer/<int:user_id>/', views.view_customer, name='view_customer'),
     path('collector/<int:user_id>/', views.view_collector, name='view_collector'),
+    path('edit-personal-info/', views.edit_profile_info, name='edit_personal_info'),
     path('delete-collector/<int:user_id>/', views.delete_collector, name='delete_collector'),
     path('collection/<int:request_id>/', views.get_completed_collection, name='view_collection'),
     

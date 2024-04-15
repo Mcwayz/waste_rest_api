@@ -7,7 +7,7 @@ from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL
 
 
 
@@ -41,6 +41,7 @@ def user_logout(request):
 
 # Reset Password View
 
+
 @login_required
 def reset_password(request):
     if request.method == 'POST':
@@ -59,6 +60,51 @@ def reset_password(request):
             return redirect('login') 
 
     return render(request, 'frontend/auth/reset-password.html')
+
+
+# Views for the Profile
+
+# Profile Information
+
+
+
+def user_profile(request):
+    user = request.user
+    context = {
+        'user': user,
+    }
+    return render(request, 'frontend/profile/profile.html', context) 
+
+
+# Update Profile Information 
+
+
+def edit_profile_info(request):
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+
+        # Update user information
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.username = username
+        user.email = email
+        user.save()
+
+        # Display success message
+        messages.success(request, 'Your information has been updated successfully.')
+
+        # Redirect to profile page or any other page after updating
+        return redirect('user_profile')  # Change 'user_profile' to the name of your profile view
+    
+    return render(request, 'frontend/profile/profile.html')
+
+
+
 
 
 # Dashboard View
@@ -439,3 +485,20 @@ def delete_collector(request, user_id):
         collector_data.delete()
         return redirect('Collectors') 
     return render(request, 'frontend/collectors/delete_collector.html', {'collector_data': collector_data})
+
+
+# General Ledger
+
+def general_ledger(request):
+    ledger = WasteGL.objects.all()
+    waste_gl = []
+    for waste_ledger in ledger:
+         waste_gl = {
+            'gl_id': waste_ledger.gl_id,
+            'old_GL_balance': waste_ledger.old_GL_balance,
+            'service_charge': waste_ledger.service_charge,
+            'transaction_type': waste_ledger.transaction_type,
+            'transaction_date': waste_ledger.transaction_date,
+            'collection_id': waste_ledger.collection.collection_id
+        }
+    return render(request, 'frontend/wallet/general_ledger.html', {'waste_gl': waste_gl})

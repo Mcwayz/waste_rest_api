@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL, CollectorCommission
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
@@ -261,22 +261,28 @@ def updateCollectionRequest(request):
                     collector=collector_wallet.collector
                 )
                 
-                # Deduct the collection price and service charge from the collector's wallet balance
+                # Deduct the collection price from the collector's wallet balance
                 old_balance = collector_wallet.balance
-                new_balance = old_balance - collection_price - 2
+                new_balance = old_balance - collection_price
                 collector_wallet.balance = new_balance
                 collector_wallet.save()
                 
+                # Transfer 5% of the collection price to the collector commission
+                commission_amount = collection_price * Decimal('0.05')
+                collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
+                collector_commission.comission += commission_amount
+                collector_commission.save()
+                
                 # Fund the general Ledger
-                old_gl_balance = WasteGL.objects.latest('comission_settlement_date').new_GL_balance
+                old_gl_balance = WasteGL.objects.latest('transaction_date').new_GL_balance
                 WasteGL.objects.create(
                     transaction_type='DEPOSIT',
-                    comission_settlement_date=timezone.now(),
+                    transaction_date=timezone.now(),
                     collection=collection,
-                    service_charge=2,
+                    service_charge=2,  # Set service charge to 2
                     old_GL_balance=old_gl_balance - collection_price, 
                     new_GL_balance=old_gl_balance,  
-                    extras='Funded by completed collection'
+                    extras='Funded By Completed Collection'
                 )
                 
                 # Create a wallet history record
@@ -297,9 +303,9 @@ def updateCollectionRequest(request):
             request_to_update.save()
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
     except Requests.DoesNotExist:
-        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
-    
-    
+        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND) 
+
+
 # View General Ledger Wallet
 
 

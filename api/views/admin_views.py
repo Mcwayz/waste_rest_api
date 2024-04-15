@@ -172,9 +172,11 @@ def delete_user(request, user_id):
 
 
 
-
 # total_collections_per_month view
 
 def total_collections_per_month(request):
     
     return Response()
+
+
+
