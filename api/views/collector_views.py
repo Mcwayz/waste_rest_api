@@ -281,7 +281,7 @@ def updateCollectionRequest(request):
                     collection=collection,
                     service_charge=2,  # Set service charge to 2
                     old_GL_balance=old_gl_balance - collection_price, 
-                    new_GL_balance=old_gl_balance,  
+                    new_GL_balance=old_gl_balance - commission_amount,  
                     extras='Funded By Completed Collection'
                 )
                 
@@ -313,14 +313,14 @@ def updateCollectionRequest(request):
 def viewGeneralLedgerWallet(request):
     try:
         # Get the latest entry in WasteGL
-        latest_entry = WasteGL.objects.latest('comission_settlement_date')
+        latest_entry = WasteGL.objects.latest('transaction_date')
         transaction_history = WasteGL.objects.all()
         current_balance = latest_entry.new_GL_balance
         serialized_history = []
         for entry in transaction_history:
             serialized_entry = {
                 'transaction_type': entry.transaction_type,
-                'comission_settlement_date': entry.comission_settlement_date,
+                'transaction_date': entry.transaction_date,
                 'collection_id': entry.collection.collection_id if entry.collection else None,
                 'service_charge': entry.service_charge,
                 'old_GL_balance': entry.old_GL_balance,
