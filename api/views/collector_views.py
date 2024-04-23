@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 # GET Request Methods
 
 
-
 # Get Customer Requests
 
 @api_view(['GET'])
@@ -41,7 +40,6 @@ def get_customer_requests(request):
     return Response(serialized_requests)
 
 
-
 # Get Collector Profile
 
 
@@ -50,7 +48,6 @@ def getCollectorProfile(request, pk):
     profile = get_object_or_404(CollectorProfile, pk=pk)
     serializer = CollectorSerializer(profile)
     return Response(serializer.data)
-
 
 
 # Get Collector Profiles
@@ -113,12 +110,10 @@ def collector_data(request, wallet_id):
     return Response(serializer.data)
 
 
-
 # End Of GET Request Methods
 
 
 # POST Request Methods
-
 
 
 # Add Collection
@@ -166,7 +161,6 @@ def cancel_request(request, request_id):
     return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
 
 
-
 # Add Collector Profile
 
 
@@ -196,7 +190,6 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
 
 # Create a wallet for the collector profile
 
