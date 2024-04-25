@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import collector_views, customer_views, admin_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-# total_collections_per_month
+
+
 urlpatterns = [
     
     path('addUser/', admin_views.create_user),
