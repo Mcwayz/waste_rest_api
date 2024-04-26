@@ -5,7 +5,6 @@ from .decorators.security import superuser_required
 urlpatterns = [
     # URL accessible to all users
     path('', views.dashboard, name='Index'),
-    # URLs accessible only to authenticated super-users
     path('dashboard/', superuser_required(views.dashboard), name='Dash'),
     path('add-type/', superuser_required(views.addType), name='Add Type'),
     path('home/', superuser_required(views.dashboard), name='Admin Dashboard'),
