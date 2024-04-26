@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from base.models import Waste, CollectorProfile, Requests, Collection, Wallet, WasteGL, WalletHistory
+from base.models import Waste, CollectorProfile, Requests, Collection, Wallet
 
 
 # Waste Type Serializer
@@ -70,7 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             user.set_password(password)
             user.save()
-        return user.id  # Return just the user ID
+        return user.id 
 
 
 # Completed Task Serialiser
