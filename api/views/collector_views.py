@@ -1,6 +1,7 @@
 import json
 import logging
 from decimal import Decimal
+from django.db import transaction
 from django.utils import timezone
 from django.conf import settings
 from rest_framework import status
@@ -317,6 +318,7 @@ def updateCollectionRequest(request):
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     
 # View General Ledger Wallet
 
