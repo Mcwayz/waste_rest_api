@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL, CollectorCommission
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL, CollectorCommission, ServiceCharge
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
 
 
@@ -253,6 +253,10 @@ def updateCollectionRequest(request):
             return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # Fetch commission and service charge from the database
+            commission_rate = ServiceCharge.objects.get(service_type='Commission').service_charge
+            service_charge = ServiceCharge.objects.get(service_type='Service Charge').service_charge
+
             with transaction.atomic():
                 # Update request status
                 request_to_update.request_status = new_status
@@ -271,8 +275,8 @@ def updateCollectionRequest(request):
                 collector_wallet.balance = new_balance
                 collector_wallet.save()
 
-                # Transfer 3% of the collection price to the collector commission
-                commission_amount = collection_price * Decimal('0.03')
+                # Transfer commission amount to the collector commission
+                commission_amount = collection_price * (commission_rate / Decimal(100))
                 collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
                 collector_commission.comission += commission_amount
                 collector_commission.save()
@@ -291,9 +295,9 @@ def updateCollectionRequest(request):
                     transaction_type='DEPOSIT',
                     transaction_date=timezone.now(),
                     collection=collection,
-                    service_charge=3.0,
+                    service_charge=service_charge,
                     old_GL_balance=old_gl_balance,
-                    new_GL_balance=new_gl_balance_after_commission - Decimal('3.0'),
+                    new_GL_balance=new_gl_balance_after_commission - service_charge,
                     extras='Funded By Completed Collection'
                 )
 
@@ -318,7 +322,6 @@ def updateCollectionRequest(request):
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
     
 # View General Ledger Wallet
 
