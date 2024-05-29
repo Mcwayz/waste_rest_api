@@ -1,0 +1,18 @@
+[
+    {
+        "model": "base.servicecharge",
+        "pk": 1,
+        "fields": {
+            "service_type": "Collection",
+            "service_charge": "3.0"
+        }
+    },
+    {
+        "model": "base.servicecharge",
+        "pk": 2,
+        "fields": {
+            "service_type": "Commission",
+            "service_charge": "0.03"
+        }
+    }
+]

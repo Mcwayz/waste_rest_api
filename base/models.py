@@ -121,5 +121,12 @@ class WasteGL(models.Model):
     old_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     new_GL_balance = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
     extras = models.CharField(max_length=100, default="None")
+    
 
-     
+class ServiceCharge(models.Model):
+    service_id = models.AutoField(primary_key=True)
+    service_type = models.CharField(max_length=100)
+    service_charge = models.DecimalField(max_digits=65, decimal_places=2, default=Decimal(0.0))
+
+    def __str__(self):
+        return self.service_type
