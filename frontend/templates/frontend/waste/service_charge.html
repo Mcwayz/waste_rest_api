@@ -515,7 +515,6 @@
 <!-- [ Main Content ] start -->
 <section class="pc-container">
     <div class="pc-content">
-
       <!-- [ breadcrumb ] start -->
       <div class="page-header">
         <div class="page-block">
@@ -524,12 +523,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Edit Waste Type</li>
+                <li class="breadcrumb-item" aria-current="page">Service Charge Management</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Edit Waste Type</h2>
+                <h2 class="mb-0">Management</h2>
               </div>
             </div>
           </div>
@@ -538,58 +537,53 @@
       <!-- [ breadcrumb ] end -->
 
 
-<!-- [ Main Content ] start -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
+      <!-- [ Main Content ] start -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
             <div class="card-header">
-                <h5>Edit Type</h5>
+              <h5>Manage Services</h5>
             </div>
             <div class="card-body">
 
-                <form method="POST">
+                <form method="POST" action="{% url 'Add WasteType' %}">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom01">Waste Type</label>
-                            <input type="text" class="form-control" id="validationCustom01" name="waste_type" value="{{ waste.waste_type }}" placeholder="Waste Type" required>
+                            <label class="form-label" for="validationCustom01">Service Type</label>
+                            <input type="text" class="form-control" id="validationCustom01" name="waste_type" placeholder="Waste Type" required>
                             <div class="valid-feedback"> Looks good! </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom02">Collection Price</label>
-                            <input type="number" class="form-control" id="validationCustom02" name="collection_price" value="{{ waste.collection_price }}" placeholder="Price" required>
+                            <label class="form-label" for="validationCustom02">Service Charge</label>
+                            <input type="number" class="form-control" id="validationCustom02" name="collection_price" placeholder="Service Charge" required>
                             <div class="valid-feedback"> Looks good! </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="validationCustom03">Waste Type Description</label>
-                            <input type="text" class="form-control" id="validationCustom03" name="waste_desc" value="{{ waste.waste_desc }}" placeholder="Description" required>
-                            <div class="invalid-feedback"> Please provide a valid description. </div>
-                        </div>
                     </div>
-
-                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                    <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
+                
 
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                <script>
-                    $(document).ready(function() {
-                        // Check if the URL has an 'alert' parameter with the value 'success'
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const alertParam = urlParams.get('alert');
-                        if (alertParam === 'success') {
-                            alert('Waste Type Updated Successfully!');
-                        }
-                    });
-                </script>
+              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+              <script>
+                  $(document).ready(function() {
+                      // Check if the URL has an 'alert' parameter with the value 'success'
+                      const urlParams = new URLSearchParams(window.location.search);
+                      const alertParam = urlParams.get('alert');
+                      if (alertParam === 'success') {
+                          alert('Charge Created Successfully!');
+                      }
+                  });
+              </script>
             </div>
+          </div>
         </div>
+        <!-- [ form-element ] end -->
+      </div>
     </div>
-    <!-- [ form-element ] end -->
-</div>
-</div>
-</section>
-<!-- [ Main Content ] end -->
-
+    <!-- [ Main Content ] end -->
+  </section>
+  <!-- [ Main Content ] end -->
 
 
 

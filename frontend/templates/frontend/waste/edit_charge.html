@@ -42,7 +42,6 @@
     </div>
     <!-- [ Pre-loader ] End -->
 
-
     <!-- [ Sidebar Menu ] start -->
     <nav class="pc-sidebar">
       <div class="navbar-wrapper">
@@ -139,23 +138,12 @@
                     <use xlink:href="#custom-story"></use>
                   </svg>
                 </span>
-                <span class="pc-mtext">Waste Types</span>
+                <span class="pc-mtext">Waste Type</span>
               </a>
             </li>
 
-            <li class="pc-item">
-                <a href="/service-charges" class="pc-link">
-                  <span class="pc-micon">
-                    <svg class="pc-icon">
-                      <use xlink:href="#custom-story"></use>
-                    </svg>
-                  </span>
-                  <span class="pc-mtext">Service Charge</span>
-                </a>
-              </li>
-
             <li class="pc-item pc-caption">
-              <label>Service Charges</label>
+              <label>User / Wallet Management</label>
               <i class="ti ti-dashboard"></i>
             </li>
 
@@ -524,12 +512,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Edit Waste Type</li>
+                <li class="breadcrumb-item" aria-current="page">Edit Service Charge</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Edit Waste Type</h2>
+                <h2 class="mb-0">Edit Service Charge</h2>
               </div>
             </div>
           </div>
@@ -543,7 +531,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5>Edit Type</h5>
+                <h5>Edit Charge</h5>
             </div>
             <div class="card-body">
 
@@ -551,19 +539,14 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom01">Waste Type</label>
+                            <label class="form-label" for="validationCustom01">Service Type</label>
                             <input type="text" class="form-control" id="validationCustom01" name="waste_type" value="{{ waste.waste_type }}" placeholder="Waste Type" required>
                             <div class="valid-feedback"> Looks good! </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom02">Collection Price</label>
+                            <label class="form-label" for="validationCustom02">Service Charge</label>
                             <input type="number" class="form-control" id="validationCustom02" name="collection_price" value="{{ waste.collection_price }}" placeholder="Price" required>
                             <div class="valid-feedback"> Looks good! </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="validationCustom03">Waste Type Description</label>
-                            <input type="text" class="form-control" id="validationCustom03" name="waste_desc" value="{{ waste.waste_desc }}" placeholder="Description" required>
-                            <div class="invalid-feedback"> Please provide a valid description. </div>
                         </div>
                     </div>
 
