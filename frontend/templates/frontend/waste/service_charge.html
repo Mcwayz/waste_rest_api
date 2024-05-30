@@ -564,6 +564,8 @@
                 </form>
                 
 
+
+
               <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
               <script>
                   $(document).ready(function() {
@@ -576,14 +578,66 @@
                   });
               </script>
             </div>
-          </div>
+
         </div>
         <!-- [ form-element ] end -->
+
+
+
+        <div class="card">
+            <div class="card-header">
+              <h5>Service Types</h5>
+              <span class="d-block m-t-5">Below Is a List Of Service Types</span>
+            </div>
+            <div class="card-body table-border-style">
+              <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
+              <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
+              <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
+              <button class="btn btn-light-primary btn-sm json">Export JSON</button>
+              <br>
+              <br>
+              <div class="table-responsive">
+                
+                <table class="table" id="pc-dt-export">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Service Type</th>
+                      <th>Service Charge</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for service_charges in service_charge %}
+                    <tr>
+                      <td>{{ service_charges.service_id }}</td>
+                      <td>{{ service_charges.service_type }}</td>
+                      <td>{{ service_charges.service_charge }}</td>
+                      <td>
+                        <a href="{% url 'edit_waste' service_charges.service_id %}">Edit</a> -
+                        <a href="{% url 'delete_waste' service_charges.service_id %}">Delete</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+
+
+      </div>
+
+
       </div>
     </div>
     <!-- [ Main Content ] end -->
+
   </section>
   <!-- [ Main Content ] end -->
+
+  
 
 
 
