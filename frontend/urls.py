@@ -43,6 +43,7 @@ urlpatterns = [
     path('collectors/', views.list_collectors, name='Collectors'),
     path('add-waste-type/', views.create_waste, name='Add WasteType'),
     path('reset-password/', views.reset_password, name='reset_password'),
+    path('service-charges/', views.ServiceConfigs, name='Service Configs'),
     path('edit-waste-type/<int:pk>/', views.edit_waste, name='edit_waste'),
     path('wallet/<int:wallet_id>/', views.view_wallet, name='view_wallet'),
     path('wallets/', views.get_collector_wallets, name='Collector Wallets'), 

@@ -6,7 +6,7 @@ from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL, ServiceCharge
 
 
 
@@ -228,6 +228,13 @@ def WasteType(request):
     waste_types = Waste.objects.all()
     return render(request, 'frontend/waste/waste_type.html', {'waste_types': waste_types})
 
+
+# Service Configs
+
+
+def ServiceConfigs(request):
+    service_charge = ServiceCharge.objects.all()
+    return render(request, 'frontend/waste/service_charge.html', {'service_charge': service_charge})
 
 
 # Completed Collections
