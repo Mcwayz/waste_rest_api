@@ -42,202 +42,214 @@
     </div>
     <!-- [ Pre-loader ] End -->
 
-        <!-- [ Sidebar Menu ] start -->
-        <nav class="pc-sidebar">
-          <div class="navbar-wrapper">
-            <div class="m-header">
-              <a href="#" class="b-brand text-primary">
-                <!-- ========   Change your logo from here   ============ -->
-                <img src="{% static 'assets/images/logo-dark.svg' %}" />
-                <span
-                  class="badge bg-light-success rounded-pill ms-2 theme-version"
-                ></span>
-              </a>
-            </div>
-            <div class="navbar-content">
-              <div class="card pc-user-card">
-                <div class="card-body">
-                  <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                      <img
-                        src="{% static 'assets/images/user/avatar-1.jpg' %}"
-                        alt="user-image"
-                        class="user-avtar wid-45 rounded-circle"
-                      />
-                    </div>
-    
-                    <div class="flex-grow-1 ms-3 me-2">
-                      <h6 class="mb-0">{{user.first_name}} {{user.last_name}}</h6>
-                      <small>Administrator</small>
-                    </div>
-                    <a
-                      class="btn btn-icon btn-link-secondary avtar-s"
-                      data-bs-toggle="collapse"
-                      href="#pc_sidebar_userlink"
-                    >
-                      <svg class="pc-icon">
-                        <use xlink:href="#custom-sort-outline"></use>
-                      </svg>
-                    </a>
-                  </div>
-                  <div class="collapse pc-user-links" id="pc_sidebar_userlink">
-                    <div class="pt-3">
-                      <a href="#!">
-                        <i class="ti ti-user"></i>
-                        <span>My Account</span>
-                      </a>
-                      <a href="#!">
-                        <i class="ti ti-settings"></i>
-                        <span>Settings</span>
-                      </a>
-                      <a href="#!">
-                        <i class="ti ti-lock"></i>
-                        <span>Lock Screen</span>
-                      </a>
-                      <a href="{% url 'logout' %}">
-                        <i class="ti ti-power"></i>
-                        <span>Logout</span>
-                      </a>
-                    </div>
-                  </div>
+
+    <!-- [ Sidebar Menu ] start -->
+    <nav class="pc-sidebar">
+      <div class="navbar-wrapper">
+        <div class="m-header">
+          <a href="#" class="b-brand text-primary">
+            <!-- ========   Change your logo from here   ============ -->
+            <img src="{% static 'assets/images/logo-dark.svg' %}" />
+            <span
+              class="badge bg-light-success rounded-pill ms-2 theme-version"
+            ></span>
+          </a>
+        </div>
+        <div class="navbar-content">
+          <div class="card pc-user-card">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    src="{% static 'assets/images/user/avatar-1.jpg' %}"
+                    alt="user-image"
+                    class="user-avtar wid-45 rounded-circle"
+                  />
+                </div>
+
+                <div class="flex-grow-1 ms-3 me-2">
+                  <h6 class="mb-0">{{user.first_name}} {{user.last_name}}</h6>
+                  <small>Administrator</small>
+                </div>
+                <a
+                  class="btn btn-icon btn-link-secondary avtar-s"
+                  data-bs-toggle="collapse"
+                  href="#pc_sidebar_userlink"
+                >
+                  <svg class="pc-icon">
+                    <use xlink:href="#custom-sort-outline"></use>
+                  </svg>
+                </a>
+              </div>
+              <div class="collapse pc-user-links" id="pc_sidebar_userlink">
+                <div class="pt-3">
+                  <a href="#!">
+                    <i class="ti ti-user"></i>
+                    <span>My Account</span>
+                  </a>
+                  <a href="#!">
+                    <i class="ti ti-settings"></i>
+                    <span>Settings</span>
+                  </a>
+                  <a href="#!">
+                    <i class="ti ti-lock"></i>
+                    <span>Lock Screen</span>
+                  </a>
+                  <a href="{% url 'logout' %}">
+                    <i class="ti ti-power"></i>
+                    <span>Logout</span>
+                  </a>
                 </div>
               </div>
-    
-              <ul class="pc-navbar">
-                <li class="pc-item pc-caption">
-                  <label>Navigation</label>
-                  <i class="ti ti-dashboard"></i>
-                </li>
-                <li class="pc-item pc-hasmenu">
-                  <a href="#!" class="pc-link">
-                    <span class="pc-micon">
-                      <svg class="pc-icon">
-                        <use xlink:href="#custom-status-up"></use>
-                      </svg>
-                    </span>
-                    <span class="pc-mtext">Home</span
-                    ><span class="pc-arrow"
-                      ><i data-feather="chevron-right"></i
-                    ></span>
-                  </a>
-                  <ul class="pc-submenu">
-                    <li class="pc-item">
-                      <a class="pc-link" href="/dashboard">Dashboard</a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="pc-item pc-caption">
-                  <label>Waste Management</label>
-                  <i class="ti ti-chart-arcs"></i>
-                </li>
-    
-                <li class="pc-item">
-                  <a href="/waste-type" class="pc-link">
-                    <span class="pc-micon">
-                      <svg class="pc-icon">
-                        <use xlink:href="#custom-story"></use>
-                      </svg>
-                    </span>
-                    <span class="pc-mtext">Waste Type</span>
-                  </a>
-                </li>
-    
-                <li class="pc-item pc-caption">
-                  <label>User / Wallet Management</label>
-                  <i class="ti ti-dashboard"></i>
-                </li>
-    
-                <li class="pc-item">
-                  <a href="/collectors" class="pc-link">
-                    <span class="pc-micon">  <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
-                      </span><span class="pc-mtext">Collectors</span></a >
-                </li>
-    
-                <li class="pc-item">
-                  <a href="/customers" class="pc-link">
-                    <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
-                      </span><span class="pc-mtext">Customers</span></a >
-                </li>
-    
-                <li class="pc-item">
-                  <a href="/wallets" class="pc-link">
-                    <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
-                      </span><span class="pc-mtext">Wallets</span></a >
-                </li>
-    
-                <li class="pc-item">
-                  <a href="/ledger" class="pc-link">
-                    <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
-                      </span><span class="pc-mtext">General Ledger</span></a >
-                </li>
-    
-                <li class="pc-item pc-caption">
-                  <label>Collections Data</label>
-                  <i class="ti ti-forms"></i>
-                </li>
-    
-    
-                <li class="pc-item pc-hasmenu">
-                  <a href="#!" class="pc-link">
-                    <span class="pc-micon">
-                      <svg class="pc-icon">
-                        <use xlink:href="#custom-element-plus"></use>
-                      </svg>
-                    </span>
-                    <span class="pc-mtext">Collections</span
-                    ><span class="pc-arrow"
-                      ><i data-feather="chevron-right"></i></span
-                  ></a>
-    
-                  <ul class="pc-submenu">
-                    <li class="pc-item">
-                      <a class="pc-link" href="/collections"
-                        >Collections</a
-                      >
-                    </li>
-    
-                    <li class="pc-item">
-                      <a class="pc-link" href="/requests"
-                        >Requests</a
-                      >
-                    </li>
-                  </ul>
-    
-                </li>
-    
-                
-                <li class="pc-item pc-caption">
-                  <label>Profile Settings</label>
-                  <i class="ti ti-layout-kanban"></i>
-                </li>
-    
-                <li class="pc-item pc-hasmenu">
-                  <a href="#!" class="pc-link">
-                    <span class="pc-micon">
-                      <svg class="pc-icon">
-                        <use xlink:href="#custom-shopping-bag"></use>
-                      </svg>
-                    </span>
-                    <span class="pc-mtext">Profile</span
-                    ><span class="pc-arrow"
-                      ><i data-feather="chevron-right"></i></span
-                  ></a>
-                  <ul class="pc-submenu">
-                    <li class="pc-item">
-                      <a class="pc-link" href="{% url 'user_profile' %}"
-                        >My Profile</a
-                      >
-                    </li>
-                    
-    
-                  </ul>
-                </li>
-    
-              </ul>
             </div>
           </div>
-        </nav>
-        <!-- [ Sidebar Menu ] end -->
+
+          <ul class="pc-navbar">
+            <li class="pc-item pc-caption">
+              <label>Navigation</label>
+              <i class="ti ti-dashboard"></i>
+            </li>
+            <li class="pc-item pc-hasmenu">
+              <a href="#!" class="pc-link">
+                <span class="pc-micon">
+                  <svg class="pc-icon">
+                    <use xlink:href="#custom-status-up"></use>
+                  </svg>
+                </span>
+                <span class="pc-mtext">Home</span
+                ><span class="pc-arrow"
+                  ><i data-feather="chevron-right"></i
+                ></span>
+              </a>
+              <ul class="pc-submenu">
+                <li class="pc-item">
+                  <a class="pc-link" href="/dashboard">Dashboard</a>
+                </li>
+              </ul>
+            </li>
+            <li class="pc-item pc-caption">
+              <label>Waste Management</label>
+              <i class="ti ti-chart-arcs"></i>
+            </li>
+
+            <li class="pc-item">
+              <a href="/waste-type" class="pc-link">
+                <span class="pc-micon">
+                  <svg class="pc-icon">
+                    <use xlink:href="#custom-story"></use>
+                  </svg>
+                </span>
+                <span class="pc-mtext">Waste Types</span>
+              </a>
+            </li>
+
+            <li class="pc-item">
+                <a href="/service-charges" class="pc-link">
+                  <span class="pc-micon">
+                    <svg class="pc-icon">
+                      <use xlink:href="#custom-story"></use>
+                    </svg>
+                  </span>
+                  <span class="pc-mtext">Service Configs</span>
+                </a>
+              </li>
+
+            <li class="pc-item pc-caption">
+              <label>Modules</label>
+              <i class="ti ti-dashboard"></i>
+            </li>
+
+            <li class="pc-item">
+              <a href="/collectors" class="pc-link">
+                <span class="pc-micon">  <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
+                  </span><span class="pc-mtext">Collectors</span></a >
+            </li>
+
+            <li class="pc-item">
+              <a href="/customers" class="pc-link">
+                <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
+                  </span><span class="pc-mtext">Customers</span></a >
+            </li>
+
+            <li class="pc-item">
+              <a href="/wallets" class="pc-link">
+                <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
+                  </span><span class="pc-mtext">Wallets</span></a >
+            </li>
+
+            <li class="pc-item">
+              <a href="/ledger" class="pc-link">
+                <span class="pc-micon">   <svg class="pc-icon"> <use xlink:href="#custom-box-1"></use> </svg> 
+                  </span><span class="pc-mtext">General Ledger</span></a >
+            </li>
+
+            <li class="pc-item pc-caption">
+              <label>Collections Data</label>
+              <i class="ti ti-forms"></i>
+            </li>
+
+
+            <li class="pc-item pc-hasmenu">
+              <a href="#!" class="pc-link">
+                <span class="pc-micon">
+                  <svg class="pc-icon">
+                    <use xlink:href="#custom-element-plus"></use>
+                  </svg>
+                </span>
+                <span class="pc-mtext">Collections</span
+                ><span class="pc-arrow"
+                  ><i data-feather="chevron-right"></i></span
+              ></a>
+
+              <ul class="pc-submenu">
+                <li class="pc-item">
+                  <a class="pc-link" href="/collections"
+                    >Collections</a
+                  >
+                </li>
+
+                <li class="pc-item">
+                  <a class="pc-link" href="/requests"
+                    >Requests</a
+                  >
+                </li>
+              </ul>
+
+            </li>
+
+            
+            <li class="pc-item pc-caption">
+              <label>Profile Settings</label>
+              <i class="ti ti-layout-kanban"></i>
+            </li>
+
+            <li class="pc-item pc-hasmenu">
+              <a href="#!" class="pc-link">
+                <span class="pc-micon">
+                  <svg class="pc-icon">
+                    <use xlink:href="#custom-shopping-bag"></use>
+                  </svg>
+                </span>
+                <span class="pc-mtext">Profile</span
+                ><span class="pc-arrow"
+                  ><i data-feather="chevron-right"></i></span
+              ></a>
+              <ul class="pc-submenu">
+                <li class="pc-item">
+                  <a class="pc-link" href="{% url 'user_profile' %}"
+                    >My Profile</a
+                  >
+                </li>
+                
+
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- [ Sidebar Menu ] end -->
 
      <!-- [ Header Topbar ] start -->
     <header class="pc-header">
