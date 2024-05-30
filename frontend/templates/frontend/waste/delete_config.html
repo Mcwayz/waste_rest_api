@@ -551,7 +551,7 @@
                 <p><strong>Service Type:</strong> {{ service.service_type }}</p>
                 <p><strong>Service Charge:</strong> {{ service.service_charge }}</p>
 
-                <form action="{% url 'delete_config' service.pk %}" method="post">
+                <form action="{% url 'delete_service' service.pk %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" type="submit">Confirm Delete</button>
                 </form>

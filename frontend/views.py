@@ -229,6 +229,18 @@ def WasteType(request):
     return render(request, 'frontend/waste/waste_type.html', {'waste_types': waste_types})
 
 
+# Create Service Configs
+
+def add_service(request):
+    if request.method == 'POST':
+        form = ChargeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('Service Configs') + '?alert=success')
+    else:
+        form = ChargeForm()
+    return render(request, 'frontend/waste/service_charge.html', {'form': form})
+
 # Service Configs
 
 
