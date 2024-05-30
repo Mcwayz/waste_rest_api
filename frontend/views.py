@@ -535,7 +535,7 @@ def general_ledger(request):
     total_value = 0
     waste_gl = []
     for waste_ledger in ledger:
-        total_value += waste_ledger.new_GL_balance
+        total_value = waste_ledger.new_GL_balance
         entry = {
             'gl_id': waste_ledger.gl_id,
             'extras': waste_ledger.extras,

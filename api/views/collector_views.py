@@ -254,6 +254,104 @@ def updateCollectionRequest(request):
 
         try:
             # Fetch commission and service charge from the database
+            try:
+                commission_rate = ServiceCharge.objects.get(service_type='Commission').service_charge
+            except ServiceCharge.DoesNotExist:
+                return Response({"Message": "Commission rate not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            try:
+                service_charge = ServiceCharge.objects.get(service_type='Service Charge').service_charge
+            except ServiceCharge.DoesNotExist:
+                return Response({"Message": "Service charge not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            with transaction.atomic():
+                # Update request status
+                request_to_update.request_status = new_status
+                request_to_update.save()
+
+                # Create a new collection record
+                collection = Collection.objects.create(
+                    collection_date=timezone.now(),
+                    request=request_to_update,
+                    collector=collector_wallet.collector
+                )
+
+                # Deduct the collection price from the collector's wallet balance
+                old_balance = collector_wallet.balance
+                new_balance = old_balance - collection_price
+                collector_wallet.balance = new_balance
+                collector_wallet.save()
+
+                # Transfer commission amount to the collector commission
+                commission_amount = collection_price * (commission_rate / Decimal(100))
+                collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
+                collector_commission.comission += commission_amount
+                collector_commission.save()
+
+                try:
+                    latest_entry = WasteGL.objects.latest('transaction_date')
+                    old_gl_balance = latest_entry.new_GL_balance
+                except WasteGL.DoesNotExist:
+                    old_gl_balance = Decimal('0.0')
+
+                new_gl_balance = old_gl_balance + collection_price
+                new_gl_balance_after_commission = new_gl_balance - commission_amount
+
+                # Fund the general Ledger
+                WasteGL.objects.create(
+                    transaction_type='DEPOSIT',
+                    transaction_date=timezone.now(),
+                    collection=collection,
+                    service_charge=service_charge,
+                    old_GL_balance=old_gl_balance,
+                    new_GL_balance=new_gl_balance_after_commission - service_charge,
+                    extras='Funded By Completed Collection'
+                )
+
+                # Create a wallet history record
+                WalletHistory.objects.create(
+                    transaction_type='Debit',
+                    transaction_date=timezone.now(),
+                    wallet=collector_wallet,
+                    old_wallet_balance=old_balance,
+                    new_wallet_balance=new_balance,
+                    transaction_amount=collection_price
+                )
+
+                return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    else:
+        try:
+            request_to_update.request_status = new_status
+            request_to_update.save()
+            return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    request_id = request.data.get('request_id')
+    collector_id = request.data.get('collector_id')
+    new_status = request.data.get('status')
+
+    try:
+        request_to_update = Requests.objects.get(pk=request_id)
+    except Requests.DoesNotExist:
+        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        collector_wallet = Wallet.objects.get(collector__collector_id=collector_id)
+    except Wallet.DoesNotExist:
+        return Response({"Message": "Collector Wallet Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if new_status == 'Complete':
+        collection_price = request_to_update.collection_price
+        wallet_balance = collector_wallet.balance
+
+        if collection_price > wallet_balance:
+            return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch commission and service charge from the database
             commission_rate = ServiceCharge.objects.get(service_type='Commission').service_charge
             service_charge = ServiceCharge.objects.get(service_type='Service Charge').service_charge
 
