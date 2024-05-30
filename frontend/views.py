@@ -1,8 +1,8 @@
 from datetime import datetime
-from .forms import WasteForm
 from django.urls import reverse
 from django.contrib import messages
 from collections import defaultdict
+from .forms import WasteForm, ChargeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -235,6 +235,33 @@ def WasteType(request):
 def ServiceConfigs(request):
     service_charge = ServiceCharge.objects.all()
     return render(request, 'frontend/waste/service_charge.html', {'service_charge': service_charge})
+
+
+
+# Edit Service Charge Type
+
+
+def edit_charge(request, pk):
+    service = get_object_or_404(ServiceCharge, pk=pk)
+    if request.method == 'POST':
+        form = ChargeForm(request.POST, instance=service)
+        if form.is_valid():
+            form.save()
+            return redirect('Service Configs')
+    else:
+        form = ChargeForm(instance=service)
+    return render(request, 'frontend/waste/edit_charge.html', {'form': form, 'service': service})
+
+
+# Delete Service Type
+
+
+def delete_service(request, pk):
+    service = get_object_or_404(ServiceCharge, pk=pk)
+    if request.method == 'POST':
+        service.delete()
+        return redirect('Service Configs') 
+    return render(request, 'frontend/waste/delete_config.html', {'service': service})
 
 
 # Completed Collections

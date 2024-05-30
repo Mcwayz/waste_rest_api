@@ -45,13 +45,17 @@ urlpatterns = [
     path('reset-password/', views.reset_password, name='reset_password'),
     path('service-charges/', views.ServiceConfigs, name='Service Configs'),
     path('edit-waste-type/<int:pk>/', views.edit_waste, name='edit_waste'),
+    path('edit-service/<int:pk>/', views.edit_charge, name='edit_service'),
     path('wallet/<int:wallet_id>/', views.view_wallet, name='view_wallet'),
     path('wallets/', views.get_collector_wallets, name='Collector Wallets'), 
     path('requests/', views.get_customer_requests, name='Pending Requests'),
     path('delete-waste/<int:pk>/', views.delete_waste, name='delete_waste'),
+
     path('collections/', views.get_completed_collections, name='Collections'),
     path('delete-wallet/<int:pk>/',views.delete_wallet, name='delete_wallet'),
     path('customer/<int:user_id>/', views.view_customer, name='view_customer'),
+    path('delete-service/<int:pk>/', views.delete_service, name='delete_service'),
+    
     path('collector/<int:user_id>/', views.view_collector, name='view_collector'),
     path('edit-personal-info/', views.edit_profile_info, name='edit_personal_info'),
     path('delete-collector/<int:user_id>/', views.delete_collector, name='delete_collector'),

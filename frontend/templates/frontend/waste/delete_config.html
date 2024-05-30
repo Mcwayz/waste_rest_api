@@ -251,7 +251,6 @@
     </nav>
     <!-- [ Sidebar Menu ] end -->
 
-
      <!-- [ Header Topbar ] start -->
     <header class="pc-header">
         <div class="header-wrapper">
@@ -515,6 +514,7 @@
 <!-- [ Main Content ] start -->
 <section class="pc-container">
     <div class="pc-content">
+
       <!-- [ breadcrumb ] start -->
       <div class="page-header">
         <div class="page-block">
@@ -523,12 +523,12 @@
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
-                <li class="breadcrumb-item" aria-current="page">Service Charge Management</li>
+                <li class="breadcrumb-item" aria-current="page">Delete Service Type</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Management</h2>
+                <h2 class="mb-0">Delete Configured Service</h2>
               </div>
             </div>
           </div>
@@ -537,110 +537,33 @@
       <!-- [ breadcrumb ] end -->
 
 
-      <!-- [ Main Content ] start -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h5>Manage Services</h5>
-            </div>
-            <div class="card-body">
+<!-- [ Main Content ] start -->
 
-                <form method="POST" action="{% url 'Add WasteType' %}">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom01">Service Type</label>
-                            <input type="text" class="form-control" id="validationCustom01" name="service_type" placeholder="Service Type" required>
-                            <div class="valid-feedback"> Looks good! </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="validationCustom02">Service Charge</label>
-                            <input type="number" class="form-control" id="validationCustom02" name="service_charge" placeholder="Service Charge" required>
-                            <div class="valid-feedback"> Looks good! </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                </form>
-                
-
-
-
-              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-              <script>
-                  $(document).ready(function() {
-                      // Check if the URL has an 'alert' parameter with the value 'success'
-                      const urlParams = new URLSearchParams(window.location.search);
-                      const alertParam = urlParams.get('alert');
-                      if (alertParam === 'success') {
-                          alert('Charge Created Successfully!');
-                      }
-                  });
-              </script>
-            </div>
-
-        </div>
-        <!-- [ form-element ] end -->
-
-
-
+<div class="row">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-              <h5>Service Types</h5>
-              <span class="d-block m-t-5">Below Is a List Of Service Types</span>
+                <h3>Delete Service Type</h3>
             </div>
-            <div class="card-body table-border-style">
-              <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
-              <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
-              <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
-              <button class="btn btn-light-primary btn-sm json">Export JSON</button>
-              <br>
-              <br>
-              <div class="table-responsive">
-                
-                <table class="table" id="pc-dt-export">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Service Type</th>
-                      <th>Service Charge</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for service_charges in service_charge %}
-                    <tr>
-                      <td>{{ service_charges.service_id }}</td>
-                      <td>{{ service_charges.service_type }}</td>
-                      <td>{{ service_charges.service_charge }}</td>
-                      <td>
-                        <a href="{% url 'edit_service' service_charges.service_id %}">Edit</a> -
-                        <a href="{% url 'delete_service' service_charges.service_id %}">Delete</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                
-              </div>
+            <div class="card-body">
+                <h4>Are you sure you want to delete the following service charge type?</h4>
+                <p><strong>Service ID:</strong> {{ service.service_id }}</p>
+                <p><strong>Service Type:</strong> {{ service.service_type }}</p>
+                <p><strong>Service Charge:</strong> {{ service.service_charge }}</p>
+
+                <form action="{% url 'delete_config' service.pk %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Confirm Delete</button>
+                </form>
             </div>
-          </div>
-
-
-      </div>
-
-
-      </div>
+        </div>
     </div>
-    <!-- [ Main Content ] end -->
+    <!-- [ form-element ] end -->
+</div>
+</div>
+</section>
 
-  </section>
-  <!-- [ Main Content ] end -->
-
-  
-
-
-
+<!-- [ Main Content ] end -->
 
 
 <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
