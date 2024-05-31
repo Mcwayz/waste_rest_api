@@ -1,0 +1,38 @@
+[
+    {
+        "model": "base.waste",
+        "pk": 1,
+        "fields": {
+            "waste_type": "Domestic Waste",
+            "waste_desc": "Waste generated from households and residential areas. This includes materials such as food scraps, paper, cardboard, plastics, and other general household items.",
+            "collection_price": "40.00"
+        }
+    },
+    {
+        "model": "base.waste",
+        "pk": 2,
+        "fields": {
+            "waste_type": "Construction Waste",
+            "waste_desc": "Waste generated from construction, renovation, demolition, or deconstruction activities. This includes materials such as concrete, wood, and other building materials.",
+            "collection_price": "200.00"
+        }
+    },
+    {
+        "model": "base.waste",
+        "pk": 3,
+        "fields": {
+            "waste_type": "Septic Waste",
+            "waste_desc": "Waste from septic systems, including human waste, wastewater, and organic matter. Proper disposal of septic waste is essential to prevent contamination of water sources and the spread of diseases.",
+            "collection_price": "300.00"
+        }
+    },
+    {
+        "model": "base.waste",
+        "pk": 4,
+        "fields": {
+            "waste_type": "Organic Waste",
+            "waste_desc": "Biodegradable waste from plant or animal sources. This includes food scraps, yard waste, and other organic materials. Organic waste can be composted to produce nutrient-rich soil.",
+            "collection_price": "50.00"
+        }
+    }
+]

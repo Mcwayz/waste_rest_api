@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import collector_views, customer_views, admin_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-# total_collections_per_month
+
+
 urlpatterns = [
     
     path('addUser/', admin_views.create_user),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('updateRequest/', collector_views.updateCollectionRequest),
     path('customerRequests/', collector_views.get_customer_requests),
     path('addCustomerProfile/', customer_views.create_user_and_profile),
+    path('completeCollection/', collector_views.updateCollectionRequest),
     path('completedCollections/', admin_views.get_completed_collections),
     path('addCollectorProfile/', collector_views.create_user_and_profile),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

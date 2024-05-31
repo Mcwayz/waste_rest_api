@@ -251,7 +251,6 @@
     </nav>
     <!-- [ Sidebar Menu ] end -->
 
-
      <!-- [ Header Topbar ] start -->
     <header class="pc-header">
         <div class="header-wrapper">
@@ -502,7 +501,6 @@
                           >Logout
                         </button>
                       </div>
-                      
                     </div>
                   </div>
                 </div>
@@ -511,12 +509,12 @@
           </div>
         </div>
       </header>
-
+  
       <!-- [ Header ] end -->
-
- <!-- [ Main Content ] start -->
- <section class="pc-container">
+<!-- [ Main Content ] start -->
+<section class="pc-container">
     <div class="pc-content">
+
       <!-- [ breadcrumb ] start -->
       <div class="page-header">
         <div class="page-block">
@@ -524,14 +522,13 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Collectors</a></li>
-                <li class="breadcrumb-item" aria-current="page">Collector Details</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Waste</a></li>
+                <li class="breadcrumb-item" aria-current="page">Edit Service Charge</li>
               </ul>
             </div>
-            <br>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Collector</h2>
+                <h2 class="mb-0">Edit Service Charge</h2>
               </div>
             </div>
           </div>
@@ -539,50 +536,57 @@
       </div>
       <!-- [ breadcrumb ] end -->
 
+
 <!-- [ Main Content ] start -->
-<div class="row justify-content-center">
-    <div class="col-md-8">
+<div class="row">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Collector's Profile Details</h3>
+                <h5>Edit Charge</h5>
             </div>
-
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
 
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>User ID:</strong> {{ collector_data.user_id }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's First Name:</strong> {{ collector_data.first_name }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Last Name:</strong> {{ collector_data.last_name }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Username:</strong> {{ collector_data.username }}</span>
-                        <hr class="border border-primary-subtle" />
-
-                    </div>
-
-                    <div class="col-md-6">
-                      <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Email:</strong> {{ collector_data.email }}</span>
-                      <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Vehicle:</strong> {{ collector_data.vehicle }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Waste Type:</strong> {{ collector_data.waste_type }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Work Area:</strong> {{ collector_data.work_area }}</span>
-                        <hr class="border border-primary-subtle" />
-                    </div>
-                </div>
-                <form action="{% url 'Collectors' %}" method="post">
+                <form method="POST">
                     {% csrf_token %}
-                    <button class="btn btn-primary mt-4" type="submit">Back</button>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="validationCustom01">Service Type</label>
+                            <input type="text" class="form-control" id="validationCustom01" name="service_type" value="{{ service.service_type }}" placeholder="Service Type" required>
+                            <div class="valid-feedback"> Looks good! </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="validationCustom02">Service Charge</label>
+                            <input type="number" class="form-control" id="validationCustom02" name="service_charge" value="{{ service.service_charge }}" placeholder="Service Charge" required>
+                            <div class="valid-feedback"> Looks good! </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
                 </form>
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Check if the URL has an 'alert' parameter with the value 'success'
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const alertParam = urlParams.get('alert');
+                        if (alertParam === 'success') {
+                            alert('Waste Type Updated Successfully!');
+                        }
+                    });
+                </script>
             </div>
         </div>
     </div>
+    <!-- [ form-element ] end -->
 </div>
 </div>
 </section>
+<!-- [ Main Content ] end -->
+
+
+
+
 
 
 <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
@@ -594,41 +598,5 @@
 <script src="{% static 'assets/js/config.js' %}"></script>
 <script src="{% static 'assets/js/pcoded.js' %}"></script>
 <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
-
-<!-- [Page Specific JS] start -->
-
-<script  src="{% static 'assets/js/plugins/simple-datatables.js' %}"></script>
-<script>
-  const table = new simpleDatatables.DataTable('#pc-dt-export');
-  document.querySelector('button.csv').addEventListener('click', () => {
-    table.export({
-      type: 'csv',
-      download: true,
-      lineDelimiter: '\n\n',
-      columnDelimiter: ';'
-    });
-  });
-  document.querySelector('button.sql').addEventListener('click', () => {
-    table.export({
-      type: 'sql',
-      download: true,
-      tableName: 'export_table'
-    });
-  });
-  document.querySelector('button.pdf').addEventListener('click', () => {
-    table.export({
-      type: 'pdf',
-      download: true
-    });
-  });
-  document.querySelector('button.json').addEventListener('click', () => {
-    table.export({
-      type: 'json',
-      download: true,
-      escapeHTML: true,
-      space: 3
-    });
-  });
-</script>
 </body>
 </html>

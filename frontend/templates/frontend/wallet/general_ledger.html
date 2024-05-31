@@ -502,7 +502,6 @@
                           >Logout
                         </button>
                       </div>
-                      
                     </div>
                   </div>
                 </div>
@@ -511,7 +510,7 @@
           </div>
         </div>
       </header>
-
+  
       <!-- [ Header ] end -->
 
  <!-- [ Main Content ] start -->
@@ -524,14 +523,14 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Collectors</a></li>
-                <li class="breadcrumb-item" aria-current="page">Collector Details</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Wallets</a></li>
+                <li class="breadcrumb-item" aria-current="page">General Ledger (GL)</li>
               </ul>
             </div>
-            <br>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Collector</h2>
+                <br>
+                <h2 class="mb-0">General Ledger Wallet (GL) : ZK {{total_value}}</h2>
               </div>
             </div>
           </div>
@@ -539,50 +538,63 @@
       </div>
       <!-- [ breadcrumb ] end -->
 
-<!-- [ Main Content ] start -->
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
+
+      <!-- [ Main Content ] start -->
+      <div class="row">
+        <!-- [ basic-table ] start -->
+        <div class="col-xl-12">
+          <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Collector's Profile Details</h3>
+              <h5>General Ledger Wallet Funds</h5>
+              <span class="d-block m-t-5">Below is a List of <code>GL Wallet Data</code> </span>
             </div>
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>User ID:</strong> {{ collector_data.user_id }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's First Name:</strong> {{ collector_data.first_name }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Last Name:</strong> {{ collector_data.last_name }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Username:</strong> {{ collector_data.username }}</span>
-                        <hr class="border border-primary-subtle" />
-
-                    </div>
-
-                    <div class="col-md-6">
-                      <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Email:</strong> {{ collector_data.email }}</span>
-                      <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Vehicle:</strong> {{ collector_data.vehicle }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Waste Type:</strong> {{ collector_data.waste_type }}</span>
-                        <hr class="border border-primary-subtle" />
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's Work Area:</strong> {{ collector_data.work_area }}</span>
-                        <hr class="border border-primary-subtle" />
-                    </div>
-                </div>
-                <form action="{% url 'Collectors' %}" method="post">
-                    {% csrf_token %}
-                    <button class="btn btn-primary mt-4" type="submit">Back</button>
-                </form>
+            <div class="card-body table-border-style">
+              <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
+              <button class="btn btn-light-primary btn-sm sql">Export SQL</button>
+              <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
+              <button class="btn btn-light-primary btn-sm json">Export JSON</button>
+              <div class="table-responsive">
+                
+                <table class="table" id="pc-dt-export">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Collection ID</th>
+                      <th>Transaction Type</th>
+                      <th>Old GL Blanace</th>
+                      <th>New GL Balance</th>
+                      <th>Service Charge</th>
+                      <th>Transaction Date</th>
+                      <th>Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for wallet in waste_gl %}
+                    <tr>
+                      <td>{{ wallet.gl_id }}</td>
+                      <td>{{ wallet.collection_id }}</td>
+                      <td>{{ wallet.transaction_type }}</td>
+                      <td>{{ wallet.old_GL_balance }}</td>
+                      <td>{{ wallet.new_GL_balance }}</td>
+                      <td>{{ wallet.service_charge }}</td>
+                      <td>{{ wallet.transaction_date}}</td>
+                      <td>{{ wallet.extras}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
+          </div>
         </div>
+        <!-- [ basic-table ] end -->
+      </div>
+      <!-- [ Main Content ] end -->
     </div>
-</div>
-</div>
-</section>
+  </section>
+  <!-- [ Main Content ] end -->
+
+
 
 
 <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
@@ -596,7 +608,6 @@
 <script src="{% static 'assets/js/plugins/feather.min.js' %}"></script>
 
 <!-- [Page Specific JS] start -->
-
 <script  src="{% static 'assets/js/plugins/simple-datatables.js' %}"></script>
 <script>
   const table = new simpleDatatables.DataTable('#pc-dt-export');

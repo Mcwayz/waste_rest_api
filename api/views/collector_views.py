@@ -1,6 +1,7 @@
 import json
 import logging
 from decimal import Decimal
+from django.db import transaction
 from django.utils import timezone
 from django.conf import settings
 from rest_framework import status
@@ -8,15 +9,13 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL
+from base.models import CustomerProfile, CollectorProfile, Requests, Ratings, Collection, Wallet, WalletHistory, WasteGL, CollectorCommission, ServiceCharge
 from ..serializers.collector_serializer import CollectorSerializer, CompletedCollectionSerializer, CollectionSerializer, UserSerializer, CollectorsSerializer, WalletSerializer, CollectorDataSerializer
-
 
 
 logger = logging.getLogger(__name__)
 
 # GET Request Methods
-
 
 
 # Get Customer Requests
@@ -42,7 +41,6 @@ def get_customer_requests(request):
     return Response(serialized_requests)
 
 
-
 # Get Collector Profile
 
 
@@ -51,7 +49,6 @@ def getCollectorProfile(request, pk):
     profile = get_object_or_404(CollectorProfile, pk=pk)
     serializer = CollectorSerializer(profile)
     return Response(serializer.data)
-
 
 
 # Get Collector Profiles
@@ -114,12 +111,10 @@ def collector_data(request, wallet_id):
     return Response(serializer.data)
 
 
-
 # End Of GET Request Methods
 
 
 # POST Request Methods
-
 
 
 # Add Collection
@@ -167,7 +162,6 @@ def cancel_request(request, request_id):
     return Response({'Message': 'Request Cancelled Successfully'}, status=status.HTTP_200_OK)
 
 
-
 # Add Collector Profile
 
 
@@ -184,16 +178,12 @@ def create_user_and_profile(request):
             profile_serializer = CollectorSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_instance = profile_serializer.save()
-                # Create wallet for the collector profile
                 create_wallet_for_collector(profile_instance)
-                
-                # Sending email notification to the user
                 subject = 'Collector Profile Creation Notification'
                 message = 'Your Collector Profile Has Been Successfully Created.'
                 from_email = settings.EMAIL_HOST_USER
                 to_email = [user_instance.email]
                 send_mail(subject, message, from_email, to_email, fail_silently=True)
-                
                 return Response({'Message': 'User, Profile, and Wallet Created Successfully'}, status=status.HTTP_201_CREATED)
             else:
                 user_instance.delete()
@@ -201,7 +191,6 @@ def create_user_and_profile(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
 
 # Create a wallet for the collector profile
 
@@ -240,7 +229,6 @@ def updateUser(request, pk):
 
 # Update / Complete Collection Request   
    
-    
 @api_view(['PUT'])
 def updateCollectionRequest(request):
     request_id = request.data.get('request_id')
@@ -249,41 +237,77 @@ def updateCollectionRequest(request):
 
     try:
         request_to_update = Requests.objects.get(pk=request_id)
-        collection_price = request_to_update.collection_price
+    except Requests.DoesNotExist:
+        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
         collector_wallet = Wallet.objects.get(collector__collector_id=collector_id)
+    except Wallet.DoesNotExist:
+        return Response({"Message": "Collector Wallet Not Found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if new_status == 'Complete':
+        collection_price = request_to_update.collection_price
         wallet_balance = collector_wallet.balance
 
-        if new_status == 'Complete':
-            if collection_price <= wallet_balance:
+        if collection_price > wallet_balance:
+            return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch commission and service charge from the database
+            try:
+                commission_rate = ServiceCharge.objects.get(service_type='Commission').service_charge
+            except ServiceCharge.DoesNotExist:
+                return Response({"Message": "Commission rate not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            try:
+                service_charge = ServiceCharge.objects.get(service_type='Collection').service_charge
+            except ServiceCharge.DoesNotExist:
+                return Response({"Message": "Service charge not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            with transaction.atomic():
                 # Update request status
                 request_to_update.request_status = new_status
                 request_to_update.save()
-                
+
                 # Create a new collection record
                 collection = Collection.objects.create(
                     collection_date=timezone.now(),
                     request=request_to_update,
                     collector=collector_wallet.collector
                 )
-                
-                # Deduct the collection price and service charge from the collector's wallet balance
+
+                # Deduct the collection price from the collector's wallet balance
                 old_balance = collector_wallet.balance
-                new_balance = old_balance - collection_price - 2
+                new_balance = old_balance - collection_price
                 collector_wallet.balance = new_balance
                 collector_wallet.save()
-                
+
+                # Transfer commission amount to the collector commission
+                commission_amount = collection_price * (commission_rate / Decimal(100))
+                collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
+                collector_commission.comission += commission_amount
+                collector_commission.save()
+
+                try:
+                    latest_entry = WasteGL.objects.latest('transaction_date')
+                    old_gl_balance = latest_entry.new_GL_balance
+                except WasteGL.DoesNotExist:
+                    old_gl_balance = Decimal('0.0')
+
+                new_gl_balance = old_gl_balance + collection_price
+                new_gl_balance_after_commission = new_gl_balance - commission_amount
+
                 # Fund the general Ledger
-                old_gl_balance = WasteGL.objects.latest('comission_settlement_date').new_GL_balance
                 WasteGL.objects.create(
                     transaction_type='DEPOSIT',
-                    comission_settlement_date=timezone.now(),
+                    transaction_date=timezone.now(),
                     collection=collection,
-                    service_charge=2,
-                    old_GL_balance=old_gl_balance - collection_price, 
-                    new_GL_balance=old_gl_balance,  
-                    extras='Funded by completed collection'
+                    service_charge=service_charge,
+                    old_GL_balance=old_gl_balance,
+                    new_GL_balance=new_gl_balance_after_commission - service_charge,
+                    extras='Funded By Completed Collection'
                 )
-                
+
                 # Create a wallet history record
                 WalletHistory.objects.create(
                     transaction_type='Debit',
@@ -293,17 +317,18 @@ def updateCollectionRequest(request):
                     new_wallet_balance=new_balance,
                     transaction_amount=collection_price
                 )
-                
+
                 return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
-            else:
-                return Response({"Message": "Your Wallet Has Insufficient Funds."}, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        except Exception as e:
+            return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    else:
+        try:
             request_to_update.request_status = new_status
             request_to_update.save()
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
-    except Requests.DoesNotExist:
-        return Response({"Message": "Collection Request Not Found."}, status=status.HTTP_404_NOT_FOUND)
-    
+        except Exception as e:
+            return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 # View General Ledger Wallet
 
@@ -312,16 +337,14 @@ def updateCollectionRequest(request):
 def viewGeneralLedgerWallet(request):
     try:
         # Get the latest entry in WasteGL
-        latest_entry = WasteGL.objects.latest('comission_settlement_date')
+        latest_entry = WasteGL.objects.latest('transaction_date')
         transaction_history = WasteGL.objects.all()
         current_balance = latest_entry.new_GL_balance
-        
-        # Serialize data
         serialized_history = []
         for entry in transaction_history:
             serialized_entry = {
                 'transaction_type': entry.transaction_type,
-                'comission_settlement_date': entry.comission_settlement_date,
+                'transaction_date': entry.transaction_date,
                 'collection_id': entry.collection.collection_id if entry.collection else None,
                 'service_charge': entry.service_charge,
                 'old_GL_balance': entry.old_GL_balance,

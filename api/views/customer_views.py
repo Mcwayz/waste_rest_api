@@ -125,8 +125,6 @@ def create_user_and_profile(request):
             profile_serializer = CustomerProfileSerializer(data=profile_data)
             if profile_serializer.is_valid():
                 profile_serializer.save()
-                
-                # Sending email notification to the user
                 subject = 'Account Creation Notification'
                 message = 'Your eWaste Account Has Been Successfully Created.'
                 from_email = settings.EMAIL_HOST_USER
@@ -142,6 +140,7 @@ def create_user_and_profile(request):
 
 
 # Add Customer Collection Request
+
 
 @api_view(['POST'])
 def create_request(request):
@@ -168,6 +167,7 @@ def cancel_request(request, request_id):
 
 
 # Add Rating
+
 
 @api_view(['POST'])
 def add_rating(request, collection_id):

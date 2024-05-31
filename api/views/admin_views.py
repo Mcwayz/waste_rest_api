@@ -13,8 +13,10 @@ from ..serializers.customer_serializer import WasteSerializer, RequestSerializer
 # GET Request Methods
 
 
-
 # Get Completed Collections 
+
+
+# Retrieves all completed collections
 
 
 @api_view(['GET'])
@@ -24,11 +26,17 @@ def get_completed_collections(request):
     return Response(serializer.data)
 
 
+# Retrieves a specific completed collection by request ID
+
+
 @api_view(['GET'])
 def get_completed_collection(request, request_id):
     completed_collection = get_object_or_404(Collection, request_id=request_id, request__request_status='Complete')
     serializer = CompletedCollectionSerializer(completed_collection)
     return Response(serializer.data)
+
+
+# Retrieves all collected items
 
 
 @api_view(['GET'])
@@ -38,11 +46,19 @@ def getCollected(request):
     return Response(serializer.data)
 
 
+
+# Retrieves details of a specific collection
+
+
+
 @api_view(['GET'])
 def collectionDetails(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     serializer = CollectionSerializer(collection)
     return Response(serializer.data)
+
+
+# Retrieves details of a specific waste item
 
 
 @api_view(['GET'])
@@ -52,18 +68,28 @@ def wasteDetails(request, pk):
     return Response(serializer.data)
 
 
+
+# Retrieves all requests
+
+
 @api_view(['GET'])
 def getRequests(request):
     requests = Requests.objects.all()
     serializer = RequestSerializer(requests, many=True)
-    return Response(serializer.data) 
+    return Response(serializer.data)
+
+
+# Retrieves ratings of a specific driver (collector)
 
 
 @api_view(['GET'])
 def getDriverRating(request, collector_id):
     rating = Ratings.objects.filter(collector_id=collector_id)
     serializer = RatingSerializer(rating, many=True)
-    return Response(serializer.data) 
+    return Response(serializer.data)
+
+
+# Retrieves all cancelled requests
 
 
 @api_view(['GET'])
@@ -71,7 +97,6 @@ def getCancelledRequests(request):
     cancelled = Requests.objects.filter(request_status='Cancelled')
     serializer = RequestSerializer(cancelled, many=True)
     return Response(serializer.data)
-
 
 
 # End Of GET Request Methods
@@ -146,9 +171,11 @@ def delete_user(request, user_id):
 
 
 
-
 # total_collections_per_month view
 
 def total_collections_per_month(request):
     
     return Response()
+
+
+

@@ -1,42 +1,13 @@
-import pytz
-import calendar
-import requests
-from decimal import Decimal
 from datetime import datetime
-from .forms import WasteForm
 from django.urls import reverse
-from django.db.models import Sum
-from django.utils import timezone
 from django.contrib import messages
 from collections import defaultdict
-from rest_framework.response import Response
-from django.core.serializers import serialize
+from .forms import WasteForm, ChargeForm
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import TruncMonth, ExtractMonth
+from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login as auth_login, logout 
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL, ServiceCharge
 
-
-
-
-# def login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         print("Email:", email)
-#         print("Password:", password)
-       
-#         user = authenticate(request, email=email, password=password)
-#         print(user)
-#         if user is not None:
-#             print("user is about")
-#             login(request, user)  # Correct call to login function
-#             return redirect('Dash')  # Redirect to home page after successful login
-#         else:
-#             print("user is not about")
-#             messages.error(request, 'Invalid email or password.')
-#     return render(request, 'frontend/auth/login.html')
 
 
 # Login view
@@ -48,13 +19,10 @@ def user_login(request):
         password = request.POST.get('password')
 
         try:
-            # Query the database to get the user with the provided email
             user = User.objects.get(email=email)
-            # Check if the provided password matches the user's password
             if user.check_password(password):
-                # Authentication successful, log in the user
                 auth_login(request, user)
-                return redirect('Dash')  # Redirect to the home page after successful login
+                return redirect('Dash') 
             else:
                 messages.error(request, 'Invalid email or password.')
         except User.DoesNotExist:
@@ -79,21 +47,16 @@ def reset_password(request):
         old_password = request.POST.get('old_password')
         new_password = request.POST.get('new_password')
         confirm_new_password = request.POST.get('confirm_new_password')
-
         user = request.user
-
-        # Check if the old password is correct
         if not user.check_password(old_password):
             messages.error(request, 'Your old password is incorrect.')
-        # Check if the new password and confirm new password match
         elif new_password != confirm_new_password:
             messages.error(request, 'New password and confirm password do not match.')
         else:
-            # Set the new password
             user.set_password(new_password)
             user.save()
             messages.success(request, 'Your password has been changed successfully.')
-            return redirect('login')  # Redirect to profile page or any other page after successful password change
+            return redirect('login') 
 
     return render(request, 'frontend/auth/reset-password.html')
 
@@ -101,7 +64,6 @@ def reset_password(request):
 # Views for the Profile
 
 # Profile Information
-
 
 
 def user_profile(request):
@@ -138,9 +100,6 @@ def edit_profile_info(request):
         return redirect('user_profile')  # Change 'user_profile' to the name of your profile view
     
     return render(request, 'frontend/profile/profile.html')
-
-
-
 
 
 # Dashboard View
@@ -270,6 +229,52 @@ def WasteType(request):
     return render(request, 'frontend/waste/waste_type.html', {'waste_types': waste_types})
 
 
+# Create Service Configs
+
+def add_service(request):
+    if request.method == 'POST':
+        form = ChargeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('Service Configs') + '?alert=success')
+    else:
+        form = ChargeForm()
+    return render(request, 'frontend/waste/service_charge.html', {'form': form})
+
+# Service Configs
+
+
+def ServiceConfigs(request):
+    service_charge = ServiceCharge.objects.all()
+    return render(request, 'frontend/waste/service_charge.html', {'service_charge': service_charge})
+
+
+
+# Edit Service Charge Type
+
+
+def edit_charge(request, pk):
+    service = get_object_or_404(ServiceCharge, pk=pk)
+    if request.method == 'POST':
+        form = ChargeForm(request.POST, instance=service)
+        if form.is_valid():
+            form.save()
+            return redirect('Service Configs')
+    else:
+        form = ChargeForm(instance=service)
+    return render(request, 'frontend/waste/edit_charge.html', {'form': form, 'service': service})
+
+
+# Delete Service Type
+
+
+def delete_service(request, pk):
+    service = get_object_or_404(ServiceCharge, pk=pk)
+    if request.method == 'POST':
+        service.delete()
+        return redirect('Service Configs') 
+    return render(request, 'frontend/waste/delete_config.html', {'service': service})
+
 
 # Completed Collections
 
@@ -342,7 +347,6 @@ def get_customer_requests(request):
         }
         customer_requests.append(request_data)
     return render(request, 'frontend/collections/requests.html', {'customer_requests': customer_requests})
-
 
 
 # Collector Wallets
@@ -522,3 +526,28 @@ def delete_collector(request, user_id):
         collector_data.delete()
         return redirect('Collectors') 
     return render(request, 'frontend/collectors/delete_collector.html', {'collector_data': collector_data})
+
+
+# General Ledger
+
+def general_ledger(request):
+    ledger = WasteGL.objects.all()
+    total_value = 0
+    waste_gl = []
+    for waste_ledger in ledger:
+        total_value = waste_ledger.new_GL_balance
+        entry = {
+            'gl_id': waste_ledger.gl_id,
+            'extras': waste_ledger.extras,
+            'old_GL_balance': waste_ledger.old_GL_balance,
+            'new_GL_balance': waste_ledger.new_GL_balance,
+            'service_charge': waste_ledger.service_charge,
+            'transaction_type': waste_ledger.transaction_type,
+            'transaction_date': waste_ledger.transaction_date,
+            'collection_id': waste_ledger.collection.collection_id
+        }
+        
+        # Append the dictionary to the list of ledger entries
+        waste_gl.append(entry)
+    # Pass the list of ledger entries and total value to the template
+    return render(request, 'frontend/wallet/general_ledger.html', {'waste_gl': waste_gl, 'total_value': total_value})
