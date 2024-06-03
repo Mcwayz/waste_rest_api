@@ -177,9 +177,10 @@ def dashboard(request):
 
         
     # Calculate the percentage of requests
-    percentage_of_total_requests = (total_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
-    percentage_of_pending_requests = (total_pending_requests / total_requests_count) * 100 if total_requests_count > 0 else 0
-    percentage_of_complete_requests = (total_complete_collections / total_requests_count) * 100 if total_requests_count > 0 else 0
+    percentage_of_total_requests = round((total_requests / total_requests_count) * 100, 1) if total_requests_count > 0 else 0
+    percentage_of_pending_requests = round((total_pending_requests / total_requests_count) * 100, 1) if total_requests_count > 0 else 0
+    percentage_of_complete_requests = round((total_complete_collections / total_requests_count) * 100, 1) if total_requests_count > 0 else 0
+
 
     context = {
         'user': user,
@@ -192,6 +193,7 @@ def dashboard(request):
         'total_requests': total_requests,
         'pie_chart_data': pie_chart_data,
         'recent_collections': recent_collections_data,
+        'total_pending_requests': total_pending_requests,
         'total_complete_collections': total_complete_collections,
         'percentage_of_total_requests': percentage_of_total_requests,
         'percentage_of_pending_requests': percentage_of_pending_requests,
@@ -536,9 +538,11 @@ def general_ledger(request):
     waste_gl = []
     for waste_ledger in ledger:
         total_value = waste_ledger.new_GL_balance
+        transaction_amount  = waste_ledger.new_GL_balance - waste_ledger.old_GL_balance
         entry = {
             'gl_id': waste_ledger.gl_id,
             'extras': waste_ledger.extras,
+            'transaction_amount': transaction_amount,
             'old_GL_balance': waste_ledger.old_GL_balance,
             'new_GL_balance': waste_ledger.new_GL_balance,
             'service_charge': waste_ledger.service_charge,
