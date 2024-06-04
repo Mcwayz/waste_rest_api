@@ -228,6 +228,7 @@ def updateUser(request, pk):
 
 
 # Update / Complete Collection Request   
+      
    
 @api_view(['PUT'])
 def updateCollectionRequest(request):
@@ -284,10 +285,7 @@ def updateCollectionRequest(request):
 
                 # Transfer commission amount to the collector commission
                 commission_amount = collection_price * (commission_rate / Decimal(100))
-                collector_commission, created = CollectorCommission.objects.get_or_create(collector=collector_wallet.collector)
-                collector_commission.comission += commission_amount
-                collector_commission.save()
-
+                
                 try:
                     latest_entry = WasteGL.objects.latest('transaction_date')
                     old_gl_balance = latest_entry.new_GL_balance
@@ -307,7 +305,16 @@ def updateCollectionRequest(request):
                     new_GL_balance=new_gl_balance_after_commission - service_charge,
                     extras='Funded By Completed Collection'
                 )
-
+                
+                # Fund the Commission Wallet
+                CollectorCommission.objects.create(
+                    collector_id=collector_id,
+                    extras='Funded By Collection',
+                    commission=commission_amount,
+                    collection_id=collection.id,  # Use collection.id here
+                    commission_settlement_date=timezone.now(),
+                )
+                                
                 # Create a wallet history record
                 WalletHistory.objects.create(
                     transaction_type='Debit',
@@ -329,6 +336,8 @@ def updateCollectionRequest(request):
             return Response({"Message": "Collection Request Updated And Status Changed."}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"Message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
     
 # View General Ledger Wallet
 
