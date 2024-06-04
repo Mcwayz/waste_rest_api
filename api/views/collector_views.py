@@ -308,10 +308,10 @@ def updateCollectionRequest(request):
                 
                 # Fund the Commission Wallet
                 CollectorCommission.objects.create(
-                    collector_id=collector_id,
+                    collection=collection,
                     extras='Funded By Collection',
                     commission=commission_amount,
-                    collection_id=collection.id,  # Use collection.id here
+                    collector=collector_wallet.collector,
                     commission_settlement_date=timezone.now(),
                 )
                                 

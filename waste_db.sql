@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 04, 2024 at 07:55 AM
+-- Generation Time: Jun 04, 2024 at 02:26 PM
 -- Server version: 11.3.2-MariaDB
 -- PHP Version: 8.3.7
 
@@ -179,42 +179,38 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (34, 'Can change customer profile', 9, 'change_customerprofile'),
 (35, 'Can delete customer profile', 9, 'delete_customerprofile'),
 (36, 'Can view customer profile', 9, 'view_customerprofile'),
-(37, 'Can add wallet', 10, 'add_wallet'),
-(38, 'Can change wallet', 10, 'change_wallet'),
-(39, 'Can delete wallet', 10, 'delete_wallet'),
-(40, 'Can view wallet', 10, 'view_wallet'),
-(41, 'Can add waste', 11, 'add_waste'),
-(42, 'Can change waste', 11, 'change_waste'),
-(43, 'Can delete waste', 11, 'delete_waste'),
-(44, 'Can view waste', 11, 'view_waste'),
-(45, 'Can add wallet history', 12, 'add_wallethistory'),
-(46, 'Can change wallet history', 12, 'change_wallethistory'),
-(47, 'Can delete wallet history', 12, 'delete_wallethistory'),
-(48, 'Can view wallet history', 12, 'view_wallethistory'),
-(49, 'Can add requests', 13, 'add_requests'),
-(50, 'Can change requests', 13, 'change_requests'),
-(51, 'Can delete requests', 13, 'delete_requests'),
-(52, 'Can view requests', 13, 'view_requests'),
-(53, 'Can add ratings', 14, 'add_ratings'),
-(54, 'Can change ratings', 14, 'change_ratings'),
-(55, 'Can delete ratings', 14, 'delete_ratings'),
-(56, 'Can view ratings', 14, 'view_ratings'),
-(57, 'Can add commission collector', 15, 'add_commissioncollector'),
-(58, 'Can change commission collector', 15, 'change_commissioncollector'),
-(59, 'Can delete commission collector', 15, 'delete_commissioncollector'),
-(60, 'Can view commission collector', 15, 'view_commissioncollector'),
-(61, 'Can add waste gl', 16, 'add_wastegl'),
-(62, 'Can change waste gl', 16, 'change_wastegl'),
-(63, 'Can delete waste gl', 16, 'delete_wastegl'),
-(64, 'Can view waste gl', 16, 'view_wastegl'),
-(65, 'Can add collector commission', 15, 'add_collectorcommission'),
-(66, 'Can change collector commission', 15, 'change_collectorcommission'),
-(67, 'Can delete collector commission', 15, 'delete_collectorcommission'),
-(68, 'Can view collector commission', 15, 'view_collectorcommission'),
-(69, 'Can add service charge', 17, 'add_servicecharge'),
-(70, 'Can change service charge', 17, 'change_servicecharge'),
-(71, 'Can delete service charge', 17, 'delete_servicecharge'),
-(72, 'Can view service charge', 17, 'view_servicecharge');
+(37, 'Can add service charge', 10, 'add_servicecharge'),
+(38, 'Can change service charge', 10, 'change_servicecharge'),
+(39, 'Can delete service charge', 10, 'delete_servicecharge'),
+(40, 'Can view service charge', 10, 'view_servicecharge'),
+(41, 'Can add wallet', 11, 'add_wallet'),
+(42, 'Can change wallet', 11, 'change_wallet'),
+(43, 'Can delete wallet', 11, 'delete_wallet'),
+(44, 'Can view wallet', 11, 'view_wallet'),
+(45, 'Can add waste', 12, 'add_waste'),
+(46, 'Can change waste', 12, 'change_waste'),
+(47, 'Can delete waste', 12, 'delete_waste'),
+(48, 'Can view waste', 12, 'view_waste'),
+(49, 'Can add waste gl', 13, 'add_wastegl'),
+(50, 'Can change waste gl', 13, 'change_wastegl'),
+(51, 'Can delete waste gl', 13, 'delete_wastegl'),
+(52, 'Can view waste gl', 13, 'view_wastegl'),
+(53, 'Can add wallet history', 14, 'add_wallethistory'),
+(54, 'Can change wallet history', 14, 'change_wallethistory'),
+(55, 'Can delete wallet history', 14, 'delete_wallethistory'),
+(56, 'Can view wallet history', 14, 'view_wallethistory'),
+(57, 'Can add requests', 15, 'add_requests'),
+(58, 'Can change requests', 15, 'change_requests'),
+(59, 'Can delete requests', 15, 'delete_requests'),
+(60, 'Can view requests', 15, 'view_requests'),
+(61, 'Can add ratings', 16, 'add_ratings'),
+(62, 'Can change ratings', 16, 'change_ratings'),
+(63, 'Can delete ratings', 16, 'delete_ratings'),
+(64, 'Can view ratings', 16, 'view_ratings'),
+(65, 'Can add collector commission', 17, 'add_collectorcommission'),
+(66, 'Can change collector commission', 17, 'change_collectorcommission'),
+(67, 'Can delete collector commission', 17, 'delete_collectorcommission'),
+(68, 'Can view collector commission', 17, 'view_collectorcommission');
 
 -- --------------------------------------------------------
 
@@ -299,20 +295,6 @@ INSERT INTO `base_collection` (`collection_id`, `collection_date`, `collector_id
 -- --------------------------------------------------------
 
 --
--- Table structure for table `base_collectorcommission`
---
-
-CREATE TABLE `base_collectorcommission` (
-  `txn_id` int(11) NOT NULL,
-  `comission_settlement_date` datetime(6) NOT NULL,
-  `comission` decimal(65,2) NOT NULL,
-  `collector_id` int(11) NOT NULL,
-  `extras` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `base_collectorprofile`
 --
 
@@ -392,7 +374,8 @@ INSERT INTO `base_requests` (`request_id`, `location`, `number_of_bags`, `reques
 (4, '14 Main St, Lusaka', 1, 'Complete', '2024-05-31 07:04:44.405289', 40.00, 3, 1),
 (5, '14 Main St, Lusaka', 2, 'Complete', '2024-05-31 07:09:33.566015', 80.00, 3, 1),
 (6, '14 Main St, Lusaka', 3, 'Complete', '2024-06-03 13:59:34.453963', 120.00, 3, 1),
-(7, '14 Main St, Lusaka', 4, 'Complete', '2024-06-03 14:20:03.058019', 160.00, 3, 1);
+(7, '14 Main St, Lusaka', 4, 'Complete', '2024-06-03 14:20:03.058019', 160.00, 3, 1),
+(8, '14 Main St, Lusaka', 1, 'Claim', '2024-06-04 12:35:45.938495', 40.00, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -412,7 +395,7 @@ CREATE TABLE `base_servicecharge` (
 
 INSERT INTO `base_servicecharge` (`service_id`, `service_type`, `service_charge`) VALUES
 (1, 'Collection', 3.00),
-(2, 'Commission', 0.03);
+(2, 'Commission', 10.00);
 
 -- --------------------------------------------------------
 
@@ -563,16 +546,16 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'auth', 'user'),
 (7, 'base', 'collection'),
-(15, 'base', 'collectorcommission'),
+(17, 'base', 'collectorcommission'),
 (8, 'base', 'collectorprofile'),
 (9, 'base', 'customerprofile'),
-(14, 'base', 'ratings'),
-(13, 'base', 'requests'),
-(17, 'base', 'servicecharge'),
-(10, 'base', 'wallet'),
-(12, 'base', 'wallethistory'),
-(11, 'base', 'waste'),
-(16, 'base', 'wastegl'),
+(16, 'base', 'ratings'),
+(15, 'base', 'requests'),
+(10, 'base', 'servicecharge'),
+(11, 'base', 'wallet'),
+(14, 'base', 'wallethistory'),
+(12, 'base', 'waste'),
+(13, 'base', 'wastegl'),
 (5, 'contenttypes', 'contenttype'),
 (6, 'sessions', 'session');
 
@@ -594,30 +577,25 @@ CREATE TABLE `django_migrations` (
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
-(1, 'contenttypes', '0001_initial', '2024-02-27 06:50:44.551508'),
-(2, 'auth', '0001_initial', '2024-02-27 06:50:45.768226'),
-(3, 'admin', '0001_initial', '2024-02-27 06:50:46.010168'),
-(4, 'admin', '0002_logentry_remove_auto_add', '2024-02-27 06:50:46.019070'),
-(5, 'admin', '0003_logentry_add_action_flag_choices', '2024-02-27 06:50:46.027318'),
-(6, 'contenttypes', '0002_remove_content_type_name', '2024-02-27 06:50:46.178074'),
-(7, 'auth', '0002_alter_permission_name_max_length', '2024-02-27 06:50:46.279554'),
-(8, 'auth', '0003_alter_user_email_max_length', '2024-02-27 06:50:46.332643'),
-(9, 'auth', '0004_alter_user_username_opts', '2024-02-27 06:50:46.342579'),
-(10, 'auth', '0005_alter_user_last_login_null', '2024-02-27 06:50:46.436641'),
-(11, 'auth', '0006_require_contenttypes_0002', '2024-02-27 06:50:46.441102'),
-(12, 'auth', '0007_alter_validators_add_error_messages', '2024-02-27 06:50:46.450884'),
-(13, 'auth', '0008_alter_user_username_max_length', '2024-02-27 06:50:46.516204'),
-(14, 'auth', '0009_alter_user_last_name_max_length', '2024-02-27 06:50:46.570480'),
-(15, 'auth', '0010_alter_group_name_max_length', '2024-02-27 06:50:46.630097'),
-(16, 'auth', '0011_update_proxy_permissions', '2024-02-27 06:50:46.639518'),
-(17, 'auth', '0012_alter_user_first_name_max_length', '2024-02-27 06:50:46.693341'),
-(18, 'base', '0001_initial', '2024-02-27 06:50:47.997366'),
-(19, 'sessions', '0001_initial', '2024-02-27 06:50:48.100338'),
-(20, 'base', '0002_alter_wallet_collector', '2024-02-27 08:11:43.909135'),
-(21, 'base', '0002_wastegl_commissioncollector', '2024-03-15 14:11:40.953648'),
-(22, 'base', '0003_rename_commissioncollector_collectorcommission', '2024-03-15 14:21:38.445309'),
-(23, 'base', '0002_collectorcommission_extras', '2024-03-15 14:57:22.433605'),
-(24, 'base', '0002_servicecharge', '2024-05-29 15:23:02.233456');
+(1, 'contenttypes', '0001_initial', '2024-06-04 08:07:05.729323'),
+(2, 'auth', '0001_initial', '2024-06-04 08:07:06.547090'),
+(3, 'admin', '0001_initial', '2024-06-04 08:07:06.707990'),
+(4, 'admin', '0002_logentry_remove_auto_add', '2024-06-04 08:07:06.720773'),
+(5, 'admin', '0003_logentry_add_action_flag_choices', '2024-06-04 08:07:06.727662'),
+(6, 'contenttypes', '0002_remove_content_type_name', '2024-06-04 08:07:06.833699'),
+(7, 'auth', '0002_alter_permission_name_max_length', '2024-06-04 08:07:06.900698'),
+(8, 'auth', '0003_alter_user_email_max_length', '2024-06-04 08:07:06.937648'),
+(9, 'auth', '0004_alter_user_username_opts', '2024-06-04 08:07:06.948865'),
+(10, 'auth', '0005_alter_user_last_login_null', '2024-06-04 08:07:07.014210'),
+(11, 'auth', '0006_require_contenttypes_0002', '2024-06-04 08:07:07.017299'),
+(12, 'auth', '0007_alter_validators_add_error_messages', '2024-06-04 08:07:07.025363'),
+(13, 'auth', '0008_alter_user_username_max_length', '2024-06-04 08:07:07.061413'),
+(14, 'auth', '0009_alter_user_last_name_max_length', '2024-06-04 08:07:07.097959'),
+(15, 'auth', '0010_alter_group_name_max_length', '2024-06-04 08:07:07.133326'),
+(16, 'auth', '0011_update_proxy_permissions', '2024-06-04 08:07:07.145917'),
+(17, 'auth', '0012_alter_user_first_name_max_length', '2024-06-04 08:07:07.183560'),
+(18, 'base', '0001_initial', '2024-06-04 08:07:08.388446'),
+(19, 'sessions', '0001_initial', '2024-06-04 08:07:08.457087');
 
 -- --------------------------------------------------------
 
@@ -699,13 +677,6 @@ ALTER TABLE `base_collection`
   ADD KEY `base_collection_request_id_e243d9e8_fk_base_requests_request_id` (`request_id`);
 
 --
--- Indexes for table `base_collectorcommission`
---
-ALTER TABLE `base_collectorcommission`
-  ADD PRIMARY KEY (`txn_id`),
-  ADD UNIQUE KEY `collector_id` (`collector_id`);
-
---
 -- Indexes for table `base_collectorprofile`
 --
 ALTER TABLE `base_collectorprofile`
@@ -746,7 +717,7 @@ ALTER TABLE `base_servicecharge`
 --
 ALTER TABLE `base_wallet`
   ADD PRIMARY KEY (`wallet_id`),
-  ADD UNIQUE KEY `base_wallet_collector_id_ca33e49e_uniq` (`collector_id`);
+  ADD UNIQUE KEY `collector_id` (`collector_id`);
 
 --
 -- Indexes for table `base_wallethistory`
@@ -816,7 +787,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -840,13 +811,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `base_collection`
 --
 ALTER TABLE `base_collection`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `base_collectorcommission`
---
-ALTER TABLE `base_collectorcommission`
-  MODIFY `txn_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `base_collectorprofile`
@@ -858,7 +823,7 @@ ALTER TABLE `base_collectorprofile`
 -- AUTO_INCREMENT for table `base_customerprofile`
 --
 ALTER TABLE `base_customerprofile`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `base_ratings`
@@ -870,13 +835,13 @@ ALTER TABLE `base_ratings`
 -- AUTO_INCREMENT for table `base_requests`
 --
 ALTER TABLE `base_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `base_servicecharge`
 --
 ALTER TABLE `base_servicecharge`
-  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `base_wallet`
@@ -900,7 +865,7 @@ ALTER TABLE `base_waste`
 -- AUTO_INCREMENT for table `base_wastegl`
 --
 ALTER TABLE `base_wastegl`
-  MODIFY `gl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `gl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -918,7 +883,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
@@ -957,12 +922,6 @@ ALTER TABLE `auth_user_user_permissions`
 ALTER TABLE `base_collection`
   ADD CONSTRAINT `base_collection_collector_id_fbfa8dff_fk_base_coll` FOREIGN KEY (`collector_id`) REFERENCES `base_collectorprofile` (`collector_id`),
   ADD CONSTRAINT `base_collection_request_id_e243d9e8_fk_base_requests_request_id` FOREIGN KEY (`request_id`) REFERENCES `base_requests` (`request_id`);
-
---
--- Constraints for table `base_collectorcommission`
---
-ALTER TABLE `base_collectorcommission`
-  ADD CONSTRAINT `base_commissioncolle_collector_id_0505fecd_fk_base_coll` FOREIGN KEY (`collector_id`) REFERENCES `base_collectorprofile` (`collector_id`);
 
 --
 -- Constraints for table `base_collectorprofile`
