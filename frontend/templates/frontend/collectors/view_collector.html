@@ -551,7 +551,7 @@
                 <div class="row">
                     <div class="col-md-6">
 
-                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>User ID:</strong> {{ collector_data.user_id }}</span>
+                        <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>User ID:</strong> {{ collector_data.collector_id }}</span>
                         <hr class="border border-primary-subtle" />
                         <span class="px-4 d-block"><i class="fas fa-circle text-primary f-10 m-r-5"></i><strong>Collector's First Name:</strong> {{ collector_data.first_name }}</span>
                         <hr class="border border-primary-subtle" />
@@ -575,7 +575,8 @@
                 </div>
                 <form action="{% url 'Collectors' %}" method="post">
                     {% csrf_token %}
-                    <button class="btn btn-primary mt-4" type="submit">Back</button>
+                    <button class="btn btn-warning mt-4" type="submit">Back</button>
+                    <a class="btn btn-primary mt-4 float-end" href="{% url 'collector_commission' collector_data.user_id %}">View Commission</a>
                 </form>
             </div>
         </div>

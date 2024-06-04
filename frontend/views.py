@@ -6,7 +6,7 @@ from .forms import WasteForm, ChargeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
-from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL, ServiceCharge
+from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL, ServiceCharge, CollectorCommission
 
 
 
@@ -462,16 +462,32 @@ def list_collectors(request):
     for collector in collectors:
         collector_data = {
             'user_id': collector.auth.id,
+            
             'username': collector.auth.username,
             'first_name': collector.auth.first_name,
             'last_name': collector.auth.last_name,
             'email': collector.auth.email,
             'waste_type': collector.waste.waste_type,
             'vehicle': collector.vehicle,
+            'collector_id': collector.collector_id,
             'work_area': collector.work_area
         }
         collectors_data.append(collector_data)
     return render(request, 'frontend/collectors/collectors.html', {'collectors_data': collectors_data})
+
+
+# Commissions Data 
+
+
+def list_commission(request, collector_id):
+    commission = get_object_or_404(CollectorCommission, collector__id=collector_id)
+    commission_data = {
+        'comment': commission.extras,
+        'commission_id': commission.txn_id,
+        'commission': commission.commission,
+        'commission_settlement_date': commission.commission_settlement_date
+    }
+    return render(request, 'frontend/collectors/commission.html', {'commission_data': commission_data})
 
 
 # Get Customer Details
@@ -481,11 +497,11 @@ def view_customer(request, user_id):
     customer = get_object_or_404(CustomerProfile, auth__id=user_id)
     customer_data = {
         'user_id': customer.auth.id,
+        'address': customer.address,
+        'email': customer.auth.email,
         'username': customer.auth.username,
         'first_name': customer.auth.first_name,
-        'last_name': customer.auth.last_name,
-        'email': customer.auth.email,
-        'address': customer.address
+        'last_name': customer.auth.last_name
     }
     return render(request, 'frontend/customers/view_customer.html', {'customer_data': customer_data})
 
