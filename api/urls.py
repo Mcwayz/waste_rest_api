@@ -16,6 +16,7 @@ urlpatterns = [
     path('updateCollector/<str:pk>/', collector_views.updateUser),
     path('updateRequest/', collector_views.updateCollectionRequest),
     path('customerRequests/', collector_views.get_customer_requests),
+
     path('addCustomerProfile/', customer_views.create_user_and_profile),
     path('completeCollection/', collector_views.updateCollectionRequest),
     path('completedCollections/', admin_views.get_completed_collections),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('wasteDetails/<str:pk>/', admin_views.wasteDetails, name='waste-details'),
     path('wallets/', collector_views.all_collectors_data, name='all-collectors-data'),
     path('cancelRequest/<str:pk>/', customer_views.cancel_request, name='cancel-request'),
+
     path('collectorCollections/<int:collector_id>/', collector_views.collections_by_collector),
     path('collector/<int:collector_id>/', collector_views.collector_data, name='collector-data'),
     path('view-wallet/<int:wallet_id>/', collector_views.collector_data, name='collectors-data'),
@@ -33,6 +35,7 @@ urlpatterns = [
     path('customerCollections/<int:customer_id>/', customer_views.completed_collections_by_customer),
     path('collectionDetails/<str:pk>/', customer_views.collectionDetails, name='collection-details'),
     path('collectorDetails/<str:pk>/', collector_views.getCollectorProfile, name='collector-details'),
+    path('collectorComission/<int:collector_id>/',collector_views.list_commission, name='collector_commission'),
     path('total_collections_per_month/', admin_views.total_collections_per_month, name='total_collections_per_month'),
     path('completedCollection/<int:request_id>/', admin_views.get_completed_collection, name='get_completed_collection'),
     

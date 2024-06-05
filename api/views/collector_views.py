@@ -372,5 +372,34 @@ def viewGeneralLedgerWallet(request):
     
     except WasteGL.DoesNotExist:
         return Response({"Message": "General ledger wallet not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+    
+# View function to provide the commission data
+    
+    
+@api_view(['GET'])
+def list_commission(request, collector_id):
+    total_value = 0
+    commissions_data = []
+    commissions = CollectorCommission.objects.filter(collector_id=collector_id)
+    for commission in commissions:
+        collector_profile = CollectorProfile.objects.get(collector_id=collector_id)
+        full_name = collector_profile.auth.get_full_name()
+        vehicle = collector_profile.vehicle
+        
+        commission_data = {
+            'comment': commission.extras,
+            'commission_id': commission.txn_id,
+            'commission': commission.commission,
+            'commission_settlement_date': commission.commission_settlement_date,
+            'collector_full_name': full_name,
+            'vehicle': vehicle
+        }
+        commissions_data.append(commission_data)
+        total_value += commission.commission
+
+    # Assuming you want to return JSON response
+    return Response({'commissions_data': commissions_data, 'total_value': total_value})
 
 
