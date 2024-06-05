@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from django.urls import reverse
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorProfile, Requests, WalletHistory, User, WasteGL, ServiceCharge, CollectorCommission
 
 
+logger = logging.getLogger(__name__)
 
 # Login view
 
@@ -461,32 +463,36 @@ def list_collectors(request):
     collectors_data = []
     for collector in collectors:
         collector_data = {
-            'user_id': collector.auth.id,
-            
-            'username': collector.auth.username,
-            'first_name': collector.auth.first_name,
-            'last_name': collector.auth.last_name,
-            'email': collector.auth.email,
-            'waste_type': collector.waste.waste_type,
             'vehicle': collector.vehicle,
+            'user_id': collector.auth.id,
+            'email': collector.auth.email,
+            'work_area': collector.work_area,
+            'username': collector.auth.username,
+            'last_name': collector.auth.last_name,
             'collector_id': collector.collector_id,
-            'work_area': collector.work_area
+            'first_name': collector.auth.first_name,
+            'waste_type': collector.waste.waste_type
         }
+        logger.error(f"Collector Data: {collector_data}")
+        
         collectors_data.append(collector_data)
     return render(request, 'frontend/collectors/collectors.html', {'collectors_data': collectors_data})
+
+
 
 
 # Commissions Data 
 
 
 def list_commission(request, collector_id):
-    commission = get_object_or_404(CollectorCommission, collector__id=collector_id)
+    commissions = get_object_or_404(CollectorCommission, collector_id=collector_id)
     commission_data = {
-        'comment': commission.extras,
-        'commission_id': commission.txn_id,
-        'commission': commission.commission,
-        'commission_settlement_date': commission.commission_settlement_date
+        'comment': commissions.extras,
+        'commission_id': commissions.txn_id,
+        'commission': commissions.commission,
+        'commission_settlement_date': commissions.commission_settlement_date
     }
+    logger.error(f"Commission Data: {commission_data}")
     return render(request, 'frontend/collectors/commission.html', {'commission_data': commission_data})
 
 
@@ -500,8 +506,8 @@ def view_customer(request, user_id):
         'address': customer.address,
         'email': customer.auth.email,
         'username': customer.auth.username,
+        'last_name': customer.auth.last_name,
         'first_name': customer.auth.first_name,
-        'last_name': customer.auth.last_name
     }
     return render(request, 'frontend/customers/view_customer.html', {'customer_data': customer_data})
 
@@ -512,14 +518,16 @@ def view_customer(request, user_id):
 def view_collector(request, user_id):
     collector =  get_object_or_404(CollectorProfile, auth__id=user_id)
     collector_data = {
-        'user_id': collector.auth.id,
-        'username': collector.auth.username,
-        'first_name': collector.auth.first_name,
-        'last_name': collector.auth.last_name,
-        'email': collector.auth.email,
-        'waste_type': collector.waste.waste_type,
         'vehicle': collector.vehicle,
-        'work_area': collector.work_area
+        'user_id': collector.auth.id,
+        'email': collector.auth.email,
+        'work_area': collector.work_area,
+        'username': collector.auth.username,
+        'last_name': collector.auth.last_name,
+        'collector_id': collector.collector_id,
+        'first_name': collector.auth.first_name,
+        'waste_type': collector.waste.waste_type
+        
     }
     return render(request, 'frontend/collectors/view_collector.html', {'collector_data': collector_data})
 
@@ -531,14 +539,15 @@ def view_collector(request, user_id):
 def delete_collector(request, user_id):
     collector = get_object_or_404(CollectorProfile, auth__id=user_id)
     collector_data = {
-        'user_id': collector.auth.id,
-        'username': collector.auth.username,
-        'first_name': collector.auth.first_name,
-        'last_name': collector.auth.last_name,
-        'email': collector.auth.email,
-        'waste_type': collector.waste.waste_type,
         'vehicle': collector.vehicle,
-        'work_area': collector.work_area
+        'user_id': collector.auth.id,
+        'email': collector.auth.email,
+        'work_area': collector.work_area,
+        'username': collector.auth.username,
+        'last_name': collector.auth.last_name,
+        'collector_id': collector.collector_id,
+        'first_name': collector.auth.first_name,
+        'waste_type': collector.waste.waste_type
     }
     if request.method == 'POST':
         collector_data.delete()

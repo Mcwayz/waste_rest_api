@@ -523,13 +523,13 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Customers</a></li>
-                <li class="breadcrumb-item" aria-current="page">Customer List</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Collectors</a></li>
+                <li class="breadcrumb-item" aria-current="page">Commission</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Customers</h2>
+                <h2 class="mb-0">Commission</h2>
               </div>
             </div>
           </div>
@@ -545,7 +545,7 @@
           <div class="card">
             <div class="card-header">
               <h5>Customers</h5>
-              <span class="d-block m-t-5">Below Is A List Of <code>Customers</code> </span>
+              <span class="d-block m-t-5">Below Is A List Of <code>Collections Commission</code> </span>
             </div>
             <div class="card-body table-border-style">
               <button class="btn btn-light-primary btn-sm csv">Export CSV</button>
@@ -556,28 +556,25 @@
                 
                 <table class="table" id="pc-dt-export">
                   <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Commission</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Email Address</th>
-                      <th>Address</th>
-                      <th>Action</th>
-                    </tr>
+                      <tr>
+                          <th>ID</th>
+                          <th>Commission</th>
+                          <th>Comment</th>
+                          <th>Commission Settlement Date</th>
+                      </tr>
                   </thead>
                   <tbody>
-                    {% for commision in commission_data %}
-                    <tr>
-                      <td>{{ commision.commission_id }}</td>
-                      <td>{{ commision.commission }}</td>
-                      <td>{{ commision.comment }}</td>
-                      <td>{{ commision.commission_settlement_date }}</td>
-                    </tr>
-                    {% endfor %}
+                      {% for commission in commission_data %}
+                      <tr>
+                          <td>{{ commission_data.commission_id }}</td>
+                          <td>{{ commission_data.commission }}</td>
+                          <td>{{ commission_data.comment }}</td>
+                          <td>{{ commission_data.commission_settlement_date }}</td>
+                      </tr>
+                      {% endfor %}
                   </tbody>
-                </table>
-                
+              </table>
+              
               </div>
             </div>
           </div>
