@@ -480,14 +480,39 @@ def list_collectors(request):
 
 
 
+def general_ledger(request):
+    ledger = WasteGL.objects.all()
+    total_value = 0
+    waste_gl = []
+    for waste_ledger in ledger:
+        total_value = waste_ledger.new_GL_balance
+        transaction_amount  = waste_ledger.new_GL_balance - waste_ledger.old_GL_balance
+        entry = {
+            'gl_id': waste_ledger.gl_id,
+            'extras': waste_ledger.extras,
+            'transaction_amount': transaction_amount,
+            'old_GL_balance': waste_ledger.old_GL_balance,
+            'new_GL_balance': waste_ledger.new_GL_balance,
+            'service_charge': waste_ledger.service_charge,
+            'transaction_type': waste_ledger.transaction_type,
+            'transaction_date': waste_ledger.transaction_date,
+            'collection_id': waste_ledger.collection.collection_id
+        }
+        
+        # Append the dictionary to the list of ledger entries
+        waste_gl.append(entry)
+    # Pass the list of ledger entries and total value to the template
+    return render(request, 'frontend/wallet/general_ledger.html', {'waste_gl': waste_gl, 'total_value': total_value})
+
+
 
 # Commissions Data 
 
 
 def list_commission(request, collector_id):
-    commissions = CollectorCommission.objects.filter(collector_id=collector_id)
-     #commissions = get_object_or_404(CollectorCommission, collector_id=collector_id)
+    total_value = 0
     commissions_data = []
+    commissions = CollectorCommission.objects.filter(collector_id=collector_id)
     for commission in commissions:
         commission_data = {
             'comment': commission.extras,
@@ -495,9 +520,9 @@ def list_commission(request, collector_id):
             'commission': commission.commission,
             'commission_settlement_date': commission.commission_settlement_date
         }
-        logger.error(f"Commission Data: {commission_data}")
         commissions_data.append(commission_data)
-    return render(request, 'frontend/collectors/commission.html', {'commissions_data': commissions_data})
+        total_value += commission.commission
+    return render(request, 'frontend/collectors/commission.html', {'commissions_data': commissions_data, 'total_value': total_value})
 
 
 # Get Customer Details
