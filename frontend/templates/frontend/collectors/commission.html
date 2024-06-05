@@ -558,7 +558,9 @@
                   <thead>
                       <tr>
                           <th>ID</th>
-                          <th>Commission</th>
+                          <th>Collector Name</th>
+                          <th>Collector Vehicle</th>
+                          <th>Commission (ZK)</th>
                           <th>Commission Comment</th>
                           <th>Commission Settlement Date</th>
                       </tr>
@@ -567,6 +569,8 @@
                       {% for commission_data in commissions_data %}
                       <tr>
                           <td>{{ commission_data.commission_id }}</td>
+                          <td>{{ commission_data.collector_full_name }}</td>
+                          <td>{{ commission_data.vehicle }}</td>
                           <td>{{ commission_data.commission }}</td>
                           <td>{{ commission_data.comment }}</td>
                           <td>{{ commission_data.commission_settlement_date }}</td>

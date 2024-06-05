@@ -514,11 +514,17 @@ def list_commission(request, collector_id):
     commissions_data = []
     commissions = CollectorCommission.objects.filter(collector_id=collector_id)
     for commission in commissions:
+        collector_profile = CollectorProfile.objects.get(collector_id=collector_id)
+        full_name = collector_profile.auth.get_full_name()
+        vehicle = collector_profile.vehicle
+        
         commission_data = {
             'comment': commission.extras,
             'commission_id': commission.txn_id,
             'commission': commission.commission,
-            'commission_settlement_date': commission.commission_settlement_date
+            'commission_settlement_date': commission.commission_settlement_date,
+            'collector_full_name': full_name,
+            'vehicle': vehicle
         }
         commissions_data.append(commission_data)
         total_value += commission.commission
