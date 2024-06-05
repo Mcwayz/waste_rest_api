@@ -485,15 +485,19 @@ def list_collectors(request):
 
 
 def list_commission(request, collector_id):
-    commissions = get_object_or_404(CollectorCommission, collector_id=collector_id)
-    commission_data = {
-        'comment': commissions.extras,
-        'commission_id': commissions.txn_id,
-        'commission': commissions.commission,
-        'commission_settlement_date': commissions.commission_settlement_date
-    }
-    logger.error(f"Commission Data: {commission_data}")
-    return render(request, 'frontend/collectors/commission.html', {'commission_data': commission_data})
+    commissions = CollectorCommission.objects.filter(collector_id=collector_id)
+     #commissions = get_object_or_404(CollectorCommission, collector_id=collector_id)
+    commissions_data = []
+    for commission in commissions:
+        commission_data = {
+            'comment': commission.extras,
+            'commission_id': commission.txn_id,
+            'commission': commission.commission,
+            'commission_settlement_date': commission.commission_settlement_date
+        }
+        logger.error(f"Commission Data: {commission_data}")
+        commissions_data.append(commission_data)
+    return render(request, 'frontend/collectors/commission.html', {'commissions_data': commissions_data})
 
 
 # Get Customer Details

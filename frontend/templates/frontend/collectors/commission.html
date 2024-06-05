@@ -553,18 +553,17 @@
               <button class="btn btn-light-primary btn-sm pdf">Export PDF</button>
               <button class="btn btn-light-primary btn-sm json">Export JSON</button>
               <div class="table-responsive">
-                
                 <table class="table" id="pc-dt-export">
                   <thead>
                       <tr>
                           <th>ID</th>
                           <th>Commission</th>
-                          <th>Comment</th>
+                          <th>Commission Comment</th>
                           <th>Commission Settlement Date</th>
                       </tr>
                   </thead>
                   <tbody>
-                      {% for commission in commission_data %}
+                      {% for commission_data in commissions_data %}
                       <tr>
                           <td>{{ commission_data.commission_id }}</td>
                           <td>{{ commission_data.commission }}</td>
@@ -574,6 +573,7 @@
                       {% endfor %}
                   </tbody>
               </table>
+              
               
               </div>
             </div>
