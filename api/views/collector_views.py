@@ -398,8 +398,13 @@ def list_commission(request, collector_id):
         }
         commissions_data.append(commission_data)
         total_value += commission.commission
-
-    # Assuming you want to return JSON response
     return Response({'commissions_data': commissions_data, 'total_value': total_value})
 
 
+# Super Admin Can Create All The Users.
+
+# Admin - Can aprove Companys, Merhcants, Terminals. 
+
+# Tech User - Can Create Companys, Merhcants, Terminals. 
+
+# User - Can be able to veiw all transactions

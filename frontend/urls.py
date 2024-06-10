@@ -23,6 +23,7 @@ from .decorators.security import superuser_required
 #     path('collector/<int:user_id>/', superuser_required(views.view_collector), name='view_collector'),
 #     path('delete-collector/<int:user_id>/', superuser_required(views.delete_collector), name='delete_collector'),
 #     path('collection/<int:request_id>/', superuser_required(views.get_completed_collection), name='view_collection'),
+#     path('collector-commission/<int:collector_id>/', superuser_required(views.list_commission), name='collector_commission'),
 # ]
 
 
