@@ -2,6 +2,8 @@ from . import views
 from django.urls import path
 from .decorators.security import superuser_required
 
+
+
 # urlpatterns = [
 #     # URL accessible to all users
 #     path('', views.dashboard, name='Index'),
@@ -25,6 +27,7 @@ from .decorators.security import superuser_required
 #     path('collection/<int:request_id>/', superuser_required(views.get_completed_collection), name='view_collection'),
 #     path('collector-commission/<int:collector_id>/', superuser_required(views.list_commission), name='collector_commission'),
 # ]
+
 
 
 # Define Custom Function to Check If The User is a Superuser general_ledger
