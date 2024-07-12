@@ -13,6 +13,7 @@ from base.models import Waste, Collection, Wallet, CustomerProfile, CollectorPro
 
 logger = logging.getLogger(__name__)
 
+
 # Login view
 
 
@@ -65,6 +66,7 @@ def reset_password(request):
 
 
 # Views for the Profile
+
 
 # Profile Information
 
@@ -478,7 +480,7 @@ def list_collectors(request):
     return render(request, 'frontend/collectors/collectors.html', {'collectors_data': collectors_data})
 
 
-# # General Ledger
+#  General Ledger
 
 
 def general_ledger(request):
