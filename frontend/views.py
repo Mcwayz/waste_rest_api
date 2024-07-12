@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from collections import defaultdict
 from .forms import WasteForm, ChargeForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -473,20 +474,25 @@ def list_collectors(request):
             'first_name': collector.auth.first_name,
             'waste_type': collector.waste.waste_type
         }
-        logger.error(f"Collector Data: {collector_data}")
-        
         collectors_data.append(collector_data)
     return render(request, 'frontend/collectors/collectors.html', {'collectors_data': collectors_data})
 
 
+# # General Ledger
+
 
 def general_ledger(request):
     ledger = WasteGL.objects.all()
-    total_value = 0
+    total_value = sum([waste_ledger.new_GL_balance for waste_ledger in ledger])
     waste_gl = []
+    
     for waste_ledger in ledger:
-        total_value = waste_ledger.new_GL_balance
-        transaction_amount  = waste_ledger.new_GL_balance - waste_ledger.old_GL_balance
+        transaction_amount = waste_ledger.new_GL_balance - waste_ledger.old_GL_balance
+        try:
+            collection_id = waste_ledger.collection.collection_id
+        except ObjectDoesNotExist:
+            collection_id = None
+        
         entry = {
             'gl_id': waste_ledger.gl_id,
             'extras': waste_ledger.extras,
@@ -496,14 +502,14 @@ def general_ledger(request):
             'service_charge': waste_ledger.service_charge,
             'transaction_type': waste_ledger.transaction_type,
             'transaction_date': waste_ledger.transaction_date,
-            'collection_id': waste_ledger.collection.collection_id
+            'collection_id': collection_id
         }
         
         # Append the dictionary to the list of ledger entries
         waste_gl.append(entry)
+    
     # Pass the list of ledger entries and total value to the template
     return render(request, 'frontend/wallet/general_ledger.html', {'waste_gl': waste_gl, 'total_value': total_value})
-
 
 
 # Commissions Data 
@@ -590,28 +596,3 @@ def delete_collector(request, user_id):
     return render(request, 'frontend/collectors/delete_collector.html', {'collector_data': collector_data})
 
 
-# General Ledger
-
-def general_ledger(request):
-    ledger = WasteGL.objects.all()
-    total_value = 0
-    waste_gl = []
-    for waste_ledger in ledger:
-        total_value = waste_ledger.new_GL_balance
-        transaction_amount  = waste_ledger.new_GL_balance - waste_ledger.old_GL_balance
-        entry = {
-            'gl_id': waste_ledger.gl_id,
-            'extras': waste_ledger.extras,
-            'transaction_amount': transaction_amount,
-            'old_GL_balance': waste_ledger.old_GL_balance,
-            'new_GL_balance': waste_ledger.new_GL_balance,
-            'service_charge': waste_ledger.service_charge,
-            'transaction_type': waste_ledger.transaction_type,
-            'transaction_date': waste_ledger.transaction_date,
-            'collection_id': waste_ledger.collection.collection_id
-        }
-        
-        # Append the dictionary to the list of ledger entries
-        waste_gl.append(entry)
-    # Pass the list of ledger entries and total value to the template
-    return render(request, 'frontend/wallet/general_ledger.html', {'waste_gl': waste_gl, 'total_value': total_value})
