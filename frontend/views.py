@@ -102,7 +102,7 @@ def edit_profile_info(request):
         messages.success(request, 'Your information has been updated successfully.')
 
         # Redirect to profile page or any other page after updating
-        return redirect('user_profile')  # Change 'user_profile' to the name of your profile view
+        return redirect('user_profile') 
     
     return render(request, 'frontend/profile/profile.html')
 
